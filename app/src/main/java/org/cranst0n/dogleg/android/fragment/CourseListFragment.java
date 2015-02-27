@@ -3,17 +3,18 @@ package org.cranst0n.dogleg.android.fragment;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.internal.widget.TintImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.ProgressBar;
 
 import com.google.gson.JsonArray;
 
@@ -23,47 +24,50 @@ import org.cranst0n.dogleg.android.adapter.CourseListRecyclerAdapter;
 import org.cranst0n.dogleg.android.backend.BackendResponse;
 import org.cranst0n.dogleg.android.backend.Courses;
 import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
-import org.cranst0n.dogleg.android.model.Course;
 import org.cranst0n.dogleg.android.model.CourseSummary;
 import org.cranst0n.dogleg.android.model.LatLon;
+import org.cranst0n.dogleg.android.utils.Colors;
 import org.cranst0n.dogleg.android.views.PinSwitch;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CourseListFragment extends BaseFragment implements SearchView.OnQueryTextListener,
-    SearchView.OnCloseListener {
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
+
+public class CourseListFragment extends BaseFragment implements SearchView.OnQueryTextListener {
 
   private Location lastLocation;
 
-  private View mViewFragmentCourseList;
-  private RecyclerView mRecyclerView;
+  private View courseListView;
+  private SwipeRefreshLayout swipeRefreshLayout;
+  private RecyclerView recyclerView;
+  private SmoothProgressBar loadInProgressBar;
 
   private BackendResponse<JsonArray, CourseSummary[]> queryCall;
 
   private boolean pinMode = false;
+  private MenuItem pinnedMenuItem;
   private PinSwitch pinnedCoursesSwitch;
+  private MenuItem courseSearchMenuItem;
   private SearchView courseSearchView;
-  private ProgressBar searchingProgressView;
+  private boolean refreshOnSearchClose = false;
 
   private Courses courses;
 
-  private List<CourseSummary> displayedCourseList = new ArrayList<CourseSummary>();
+  private final List<CourseSummary> displayedCourseList = new ArrayList<>();
 
   private int previousTotal = 0;
   private boolean loading = true;
-  private int visibleThreshold = 5;
+  private boolean endOfListReached = false;
+  private final int visibleThreshold = 5;
   private int firstVisibleItem, visibleItemCount, totalItemCount;
 
   @Override
   public void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    if(savedInstanceState != null) {
-      boolean pm = savedInstanceState.getBoolean("pinMod");
-      Log.d(getClass().getSimpleName(), ">>>>> pm: " + pm);
-    }
+    setHasOptionsMenu(true);
 
     lastLocation = DoglegApplication.lastKnownLocation();
   }
@@ -72,17 +76,27 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
   public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
 
     courses = new Courses(context);
-    mViewFragmentCourseList = inflater.inflate(R.layout.fragment_course_list, container, false);
+    courseListView = inflater.inflate(R.layout.fragment_course_list, container, false);
 
-    mRecyclerView = (RecyclerView) mViewFragmentCourseList.findViewById(R.id.fragment_course_list_content_main);
-    searchingProgressView = (ProgressBar) mViewFragmentCourseList.findViewById(R.id.search_in_progress_bar);
+    swipeRefreshLayout = (SwipeRefreshLayout) courseListView.findViewById(R.id.swipe_refresh_container);
+    recyclerView = (RecyclerView) courseListView.findViewById(R.id.course_list_recycler);
+    loadInProgressBar = (SmoothProgressBar) courseListView.findViewById(R.id.search_in_progress_bar);
+
+    swipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accent);
+
+    swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      @Override
+      public void onRefresh() {
+        addToCourseList(false);
+      }
+    });
 
     initRecyclerView();
-    addToCourseList(false);
 
+    addToCourseList(false);
     setHasOptionsMenu(true);
 
-    return mViewFragmentCourseList;
+    return courseListView;
   }
 
   @Override
@@ -90,9 +104,20 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
     super.onCreateOptionsMenu(menu, inflater);
     inflater.inflate(R.menu.course_list_fragment_menu, menu);
 
-    courseSearchView =
-        (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_course_search));
-    pinnedCoursesSwitch = (PinSwitch) MenuItemCompat.getActionView(menu.findItem(R.id.pinned_switch));
+    courseSearchMenuItem = menu.findItem(R.id.action_course_search);
+    courseSearchView = (SearchView) MenuItemCompat.getActionView(courseSearchMenuItem);
+
+    SearchView.SearchAutoComplete searchTextField =
+        (SearchView.SearchAutoComplete) courseSearchView.findViewById(R.id.search_src_text);
+    TintImageView searchButton = (TintImageView) courseSearchView.findViewById(R.id.search_button);
+    TintImageView closeButton = (TintImageView) courseSearchView.findViewById(R.id.search_close_btn);
+
+    searchTextField.setTextColor(getResources().getColor(android.R.color.white));
+    searchButton.setImageDrawable(Colors.colorize(searchButton.getDrawable(), android.R.color.white, context));
+    closeButton.setImageDrawable(Colors.colorize(closeButton.getDrawable(), android.R.color.white, context));
+
+    pinnedMenuItem = menu.findItem(R.id.pinned_switch);
+    pinnedCoursesSwitch = (PinSwitch) MenuItemCompat.getActionView(pinnedMenuItem);
     pinnedCoursesSwitch.setChecked(pinMode);
     pinnedCoursesSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       @Override
@@ -102,44 +127,74 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
       }
     });
 
+    courseSearchView.setOnSearchClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(final View v) {
+        for (int ix = 0; ix < menu.size(); ix++) {
+          if (menu.getItem(ix) != courseSearchMenuItem) {
+            menu.getItem(ix).setVisible(false);
+          }
+        }
+        courseSearchView.requestFocus();
+      }
+    });
     courseSearchView.setOnQueryTextListener(this);
-    courseSearchView.setOnCloseListener(this);
+    courseSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+      @Override
+      public boolean onClose() {
+
+        for (int ix = 0; ix < menu.size(); ix++) {
+          menu.getItem(ix).setVisible(true);
+        }
+
+        activity.invalidateOptionsMenu();
+
+        if (refreshOnSearchClose) {
+          addToCourseList(false);
+        }
+
+        refreshOnSearchClose = false;
+
+        return false;
+      }
+    });
   }
 
   @Override
   public boolean onQueryTextSubmit(final String s) {
+    refreshOnSearchClose = true;
     addToCourseList(false);
     return true;
   }
 
   @Override
   public boolean onQueryTextChange(final String s) {
-    if(s.length() > 1) {
+    if (s.length() > 1) {
+      refreshOnSearchClose = true;
       addToCourseList(false);
     }
     return true;
   }
 
   @Override
-  public boolean onClose() {
-    addToCourseList(false);
-    return false;
+  public String getTitle() {
+    return "Courses";
   }
 
   private void initRecyclerView() {
 
     final LinearLayoutManager layoutManager = new LinearLayoutManager(context);
     layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-    mRecyclerView.setLayoutManager(layoutManager);
-    mRecyclerView.setAdapter(new CourseListRecyclerAdapter(activity, displayedCourseList));
+    recyclerView.setLayoutManager(layoutManager);
+    recyclerView.setAdapter(new CourseListRecyclerAdapter(activity, displayedCourseList));
 
-    mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+    recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
 
       @Override
       public void onScrolled(final RecyclerView recyclerView, final int dx, final int dy) {
         super.onScrolled(recyclerView, dx, dy);
 
-        visibleItemCount = mRecyclerView.getChildCount();
+        visibleItemCount = CourseListFragment.this.recyclerView.getChildCount();
         totalItemCount = layoutManager.getItemCount();
         firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
 
@@ -149,7 +204,8 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
             previousTotal = totalItemCount;
           }
         }
-        if (!loading && (totalItemCount - visibleItemCount)
+
+        if (!loading && !endOfListReached && dy > 0 && (totalItemCount - visibleItemCount)
             <= (firstVisibleItem + visibleThreshold)) {
 
           addToCourseList(true);
@@ -165,24 +221,25 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
   private void addToCourseList(final boolean append) {
 
     loading = true;
+    loadInProgressBar.setVisibility(View.VISIBLE);
 
-    if(!append) {
-      mRecyclerView.setVisibility(View.INVISIBLE);
-      searchingProgressView.setVisibility(View.VISIBLE);
+    if (!append) {
+      recyclerView.setVisibility(View.INVISIBLE);
       displayedCourseList.clear();
+      endOfListReached = false;
     }
 
-    if(queryCall != null) {
+    if (queryCall != null) {
       queryCall.cancel();
     }
 
-    if(pinMode && searchMode()) {
+    if (pinMode && searchMode()) {
       queryCall =
           courses.searchPinned(courseSearchView.getQuery().toString(), 20, displayedCourseList.size());
-    } else if(pinMode) {
+    } else if (pinMode) {
       queryCall =
           courses.listPinned(LatLon.fromLocation(lastLocation), 20, displayedCourseList.size());
-    } else if(searchMode()) {
+    } else if (searchMode()) {
       queryCall =
           courses.search(courseSearchView.getQuery().toString(), 20, displayedCourseList.size());
     } else {
@@ -193,6 +250,7 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
         onSuccess(new BackendResponse.BackendSuccessListener<CourseSummary[]>() {
           @Override
           public void onSuccess(final CourseSummary[] value) {
+            endOfListReached = value.length == 0;
             displayedCourseList.addAll(Arrays.asList(value));
           }
         }).
@@ -200,9 +258,10 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
           @Override
           public void onFinally() {
             loading = false;
-            mRecyclerView.getAdapter().notifyDataSetChanged();
-            searchingProgressView.setVisibility(View.INVISIBLE);
-            mRecyclerView.setVisibility(View.VISIBLE);
+            recyclerView.getAdapter().notifyDataSetChanged();
+            recyclerView.setVisibility(View.VISIBLE);
+            loadInProgressBar.setVisibility(View.GONE);
+            swipeRefreshLayout.setRefreshing(false);
           }
         });
   }

@@ -9,13 +9,24 @@
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
 
-        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+
+        <item name="homeAsUpIndicator">@drawable/ic_arrow_left</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_arrow_left</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowToggleStyle</item>
 
         <item name="android:buttonStyle">@style/ButtonStyle</item>
 
     </style>
 
+    <style name="DrawerArrowToggleStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@android:color/white</item>
+    </style>
+
     <style name="ButtonStyle" parent="@android:style/Widget.Button">
+        <item name="android:background">@color/primary</item>
+        <item name="android:textColor">@android:color/white</item>
         <item name="android:paddingTop">@dimen/padding_four</item>
         <item name="android:paddingBottom">@dimen/padding_four</item>
         <item name="android:paddingLeft">@dimen/padding_thirty_two</item>
@@ -34,6 +45,25 @@
         <item name="onDrawable">@drawable/md_back_on</item>
         <item name="thumbDrawable">@drawable/md_thumb</item>
         <item name="thumb_margin">-17dp</item>
+    </style>
+
+    <style name="ScorecardCell">
+        <item name="android:paddingTop">@dimen/padding_four</item>
+        <item name="android:paddingBottom">@dimen/padding_four</item>
+        <item name="android:paddingLeft">@dimen/padding_two</item>
+        <item name="android:paddingRight">@dimen/padding_two</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/border</item>
+        <item name="android:textSize">@dimen/text_size_eight</item>
+    </style>
+
+    <style name="ScorecardCheckboxCell">
+        <item name="android:layout_margin">0dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">0dp</item>
+        <item name="android:scaleX">0.7</item>
+        <item name="android:scaleY">0.7</item>
     </style>
 
 </resources>

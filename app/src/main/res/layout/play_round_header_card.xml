@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/play_round_header_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin_four"
+    android:layout_marginBottom="@dimen/margin_two"
+    android:layout_marginLeft="@dimen/margin_four"
+    android:layout_marginRight="@dimen/margin_four"
+    android:elevation="@dimen/elevation_ten"
+    card_view:cardCornerRadius="0px">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/padding_eight"
+        android:orientation="horizontal">
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:id="@+id/previous_hole_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_hardware_keyboard_arrow_left_grey"/>
+
+        <TextView
+            android:id="@+id/current_hole"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_twenty"
+            android:text="1"/>
+
+        <TextView
+            android:id="@+id/current_hole_suffix"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_ten"
+            android:text="st"/>
+
+        <TextView
+            android:id="@+id/current_hole_par"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin_four"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_ten"
+            android:text="Par 4"/>
+
+        <TextView
+            android:id="@+id/current_hole_yardage"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin_four"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_ten"
+            android:text="388 Yards"/>
+
+        <TextView
+            android:id="@+id/current_hole_handicap"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin_four"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_ten"
+            android:text="HCP: 7"/>
+
+        <ImageButton
+            android:id="@+id/next_hole_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|center"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_hardware_keyboard_arrow_right_grey"/>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/margin_eight"
+            android:layout_marginBottom="@dimen/margin_eight"
+            android:background="@android:color/darker_gray"/>
+
+        <TextView
+            android:id="@+id/round_score"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginLeft="@dimen/margin_sixteen"
+            android:gravity="center_vertical|right"
+            android:text="0"/>
+
+        <TextView
+            android:id="@+id/round_score_to_par"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginLeft="@dimen/margin_four"
+            android:layout_marginRight="@dimen/margin_sixteen"
+            android:gravity="center_vertical|right"
+            android:textSize="@dimen/text_size_ten"
+            android:text="(E)"/>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

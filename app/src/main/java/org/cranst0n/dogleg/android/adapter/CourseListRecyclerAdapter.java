@@ -8,8 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.koushikdutta.ion.Ion;
 
 import org.cranst0n.dogleg.android.DoglegApplication;
 import org.cranst0n.dogleg.android.R;
@@ -49,41 +52,49 @@ public class CourseListRecyclerAdapter extends RecyclerView.Adapter<CourseListRe
 
   public class ViewHolder extends RecyclerView.ViewHolder {
 
-    private Activity mActivity;
     private CourseSummary courseSummary;
 
     public final ImageView courseImageView;
     public final TextView courseNameView;
     public final TextView courseLocationView;
-    public final TextView courseNumHolesView;
+    public final TextView courseStatsView;
 
+    public final ImageButton callButton;
     public final Button navigationButton;
 
     public ViewHolder(final Activity activity, final View itemView) {
       super(itemView);
 
-      this.mActivity = activity;
-
       courseImageView = (ImageView) itemView.findViewById(R.id.course_image);
       courseNameView = (TextView) itemView.findViewById(R.id.course_name);
       courseLocationView = (TextView) itemView.findViewById(R.id.course_city);
-      courseNumHolesView = (TextView) itemView.findViewById(R.id.course_num_holes);
+      courseStatsView = (TextView) itemView.findViewById(R.id.course_stats);
 
+      callButton = (ImageButton) itemView.findViewById(R.id.course_call);
       navigationButton = (Button) itemView.findViewById(R.id.course_navigation);
+
+      callButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(final View v) {
+          activity.startActivity(Intents.call(courseSummary.phoneNumber));
+        }
+      });
 
       navigationButton.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(final View v) {
-          mActivity.startActivity(Intents.navigationTo(courseSummary.location));
+          activity.startActivity(Intents.navigationTo(courseSummary.location));
         }
       });
 
       itemView.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-          Intent i = new Intent(mActivity, CourseInfoActivity.class);
-          i.putExtra("courseId", courseSummary.id);
-          mActivity.startActivity(i);
+          Intent intent = new Intent(activity, CourseInfoActivity.class);
+          intent.putExtra(activity.getResources().getString(R.string.intent_course_id_key),
+              courseSummary.id);
+          intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+          activity.startActivity(intent);
         }
       });
     }
@@ -91,14 +102,17 @@ public class CourseListRecyclerAdapter extends RecyclerView.Adapter<CourseListRe
     public void setCourseSummary(final CourseSummary courseSummary) {
       this.courseSummary = courseSummary;
 
-      courseImageView.setImageResource(Photos.photoFor((int) courseSummary.id));
+      Ion.with(courseImageView)
+          .centerCrop()
+          .load("android.resource://" + activity.getPackageName() + "/" + Photos.photoFor((int) courseSummary.id));
+
       courseNameView.setText(courseSummary.name);
       courseLocationView.setText(courseSummary.city + ", " + courseSummary.state);
-      courseNumHolesView.setText(courseSummary.numHoles + " Holes");
+      courseStatsView.setText(String.format("%d Holes - Par %d", courseSummary.numHoles, courseSummary.par));
 
       Location lastKnownLocation = DoglegApplication.lastKnownLocation();
 
-      if(lastKnownLocation != null) {
+      if (lastKnownLocation != null) {
         double miles =
             Units.metersToMiles(lastKnownLocation.distanceTo(courseSummary.location.toLocation()));
         navigationButton.setText(String.format("%.1f miles", miles));

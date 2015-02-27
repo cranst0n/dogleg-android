@@ -11,7 +11,7 @@ public class FullHeightViewPager extends ViewPager {
     super(context);
   }
 
-  public FullHeightViewPager(final Context context, final AttributeSet attrs){
+  public FullHeightViewPager(final Context context, final AttributeSet attrs) {
 
     super(context, attrs);
   }
@@ -22,7 +22,7 @@ public class FullHeightViewPager extends ViewPager {
     super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
     int height = 0;
-    for(int i = 0; i < getChildCount(); i++) {
+    for (int i = 0; i < getChildCount(); i++) {
 
       View child = getChildAt(i);
 
@@ -30,7 +30,7 @@ public class FullHeightViewPager extends ViewPager {
 
       int h = child.getMeasuredHeight();
 
-      if(h > height) height = h;
+      if (h > height) height = h;
 
     }
 

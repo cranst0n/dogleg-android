@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 
 public class Files {
 
-  public static String getStringFromFile (final File f) throws IOException {
+  public static String getStringFromFile(final File f) throws IOException {
 
     FileInputStream fin = new FileInputStream(f);
     String ret = convertStreamToString(fin);
@@ -22,7 +22,7 @@ public class Files {
 
     BufferedReader reader = new BufferedReader(new InputStreamReader(is));
     StringBuilder sb = new StringBuilder();
-    String line = null;
+    String line;
 
     while ((line = reader.readLine()) != null) {
       sb.append(line).append("\n");

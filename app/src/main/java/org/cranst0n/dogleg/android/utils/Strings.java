@@ -6,13 +6,13 @@ public class Strings {
 
   }
 
-  public static int levenshteinDistance(final String x, final String y) {
+  public static int levensteinDistance(final String x, final String y) {
 
     String a = x.toLowerCase();
     String b = y.toLowerCase();
 
     // i == 0
-    int [] costs = new int [b.length() + 1];
+    int[] costs = new int[b.length() + 1];
 
     for (int j = 0; j < costs.length; j++) {
       costs[j] = j;
@@ -31,4 +31,21 @@ public class Strings {
     return costs[b.length()];
   }
 
+  public static String numberSuffix(final int number) {
+
+    if (number >= 11 && number <= 13) {
+      return "th";
+    }
+
+    switch (number % 10) {
+      case 1:
+        return "st";
+      case 2:
+        return "nd";
+      case 3:
+        return "rd";
+      default:
+        return "th";
+    }
+  }
 }

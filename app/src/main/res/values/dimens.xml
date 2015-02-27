@@ -13,8 +13,13 @@
     <dimen name="text_size_twenty">20dp</dimen>
     <dimen name="text_size_twenty_two">22dp</dimen>
     <dimen name="text_size_twenty_four">24dp</dimen>
-    <dimen name="text_size_twenty_six">24dp</dimen>
+    <dimen name="text_size_twenty_six">26dp</dimen>
     <dimen name="text_size_twenty_eight">28dp</dimen>
+    <dimen name="text_size_thirty">30dp</dimen>
+    <dimen name="text_size_thirty_two">32dp</dimen>
+    <dimen name="text_size_thirty_six">36dp</dimen>
+    <dimen name="text_size_fourty_two">42dp</dimen>
+    <dimen name="text_size_fourty_eight">48dp</dimen>
 
     <!-- Spacings -->
     <dimen name="two">2dp</dimen>
@@ -109,6 +114,8 @@
     <dimen name="tab_strip_height">48dip</dimen>
 
     <!-- Drawer Menu -->
-    <dimen name="drawer_menu_width">240dp</dimen>
+    <dimen name="drawer_menu_width">300dp</dimen>
+
+    <dimen name="play_round_stat_size">@dimen/text_size_ten</dimen>
 
 </resources>

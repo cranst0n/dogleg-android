@@ -1,0 +1,1120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:id="@+id/scorecard_table"
+             android:layout_span="4"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="@dimen/margin_four"
+             android:layout_marginLeft="@dimen/margin_two"
+             android:layout_marginRight="@dimen/margin_two"
+             android:stretchColumns="1,2,3,4,5,6,7,8,9,10">
+
+    <TableRow
+        android:id="@+id/front_9_hole_number_row">
+
+        <TextView
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_1_number"
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="1"/>
+
+        <TextView
+            android:id="@+id/hole_2_number"
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="2"/>
+
+        <TextView
+            android:id="@+id/hole_3_number"
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="3"/>
+
+        <TextView
+            android:id="@+id/hole_4_number"
+            android:textStyle="bold"
+            style="@style/ScorecardCell"
+            android:text="4"/>
+
+        <TextView
+            android:id="@+id/hole_5_number"
+            android:textStyle="bold"
+            style="@style/ScorecardCell"
+            android:text="5"/>
+
+        <TextView
+            android:id="@+id/hole_6_number"
+            android:textStyle="bold"
+            style="@style/ScorecardCell"
+            android:text="6"/>
+
+        <TextView
+            android:id="@+id/hole_7_number"
+            android:textStyle="bold"
+            style="@style/ScorecardCell"
+            android:text="7"/>
+
+        <TextView
+            android:id="@+id/hole_8_number"
+            android:textStyle="bold"
+            style="@style/ScorecardCell"
+            android:text="8"/>
+
+        <TextView
+            android:id="@+id/hole_9_number"
+            android:textStyle="bold"
+            style="@style/ScorecardCell"
+            android:text="9"/>
+
+        <TextView
+            android:textStyle="bold"
+            style="@style/ScorecardCell"
+            android:text="Out"/>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/front_9_par_row">
+
+        <TextView
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="Par"/>
+
+        <TextView
+            android:id="@+id/hole_1_par"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_2_par"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_3_par"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_4_par"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_5_par"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_6_par"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_7_par"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_8_par"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_9_par"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/front_9_par"
+            style="@style/ScorecardCell"/>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/front_9_yardage_row">
+
+        <TextView
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="Yards"/>
+
+        <TextView
+            android:id="@+id/hole_1_yardage"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_2_yardage"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_3_yardage"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_4_yardage"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_5_yardage"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_6_yardage"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_7_yardage"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_8_yardage"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_9_yardage"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/front_9_yardage"
+            style="@style/ScorecardCell"/>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/front_9_score_row">
+
+        <TextView
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="Score"/>
+
+        <TextView
+            android:id="@+id/hole_1_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_2_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_3_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_4_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_5_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_6_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_7_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_8_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_9_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/front_9_score"
+            style="@style/ScorecardCell"/>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/front_9_putts_row">
+
+        <TextView
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="Putts"/>
+
+        <TextView
+            android:id="@+id/hole_1_putts"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_2_putts"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_3_putts"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_4_putts"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_5_putts"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_6_putts"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_7_putts"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_8_putts"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_9_putts"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/front_9_putts"
+            style="@style/ScorecardCell"/>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/front_9_penalties_row">
+
+        <TextView
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="Penalty"/>
+
+        <TextView
+            android:id="@+id/hole_1_penalties"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_2_penalties"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_3_penalties"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_4_penalties"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_5_penalties"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_6_penalties"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_7_penalties"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_8_penalties"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_9_penalties"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/front_9_penalties"
+            style="@style/ScorecardCell"/>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/front_9_fairway_hit_row">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="Fairway"/>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_1_fairway_hit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_2_fairway_hit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_3_fairway_hit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_4_fairway_hit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_5_fairway_hit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_6_fairway_hit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_7_fairway_hit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_8_fairway_hit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_9_fairway_hit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/front_9_fairway_hit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/ScorecardCell"
+            android:text="100%"/>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/front_9_gir_row">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="GIR"/>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_1_gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_2_gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_3_gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_4_gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_5_gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_6_gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_7_gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_8_gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_9_gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/front_9_gir"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/ScorecardCell"
+            android:text="100%"/>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/back_9_hole_number_row"
+        android:layout_marginTop="@dimen/margin_eight">
+
+        <TextView
+            style="@style/ScorecardCell"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/hole_10_number"
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="10"/>
+
+        <TextView
+            android:id="@+id/hole_11_number"
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="11"/>
+
+        <TextView
+            android:id="@+id/hole_12_number"
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="12"/>
+
+        <TextView
+            android:id="@+id/hole_13_number"
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="13"/>
+
+        <TextView
+            android:id="@+id/hole_14_number"
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="14"/>
+
+        <TextView
+            android:id="@+id/hole_15_number"
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="15"/>
+
+        <TextView
+            android:id="@+id/hole_16_number"
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="16"/>
+
+        <TextView
+            android:id="@+id/hole_17_number"
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="17"/>
+
+        <TextView
+            android:id="@+id/hole_18_number"
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="18"/>
+
+        <TextView
+            android:textStyle="bold"
+            style="@style/ScorecardCell"
+            android:text="In"/>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/back_9_par_row">
+
+        <TextView
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="Par"/>
+
+        <TextView
+            android:id="@+id/hole_10_par"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_11_par"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_12_par"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_13_par"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_14_par"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_15_par"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_16_par"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_17_par"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_18_par"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/back_9_par"
+            style="@style/ScorecardCell"/>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/back_9_yardage_row">
+
+        <TextView
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="Yards"/>
+
+        <TextView
+            android:id="@+id/hole_10_yardage"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_11_yardage"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_12_yardage"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_13_yardage"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_14_yardage"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_15_yardage"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_16_yardage"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_17_yardage"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_18_yardage"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/back_9_yardage"
+            style="@style/ScorecardCell"/>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/back_9_score_row">
+
+        <TextView
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="Score"/>
+
+        <TextView
+            android:id="@+id/hole_10_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_11_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_12_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_13_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_14_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_15_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_16_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_17_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_18_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/back_9_score"
+            style="@style/ScorecardCell"/>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/back_9_putts_row">
+
+        <TextView
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="Putts"/>
+
+        <TextView
+            android:id="@+id/hole_10_putts"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_11_putts"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_12_putts"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_13_putts"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_14_putts"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_15_putts"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_16_putts"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_17_putts"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_18_putts"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/back_9_putts"
+            style="@style/ScorecardCell"/>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/back_9_penalties_row">
+
+        <TextView
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="Penalty"/>
+
+        <TextView
+            android:id="@+id/hole_10_penalties"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_11_penalties"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_12_penalties"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_13_penalties"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_14_penalties"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_15_penalties"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_16_penalties"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_17_penalties"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_18_penalties"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/back_9_penalties"
+            style="@style/ScorecardCell"/>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/back_9_fairway_hit_row">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="Fairway"/>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_10_fairway_hit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_11_fairway_hit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_12_fairway_hit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_13_fairway_hit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_14_fairway_hit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_15_fairway_hit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_16_fairway_hit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_17_fairway_hit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_18_fairway_hit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/back_9_fairway_hit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/ScorecardCell"
+            android:text="100%"/>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/back_9_gir_row">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="GIR"/>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_10_gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_11_gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_12_gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_13_gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_14_gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_15_gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_16_gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_17_gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:background="@drawable/border">
+
+            <CheckBox
+                android:id="@+id/hole_18_gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ScorecardCheckboxCell"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/back_9_gir"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/ScorecardCell"
+            android:text="100%"/>
+
+    </TableRow>
+
+</TableLayout>

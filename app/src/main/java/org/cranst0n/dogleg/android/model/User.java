@@ -19,4 +19,8 @@ public class User {
     this.admin = admin;
     this.active = active;
   }
+
+  public boolean isValid() {
+    return !this.equals(NO_USER);
+  }
 }

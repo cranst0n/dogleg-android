@@ -1,0 +1,180 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical">
+
+    <com.github.ksoichiro.android.observablescrollview.ObservableScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/course_image"
+                android:layout_width="match_parent"
+                android:layout_height="175dp"
+                android:background="@color/primary"
+                android:scaleType="centerCrop"/>
+
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                                android:id="@+id/course_basic_info_card"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="-32dp"
+                                                android:layout_marginBottom="@dimen/margin_two"
+                                                android:layout_marginLeft="@dimen/margin_four"
+                                                android:layout_marginRight="@dimen/margin_four"
+                                                android:elevation="@dimen/elevation_ten"
+                                                android:layout_below="@id/course_image"
+                                                card_view:cardCornerRadius="0px">
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:rowCount="3"
+                    android:columnCount="4"
+                    android:layout_below="@id/course_image"
+                    android:paddingTop="@dimen/margin_sixteen"
+                    android:paddingBottom="@dimen/margin_sixteen"
+                    android:paddingLeft="@dimen/margin_eight"
+                    android:paddingRight="@dimen/margin_eight">
+
+                    <TextView
+                        android:id="@+id/loading_indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_row="0"
+                        android:layout_column="0"
+                        android:layout_rowSpan="3"
+                        android:layout_columnSpan="4"
+                        android:textSize="@dimen/text_size_sixteen"
+                        android:textColor="@color/primary"
+                        android:text="Loading..."/>
+
+                    <TextView
+                        android:id="@+id/course_city"
+                        android:layout_row="0"
+                        android:layout_column="0"
+                        android:layout_marginLeft="@dimen/margin_eight"
+                        android:layout_gravity="center_vertical"
+                        android:visibility="invisible"
+                        android:textColor="@color/text_grey"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:text="..."/>
+
+                    <TextView
+                        android:id="@+id/course_state"
+                        android:layout_row="1"
+                        android:layout_column="0"
+                        android:layout_marginLeft="@dimen/margin_eight"
+                        android:layout_gravity="center_vertical"
+                        android:visibility="invisible"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:textColor="@color/text_grey"
+                        android:text="..."/>
+
+                    <TextView
+                        android:id="@+id/course_stats"
+                        android:layout_row="2"
+                        android:layout_column="0"
+                        android:layout_marginLeft="@dimen/margin_eight"
+                        android:layout_gravity="center_vertical"
+                        android:visibility="invisible"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:textColor="@color/text_grey"
+                        android:text="..."/>
+
+                    <ImageButton
+                        android:id="@+id/course_navigation"
+                        android:visibility="invisible"
+                        android:layout_row="0"
+                        android:layout_column="1"
+                        android:layout_rowSpan="3"
+                        android:layout_marginLeft="@dimen/margin_twenty_four"
+                        android:layout_gravity="start|center_vertical"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_navigation_icon"/>
+
+                    <ImageButton
+                        android:id="@+id/course_call"
+                        android:visibility="invisible"
+                        android:layout_row="0"
+                        android:layout_column="2"
+                        android:layout_rowSpan="3"
+                        android:layout_gravity="start|center_vertical"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_phone"/>
+
+                    <Button
+                        android:id="@+id/action_start_round"
+                        android:layout_height="wrap_content"
+                        android:layout_row="0"
+                        android:layout_column="3"
+                        android:layout_rowSpan="3"
+                        android:layout_margin="@dimen/margin_four"
+                        android:layout_gravity="end|center_vertical"
+                        android:visibility="invisible"
+                        android:background="@color/primary"
+                        android:textColor="@android:color/white"
+                        android:text="Play"/>
+
+                </GridLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                                android:id="@+id/course_ratings_card"
+                                                android:visibility="invisible"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginBottom="@dimen/margin_four"
+                                                android:layout_marginLeft="@dimen/margin_four"
+                                                android:layout_marginRight="@dimen/margin_four"
+                                                android:elevation="@dimen/elevation_ten"
+                                                android:layout_below="@id/course_basic_info_card"
+                                                card_view:cardCornerRadius="0px">
+
+                <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                                android:layout_width="match_parent"
+                                android:layout_height="fill_parent"
+                                android:background="@android:color/white">
+
+                    <com.astuetz.PagerSlidingTabStrip
+                        android:id="@+id/ratings_tab_strip"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/tab_strip_height"
+                        android:background="@android:color/transparent"
+                        android:elevation="@dimen/elevation_ten"
+                        android:fillViewport="false"
+                        app:pstsDividerColor="@android:color/transparent"
+                        app:pstsIndicatorColor="@color/accent"
+                        app:pstsIndicatorHeight="@dimen/two"/>
+
+                    <org.cranst0n.dogleg.android.views.FullHeightViewPager
+                        android:id="@+id/ratings_view_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ratings_tab_strip"
+                        android:background="@android:color/white"/>
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+        </RelativeLayout>
+    </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
+
+    <View xmlns:android="http://schemas.android.com/apk/res/android"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          android:background="@drawable/gradient_header_background"
+          android:minHeight="?attr/actionBarSize"/>
+
+</FrameLayout>

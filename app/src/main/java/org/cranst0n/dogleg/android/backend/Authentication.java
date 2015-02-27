@@ -12,7 +12,7 @@ import org.cranst0n.dogleg.android.DoglegApplication;
 import org.cranst0n.dogleg.android.model.AuthToken;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.Crypto;
-import org.cranst0n.dogleg.android.utils.SnackBarUtils;
+import org.cranst0n.dogleg.android.utils.SnackBars;
 
 public class Authentication extends BackendComponent {
 
@@ -35,13 +35,13 @@ public class Authentication extends BackendComponent {
 
     Future<Response<JsonObject>> call =
         Ion.with(context)
-            .load(serverUrl() + LOGIN_URL)
+            .load(serverUrl(LOGIN_URL))
             .setJsonObjectBody(json)
             .asJsonObject()
             .withResponse();
 
     BackendResponse<JsonObject, AuthToken> tokenResponse =
-        new BackendResponse<JsonObject, AuthToken>(call, AuthToken.class);
+        new BackendResponse<>(call, AuthToken.class);
 
     tokenResponse.onSuccess(new BackendResponse.BackendSuccessListener<AuthToken>() {
       @Override
@@ -61,8 +61,8 @@ public class Authentication extends BackendComponent {
 
   public BackendResponse<JsonObject, BackendMessage> logout() {
     BackendResponse<JsonObject, BackendMessage> response =
-        new BackendResponse<JsonObject, BackendMessage>(Ion.with(context)
-            .load("POST", url(LOGOUT_URL))
+        new BackendResponse<>(Ion.with(context)
+            .load("POST", serverUrl(LOGOUT_URL))
             .setHeader(AuthTokenHeader, authToken())
             .asJsonObject()
             .withResponse(), BackendMessage.class);
@@ -80,8 +80,8 @@ public class Authentication extends BackendComponent {
 
   public BackendResponse<JsonObject, User> authUser() {
     BackendResponse<JsonObject, User> response =
-        new BackendResponse<JsonObject, User>(Ion.with(context)
-            .load(serverUrl() + AUTH_USER_URL)
+        new BackendResponse<>(Ion.with(context)
+            .load(serverUrl(AUTH_USER_URL))
             .setHeader(AuthTokenHeader, authToken())
             .asJsonObject()
             .withResponse(), User.class);
@@ -93,7 +93,7 @@ public class Authentication extends BackendComponent {
           bus.post(User.NO_USER);
 
           if (!authToken().isEmpty()) {
-            SnackBarUtils.showSimple(DoglegApplication.application().currentActivity(), "Login expired.");
+            SnackBars.showSimple(DoglegApplication.currentActivity(), "Login expired.");
             clearAuthToken();
           }
         }
@@ -105,8 +105,8 @@ public class Authentication extends BackendComponent {
 
   public BackendResponse<JsonObject, User> authAdmin() {
     BackendResponse<JsonObject, User> response =
-        new BackendResponse<JsonObject, User>(Ion.with(context)
-            .load(serverUrl() + AUTH_ADMIN_URL)
+        new BackendResponse<>(Ion.with(context)
+            .load(serverUrl(AUTH_ADMIN_URL))
             .setHeader(AuthTokenHeader, authToken())
             .asJsonObject()
             .withResponse(), User.class);

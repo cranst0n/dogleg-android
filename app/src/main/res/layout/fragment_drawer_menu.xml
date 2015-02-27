@@ -1,9 +1,26 @@
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          android:id="@+id/fragment_drawerMenu_listView"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_gravity="start"
-          android:background="@android:color/white"
-          android:dividerHeight="0dp"
-          tools:context=".FragmentDrawerMenu"/>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/drawer_image"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/accent"/>
+
+    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/fragment_drawerMenu_listView"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_below="@id/drawer_image"
+              android:background="@android:color/white"
+              android:dividerHeight="0dp"
+              tools:context=".FragmentDrawerMenu"/>
+
+</RelativeLayout>
+

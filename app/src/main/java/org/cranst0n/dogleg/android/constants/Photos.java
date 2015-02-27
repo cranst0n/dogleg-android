@@ -22,7 +22,21 @@ public class Photos {
       R.drawable.stock_photo_12,
       R.drawable.stock_photo_13,
       R.drawable.stock_photo_14,
-      R.drawable.stock_photo_15
+      R.drawable.stock_photo_15,
+      R.drawable.stock_photo_16,
+      R.drawable.stock_photo_17,
+      R.drawable.stock_photo_18,
+      R.drawable.stock_photo_19,
+      R.drawable.stock_photo_20,
+      R.drawable.stock_photo_21,
+      R.drawable.stock_photo_22,
+      R.drawable.stock_photo_23,
+      R.drawable.stock_photo_24,
+      R.drawable.stock_photo_25,
+      R.drawable.stock_photo_26,
+      R.drawable.stock_photo_27,
+      R.drawable.stock_photo_28,
+      R.drawable.stock_photo_29
   };
 
   public static final int random() {

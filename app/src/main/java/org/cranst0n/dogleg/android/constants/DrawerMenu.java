@@ -17,7 +17,7 @@ public class DrawerMenu {
       new DrawerMenuItem(R.drawable.ic_action_settings, "Settings");
 
   public static final ArrayList<DrawerMenuItem> MENU_ITEMS =
-      new ArrayList<DrawerMenuItem>(Arrays.asList(HOME_ITEM, SETTINGS_ITEM));
+      new ArrayList<>(Arrays.asList(HOME_ITEM, SETTINGS_ITEM));
 
   public static class DrawerMenuItem {
 
@@ -28,6 +28,6 @@ public class DrawerMenu {
       this.iconRes = iconRes;
       this.title = title;
     }
-
   }
+
 }

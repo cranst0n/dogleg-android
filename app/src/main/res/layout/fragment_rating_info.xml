@@ -1,18 +1,473 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:orientation="vertical"
-             tools:context="org.cranst0n.dogleg.android.fragment.CourseRatingFragment">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="org.cranst0n.dogleg.android.fragment.CourseRatingFragment">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout android:layout_width="match_parent"
-                      android:layout_height="match_parent"
-                      android:layout_margin="@dimen/eight"
-                      android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/eight"
+            android:orientation="vertical">
+
+            <TableLayout
+                android:id="@+id/front_9_ratings_table"
+                android:layout_span="4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_four"
+                android:stretchColumns="1,2,3,4,5,6,7,8,9,10">
+
+                <TableRow>
+
+                    <TextView
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/hole_1_number"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="1"/>
+
+                    <TextView
+                        android:id="@+id/hole_2_number"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="2"/>
+
+                    <TextView
+                        android:id="@+id/hole_3_number"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="3"/>
+
+                    <TextView
+                        android:id="@+id/hole_4_number"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="4"/>
+
+                    <TextView
+                        android:id="@+id/hole_5_number"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="5"/>
+
+                    <TextView
+                        android:id="@+id/hole_6_number"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="6"/>
+
+                    <TextView
+                        android:id="@+id/hole_7_number"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="7"/>
+
+                    <TextView
+                        android:id="@+id/hole_8_number"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="8"/>
+
+                    <TextView
+                        android:id="@+id/hole_9_number"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="9"/>
+
+                    <TextView
+                        android:id="@+id/front_9_total"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="Out"/>
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="Par"/>
+
+                    <TextView
+                        android:id="@+id/hole_1_par"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_2_par"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_3_par"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_4_par"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_5_par"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_6_par"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_7_par"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_8_par"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_9_par"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/front_9_par"
+                        style="@style/ScorecardCell"/>
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="Yards"/>
+
+                    <TextView
+                        android:id="@+id/hole_1_yardage"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_2_yardage"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_3_yardage"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_4_yardage"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_5_yardage"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_6_yardage"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_7_yardage"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_8_yardage"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_9_yardage"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/front_9_yardage"
+                        style="@style/ScorecardCell"/>
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="HCP"/>
+
+                    <TextView
+                        android:id="@+id/hole_1_handicap"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_2_handicap"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_3_handicap"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_4_handicap"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_5_handicap"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_6_handicap"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_7_handicap"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_8_handicap"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_9_handicap"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        style="@style/ScorecardCell"/>
+
+                </TableRow>
+
+            </TableLayout>
+
+            <TableLayout
+                android:id="@+id/back_9_ratings_table"
+                android:layout_span="4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_four"
+                android:stretchColumns="1,2,3,4,5,6,7,8,9,10">
+
+                <TableRow>
+
+                    <TextView
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/hole_10_number"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="10"/>
+
+                    <TextView
+                        android:id="@+id/hole_11_number"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="11"/>
+
+                    <TextView
+                        android:id="@+id/hole_12_number"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="12"/>
+
+                    <TextView
+                        android:id="@+id/hole_13_number"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="13"/>
+
+                    <TextView
+                        android:id="@+id/hole_14_number"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="14"/>
+
+                    <TextView
+                        android:id="@+id/hole_15_number"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="15"/>
+
+                    <TextView
+                        android:id="@+id/hole_16_number"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="16"/>
+
+                    <TextView
+                        android:id="@+id/hole_17_number"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="17"/>
+
+                    <TextView
+                        android:id="@+id/hole_18_number"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="18"/>
+
+                    <TextView
+                        android:id="@+id/back_9_total"
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="In"/>
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="Par"/>
+
+                    <TextView
+                        android:id="@+id/hole_10_par"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_11_par"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_12_par"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_13_par"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_14_par"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_15_par"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_16_par"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_17_par"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_18_par"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/back_9_par"
+                        style="@style/ScorecardCell"/>
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="Yards"/>
+
+                    <TextView
+                        android:id="@+id/hole_10_yardage"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_11_yardage"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_12_yardage"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_13_yardage"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_14_yardage"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_15_yardage"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_16_yardage"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_17_yardage"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_18_yardage"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/back_9_yardage"
+                        style="@style/ScorecardCell"/>
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        style="@style/ScorecardCell"
+                        android:textStyle="bold"
+                        android:text="HCP"/>
+
+                    <TextView
+                        android:id="@+id/hole_10_handicap"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_11_handicap"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_12_handicap"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_13_handicap"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_14_handicap"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_15_handicap"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_16_handicap"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_17_handicap"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        android:id="@+id/hole_18_handicap"
+                        style="@style/ScorecardCell"/>
+
+                    <TextView
+                        style="@style/ScorecardCell"/>
+
+                </TableRow>
+
+            </TableLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_margin="@dimen/margin_four"
+                android:background="@android:color/darker_gray"/>
 
             <TableLayout
                 android:layout_width="match_parent"
@@ -20,152 +475,133 @@
                 android:stretchColumns="*">
 
                 <TableRow android:layout_marginLeft="@dimen/sixteen">
+
                     <TextView
                         android:layout_margin="@dimen/four"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:text="Par:" />
+                        android:textSize="@dimen/text_size_ten"
+                        android:textStyle="bold"
+                        android:text="Par:"/>
+
                     <TextView
                         android:layout_margin="@dimen/four"
                         android:layout_marginRight="@dimen/twenty_eight"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:id="@+id/par_text" />
+                        android:textSize="@dimen/text_size_ten"
+                        android:id="@+id/par_text"/>
+
                     <TextView
                         android:layout_margin="@dimen/four"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:text="Yardage:" />
+                        android:textSize="@dimen/text_size_ten"
+                        android:textStyle="bold"
+                        android:text="Yardage:"/>
+
                     <TextView
                         android:layout_margin="@dimen/four"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:id="@+id/yardage_text" />
+                        android:textSize="@dimen/text_size_ten"
+                        android:id="@+id/yardage_text"/>
                 </TableRow>
 
                 <TableRow android:layout_marginLeft="@dimen/sixteen">
+
                     <TextView
                         android:layout_margin="@dimen/four"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:text="Rating:" />
+                        android:textSize="@dimen/text_size_ten"
+                        android:textStyle="bold"
+                        android:text="Rating:"/>
+
                     <TextView
                         android:layout_margin="@dimen/four"
                         android:layout_marginRight="@dimen/twenty_eight"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:id="@+id/rating_text" />
+                        android:textSize="@dimen/text_size_ten"
+                        android:id="@+id/rating_text"/>
+
                     <TextView
                         android:layout_margin="@dimen/four"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:text="Slope:" />
+                        android:textSize="@dimen/text_size_ten"
+                        android:textStyle="bold"
+                        android:text="Slope:"/>
+
                     <TextView
                         android:layout_margin="@dimen/four"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:id="@+id/slope_text" />
+                        android:textSize="@dimen/text_size_ten"
+                        android:id="@+id/slope_text"/>
                 </TableRow>
 
                 <TableRow android:layout_marginLeft="@dimen/sixteen">
+
                     <TextView
                         android:layout_margin="@dimen/four"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:text="Front Rating:" />
+                        android:textSize="@dimen/text_size_ten"
+                        android:textStyle="bold"
+                        android:text="Front Rating:"/>
+
                     <TextView
                         android:layout_margin="@dimen/four"
                         android:layout_marginRight="@dimen/twenty_eight"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:id="@+id/front_rating_text" />
+                        android:textSize="@dimen/text_size_ten"
+                        android:id="@+id/front_rating_text"/>
+
                     <TextView
                         android:layout_margin="@dimen/four"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:text="Front Slope:" />
+                        android:textSize="@dimen/text_size_ten"
+                        android:textStyle="bold"
+                        android:text="Front Slope:"/>
+
                     <TextView
                         android:layout_margin="@dimen/four"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:id="@+id/front_slope_text" />
+                        android:textSize="@dimen/text_size_ten"
+                        android:id="@+id/front_slope_text"/>
                 </TableRow>
 
                 <TableRow android:layout_marginLeft="@dimen/sixteen">
+
                     <TextView
                         android:layout_margin="@dimen/four"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:text="Back Rating:" />
+                        android:textSize="@dimen/text_size_ten"
+                        android:textStyle="bold"
+                        android:text="Back Rating:"/>
+
                     <TextView
                         android:layout_margin="@dimen/four"
                         android:layout_marginRight="@dimen/twenty_eight"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:id="@+id/back_rating_text" />
+                        android:textSize="@dimen/text_size_ten"
+                        android:id="@+id/back_rating_text"/>
+
                     <TextView
                         android:layout_margin="@dimen/four"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:text="Back Slope:" />
+                        android:textSize="@dimen/text_size_ten"
+                        android:textStyle="bold"
+                        android:text="Back Slope:"/>
+
                     <TextView
                         android:layout_margin="@dimen/four"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:id="@+id/back_slope_text" />
+                        android:textSize="@dimen/text_size_ten"
+                        android:id="@+id/back_slope_text"/>
                 </TableRow>
 
                 <TableRow android:layout_marginLeft="@dimen/sixteen">
+
                     <TextView
                         android:layout_margin="@dimen/four"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:text="Bogey Rating:" />
+                        android:textSize="@dimen/text_size_ten"
+                        android:textStyle="bold"
+                        android:text="Bogey Rating:"/>
+
                     <TextView
                         android:layout_margin="@dimen/four"
                         android:layout_marginRight="@dimen/twenty_eight"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:id="@+id/bogey_rating_text" />
+                        android:textSize="@dimen/text_size_ten"
+                        android:id="@+id/bogey_rating_text"/>
+
                     <TextView
                         android:layout_margin="@dimen/four"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:text="Gender:" />
+                        android:textSize="@dimen/text_size_ten"
+                        android:textStyle="bold"
+                        android:text="Gender:"/>
+
                     <TextView
                         android:layout_margin="@dimen/four"
-                        android:textSize="@dimen/text_size_twelve"
-                        android:id="@+id/gender_text" />
-                </TableRow>
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:layout_margin="@dimen/margin_four"
-                    android:background="@android:color/darker_gray"/>
-
-                <TableRow>
-
-                    <TableLayout
-                        android:layout_span="4"
-                        android:id="@+id/hole_ratings_row"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_four"
-                        android:layout_marginBottom="@dimen/margin_four"
-                        android:layout_marginLeft="@dimen/margin_twelve"
-                        android:layout_marginRight="@dimen/margin_twelve"
-                        android:stretchColumns="0,1,2,3">
-
-                        <TableRow>
-                            <TextView
-                                android:layout_marginBottom="@dimen/margin_eight"
-                                android:gravity="center"
-                                android:textSize="@dimen/text_size_twelve"
-                                android:textStyle="bold"
-                                android:text="Hole"/>
-                            <TextView
-                                android:layout_marginBottom="@dimen/margin_eight"
-                                android:gravity="center"
-                                android:textSize="@dimen/text_size_twelve"
-                                android:textStyle="bold"
-                                android:text="Par"/>
-                            <TextView
-                                android:layout_marginBottom="@dimen/margin_eight"
-                                android:gravity="center"
-                                android:textSize="@dimen/text_size_twelve"
-                                android:textStyle="bold"
-                                android:text="Yardage"/>
-                            <TextView
-                                android:layout_marginBottom="@dimen/margin_eight"
-                                android:gravity="center"
-                                android:textSize="@dimen/text_size_twelve"
-                                android:textStyle="bold"
-                                android:text="Handicap"/>
-                        </TableRow>
-
-                    </TableLayout>
+                        android:textSize="@dimen/text_size_ten"
+                        android:id="@+id/gender_text"/>
                 </TableRow>
 
             </TableLayout>

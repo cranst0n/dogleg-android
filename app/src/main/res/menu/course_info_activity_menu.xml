@@ -5,6 +5,7 @@
     <item
         android:id="@+id/pinned_switch"
         android:title="Pinned Courses"
+        android:visible="false"
         app:showAsAction="always"
         app:actionViewClass="org.cranst0n.dogleg.android.views.PinSwitch"/>
 

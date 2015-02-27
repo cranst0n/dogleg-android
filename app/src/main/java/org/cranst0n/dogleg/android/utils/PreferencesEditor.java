@@ -11,7 +11,7 @@ public class PreferencesEditor {
 
   private static SharedPreferences mSingletonPreferences;
 
-  private static SharedPreferences getSharedPreferences(final Context context) {
+  public static SharedPreferences getSharedPreferences() {
     if (mSingletonPreferences == null) {
       synchronized (PreferencesEditor.class) {
         if (mSingletonPreferences == null) {
@@ -23,85 +23,85 @@ public class PreferencesEditor {
   }
 
   public static void shutdown() {
-    mSingletonPreferences.edit().commit();
+    mSingletonPreferences.edit().apply();
     mSingletonPreferences = null;
   }
 
-  public static void clearPreferences(final Context context) {
-    Editor editor = getSharedPreferences(context).edit();
+  public static void clearPreferences() {
+    Editor editor = getSharedPreferences().edit();
     editor.clear();
     editor.apply();
     shutdown();
   }
 
   public static boolean getBooleanPreference(final Context context, final int resId, final boolean defaultValue) {
-    return getSharedPreferences(context).getBoolean(context.getString(resId), defaultValue);
+    return getSharedPreferences().getBoolean(context.getString(resId), defaultValue);
   }
 
-  public static boolean getBooleanPreference(final Context context, final String prefKey, final boolean defaultValue) {
-    return getSharedPreferences(context).getBoolean(prefKey, defaultValue);
+  public static boolean getBooleanPreference(final String prefKey, final boolean defaultValue) {
+    return getSharedPreferences().getBoolean(prefKey, defaultValue);
   }
 
   public static int getIntPreference(final Context context, final int resId, final int defaultValue) {
-    return getSharedPreferences(context).getInt(context.getString(resId), defaultValue);
+    return getSharedPreferences().getInt(context.getString(resId), defaultValue);
   }
 
-  public static int getIntPreference(final Context context, final String prefKey, final int defaultValue) {
-    return getSharedPreferences(context).getInt(prefKey, defaultValue);
+  public static int getIntPreference(final String prefKey, final int defaultValue) {
+    return getSharedPreferences().getInt(prefKey, defaultValue);
   }
 
   public static String getStringPreference(final Context context, final int resId, final String defaultValue) {
-    return getSharedPreferences(context).getString(context.getString(resId), defaultValue);
+    return getSharedPreferences().getString(context.getString(resId), defaultValue);
   }
 
-  public static String getStringPreference(final Context context, final String prefKey, final String defaultValue) {
-    return getSharedPreferences(context).getString(prefKey, defaultValue);
+  public static String getStringPreference(final String prefKey, final String defaultValue) {
+    return getSharedPreferences().getString(prefKey, defaultValue);
   }
 
   public static void savePreference(final Context context, final int resId, final int newValue) {
-    Editor editor = getSharedPreferences(context).edit();
+    Editor editor = getSharedPreferences().edit();
     editor.putInt(context.getString(resId), newValue);
     editor.apply();
   }
 
-  public static void savePreference(final Context context, final String prefKey, final int newValue) {
-    Editor editor = getSharedPreferences(context).edit();
+  public static void savePreference(final String prefKey, final int newValue) {
+    Editor editor = getSharedPreferences().edit();
     editor.putInt(prefKey, newValue);
     editor.apply();
   }
 
   public static void savePreference(final Context context, final int resId, final String newValue) {
-    Editor editor = getSharedPreferences(context).edit();
+    Editor editor = getSharedPreferences().edit();
     editor.putString(context.getString(resId), newValue);
     editor.apply();
   }
 
-  public static void savePreference(final Context context, final String prefKey, final String newValue) {
-    Editor editor = getSharedPreferences(context).edit();
+  public static void savePreference(final String prefKey, final String newValue) {
+    Editor editor = getSharedPreferences().edit();
     editor.putString(prefKey, newValue);
     editor.apply();
   }
 
   public static void savePreference(final Context context, final int resId, final Boolean newValue) {
-    Editor editor = getSharedPreferences(context).edit();
+    Editor editor = getSharedPreferences().edit();
     editor.putBoolean(context.getString(resId), newValue);
     editor.apply();
   }
 
-  public static void savePreference(final Context context, final String prefKey, final Boolean newValue) {
-    Editor editor = getSharedPreferences(context).edit();
+  public static void savePreference(final String prefKey, final Boolean newValue) {
+    Editor editor = getSharedPreferences().edit();
     editor.putBoolean(prefKey, newValue);
     editor.apply();
   }
 
   public static void removePreference(final Context context, final int resId) {
-    Editor editor = getSharedPreferences(context).edit();
+    Editor editor = getSharedPreferences().edit();
     editor.remove(context.getString(resId));
     editor.apply();
   }
 
-  public static void removePreference(final Context context, final String prefKey) {
-    Editor editor = getSharedPreferences(context).edit();
+  public static void removePreference(final String prefKey) {
+    Editor editor = getSharedPreferences().edit();
     editor.remove(prefKey);
     editor.apply();
   }

@@ -19,10 +19,10 @@ public abstract class BackendComponent {
 
   protected BackendComponent(final Context context) {
     this.context = context;
-    this.bus = BusProvider.instance();
+    this.bus = BusProvider.Instance.bus;
   }
 
-  protected final String url(final String relativeUrl) {
+  protected final String serverUrl(final String relativeUrl) {
     return serverUrl() + relativeUrl;
   }
 
@@ -31,16 +31,16 @@ public abstract class BackendComponent {
   }
 
   protected final String authToken() {
-    return PreferencesEditor.getStringPreference(context, AuthTokenHeader, "");
+    return PreferencesEditor.getStringPreference(AuthTokenHeader, "");
   }
 
   protected final String saveAuthToken(final String token) {
-    PreferencesEditor.savePreference(context, AuthTokenHeader, token);
+    PreferencesEditor.savePreference(AuthTokenHeader, token);
     return token;
   }
 
   protected final void clearAuthToken() {
-    PreferencesEditor.removePreference(context, AuthTokenHeader);
+    PreferencesEditor.removePreference(AuthTokenHeader);
   }
 
 }

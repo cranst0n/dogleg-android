@@ -17,8 +17,8 @@ import java.util.ArrayList;
 
 public class DrawerMenuAdapter extends BaseAdapter {
 
-  private Context mContext;
-  private ArrayList<DrawerMenu.DrawerMenuItem> mListItemsDrawerMenuBean;
+  private final Context mContext;
+  private final ArrayList<DrawerMenu.DrawerMenuItem> mListItemsDrawerMenuBean;
 
   public DrawerMenuAdapter(final Context mContext, final ArrayList<DrawerMenu.DrawerMenuItem> mListItemsDrawer) {
     this.mContext = mContext;

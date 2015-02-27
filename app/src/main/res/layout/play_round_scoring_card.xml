@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/margin_four"
+    android:elevation="@dimen/elevation_ten"
+    card_view:cardCornerRadius="0px">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/primary">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_pencil_box_outline"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_eight"
+            android:padding="@dimen/padding_four"
+            android:weightSum="3"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_twelve"
+                    android:text="Strokes"/>
+
+                <ImageButton
+                    android:id="@+id/current_hole_score_increment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_four"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_hardware_keyboard_arrow_up_grey"/>
+
+                <TextView
+                    android:id="@+id/current_hole_score"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_eighteen"
+                    android:text="0"/>
+
+                <ImageButton
+                    android:id="@+id/current_hole_score_decrement"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_four"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_hardware_keyboard_arrow_down_grey"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_twelve"
+                    android:text="Putts"/>
+
+                <ImageButton
+                    android:id="@+id/current_hole_putts_increment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_four"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_hardware_keyboard_arrow_up_grey"/>
+
+                <TextView
+                    android:id="@+id/current_hole_putts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_eighteen"
+                    android:text="0"/>
+
+                <ImageButton
+                    android:id="@+id/current_hole_putts_decrement"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_four"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_hardware_keyboard_arrow_down_grey"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_twelve"
+                    android:text="Penalties"/>
+
+                <ImageButton
+                    android:id="@+id/current_hole_penalties_increment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_four"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_hardware_keyboard_arrow_up_grey"/>
+
+                <TextView
+                    android:id="@+id/current_hole_penalties"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_eighteen"
+                    android:gravity="center"
+                    android:text="0"/>
+
+                <ImageButton
+                    android:id="@+id/current_hole_penalties_decrement"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_four"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_hardware_keyboard_arrow_down_grey"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_eight"
+            android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/current_hole_fairway_hit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_four"
+                android:textColor="@color/text_grey"
+                android:textSize="@dimen/text_size_twelve"
+                android:text="Fairway Hit"/>
+
+            <CheckBox
+                android:id="@+id/current_hole_gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_four"
+                android:textColor="@color/text_grey"
+                android:textSize="@dimen/text_size_twelve"
+                android:text="Green In Regulation"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

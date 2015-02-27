@@ -13,12 +13,11 @@
 
         <ImageView
             android:id="@+id/course_image"
-            android:layout_width="fill_parent"
-            android:layout_height="125dp"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/stock_photo_0"/>
+            android:scaleType="centerCrop"/>
 
         <View
             android:layout_width="wrap_content"
@@ -29,7 +28,7 @@
             android:paddingLeft="@dimen/padding_twelve"
             android:paddingBottom="@dimen/padding_eight"
             android:gravity="bottom"
-            android:background="#a222"/>
+            android:background="#9222"/>
 
         <TextView
             android:id="@+id/course_name"
@@ -43,44 +42,65 @@
             android:textSize="@dimen/text_size_sixteen"
             android:text="Course Name"/>
 
-        <GridLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:rowCount="2"
-            android:columnCount="2"
             android:layout_below="@id/course_image"
-            android:padding="@dimen/padding_eight">
+            android:layout_margin="@dimen/margin_eight"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/course_city"
-                android:layout_row="0"
-                android:layout_column="0"
-                android:layout_margin="@dimen/margin_four"
-                android:textColor="@color/text_grey"
-                android:text="Anytown, USA"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/course_navigation"
-                android:layout_row="0"
-                android:layout_column="1"
-                android:layout_rowSpan="2"
+                <TextView
+                    android:id="@+id/course_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_four"
+                    android:textColor="@color/text_grey"
+                    android:text="Anytown, USA"/>
+
+                <TextView
+                    android:id="@+id/course_stats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_four"
+                    android:textColor="@color/text_grey"
+                    android:textSize="@dimen/text_size_twelve"
+                    android:text="18 Holes - Par 72"/>
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/course_call"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:padding="@dimen/padding_two"
                 android:layout_marginTop="-6dp"
                 android:layout_gravity="end|center_vertical"
                 android:background="@android:color/transparent"
                 android:textSize="@dimen/text_size_ten"
                 android:textColor="@color/text_grey"
-                android:drawableTop="@drawable/ic_navigation_icon"/>
+                android:src="@drawable/ic_phone"/>
 
-            <TextView
-                android:id="@+id/course_num_holes"
-                android:layout_row="1"
-                android:layout_column="0"
-                android:layout_margin="@dimen/margin_four"
+            <Button
+                android:id="@+id/course_navigation"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="@dimen/padding_two"
+                android:layout_marginTop="-6dp"
+                android:layout_marginLeft="@dimen/margin_eight"
+                android:layout_gravity="end|center_vertical"
+                android:background="@android:color/transparent"
+                android:textSize="@dimen/text_size_ten"
                 android:textColor="@color/text_grey"
-                android:text="18 Holes"/>
+                android:drawableTop="@drawable/ic_navigation_icon"
+                android:text="Directions"/>
 
-        </GridLayout>
+        </LinearLayout>
 
     </RelativeLayout>
 

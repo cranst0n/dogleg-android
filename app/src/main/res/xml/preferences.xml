@@ -1,11 +1,18 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
-        android:key="@string/dogleg_server_url_key"
-        android:title="@string/dogleg_server_url_title"
-        android:summary="@string/dogleg_server_url_summary"
-        android:dialogTitle="@string/dogleg_server_url_title"
-        android:persistent="true"
-        android:layout="@layout/preference_custom"/>
+    <PreferenceCategory
+        android:title="General"
+        android:key="general_category">
+
+        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
+            android:key="@string/dogleg_server_url_key"
+            android:title="@string/dogleg_server_url_title"
+            android:summary="@string/dogleg_server_url_summary"
+            android:dialogTitle="@string/dogleg_server_url_title"
+            android:persistent="true"
+            android:layout="@layout/preference_custom"/>
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

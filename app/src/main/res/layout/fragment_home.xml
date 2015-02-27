@@ -5,7 +5,6 @@
                 android:id="@+id/fragment_home_content_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/white"
                 tools:context=".Fragment_Home">
 
     <com.astuetz.PagerSlidingTabStrip
@@ -17,13 +16,13 @@
         android:fillViewport="false"
         app:pstsDividerColor="@android:color/transparent"
         app:pstsIndicatorColor="@color/accent"
-        app:pstsIndicatorHeight="@dimen/two" />
+        app:pstsIndicatorHeight="@dimen/four"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/fragment_home_view_pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/fragment_home_pager_sliding_tab"
-        android:background="@android:color/white" />
+        android:background="@android:color/white"/>
 
 </RelativeLayout>

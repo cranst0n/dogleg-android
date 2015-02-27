@@ -17,14 +17,13 @@ public class FeedFragment extends BaseFragment {
   }
 
   @Override
-  public void onCreate(final Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-  }
-
-  @Override
   public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
     feedView = inflater.inflate(R.layout.fragment_feed, container, false);
     return feedView;
   }
 
+  @Override
+  public String getTitle() {
+    return "Feed";
+  }
 }

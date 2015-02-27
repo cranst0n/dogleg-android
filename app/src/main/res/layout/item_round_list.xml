@@ -1,0 +1,90 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                    android:id="@+id/round_list_item_card"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="@dimen/margin_four"
+                                    android:elevation="@dimen/elevation_ten"
+                                    card_view:cardCornerRadius="0px">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/course_image"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:scaleType="centerCrop"/>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_alignTop="@+id/course_image"
+                android:layout_alignLeft="@+id/course_image"
+                android:layout_alignRight="@+id/course_image"
+                android:layout_alignBottom="@+id/course_image"
+                android:background="#9222"/>
+
+            <TextView
+                android:id="@+id/round_gross_score_view"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_alignLeft="@+id/course_image"
+                android:layout_alignBottom="@+id/course_image"
+                android:paddingLeft="@dimen/padding_twelve"
+                android:gravity="center_vertical|left"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size_twenty_four"
+                android:text="72"/>
+
+            <TextView
+                android:id="@+id/round_course_name"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_toRightOf="@id/round_gross_score_view"
+                android:layout_alignBottom="@+id/course_image"
+                android:paddingLeft="@dimen/padding_twelve"
+                android:gravity="center_vertical|left"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size_sixteen"
+                android:text="Course Name"/>
+
+            <TextView
+                android:id="@+id/round_date"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_alignRight="@+id/course_image"
+                android:layout_alignBottom="@+id/course_image"
+                android:paddingRight="@dimen/padding_twelve"
+                android:gravity="center_vertical|right"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size_ten"
+                android:text="Thursday April 8th, 2014"/>
+
+        </RelativeLayout>
+
+        <org.cranst0n.dogleg.android.views.FullHeightViewPager
+            android:id="@+id/item_round_scorecard_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"/>
+
+        <ImageButton
+            android:id="@+id/expand_details_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_six"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_hardware_keyboard_arrow_down_grey"/>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

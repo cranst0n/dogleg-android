@@ -1,25 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/fragment_home_content_main"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/fragment_course_list_content_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/white"
                 tools:context=".Fragment_Home">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/fragment_course_list_content_main"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"/>
+        android:paddingTop="@dimen/padding_four"
+        android:layout_alignParentTop="true">
 
-    <ProgressBar
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/course_list_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
         android:id="@+id/search_in_progress_bar"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerInParent="true"
-        android:visibility="invisible"
-        android:indeterminate="true"/>
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/margin_four"
+        android:layout_marginRight="@dimen/margin_four"
+        android:background="@android:color/white"
+        android:visibility="gone"
+        android:indeterminate="true"
+        app:spb_sections_count="3"
+        app:spb_colors="@array/search_progress_colors"
+        app:spb_gradients="false"
+        app:spb_speed="2.0"
+        app:spb_interpolator="spb_interpolator_acceleratedecelerate"
+        app:spb_stroke_width="8px"
+        app:spb_stroke_separator_length="8dp"
+        />
 
 </RelativeLayout>
