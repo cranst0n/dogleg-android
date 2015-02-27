@@ -1,0 +1,177 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical"
+             tools:context="org.cranst0n.dogleg.android.fragment.CourseRatingFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_margin="@dimen/eight"
+                      android:orientation="vertical">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*">
+
+                <TableRow android:layout_marginLeft="@dimen/sixteen">
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:text="Par:" />
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:layout_marginRight="@dimen/twenty_eight"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:id="@+id/par_text" />
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:text="Yardage:" />
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:id="@+id/yardage_text" />
+                </TableRow>
+
+                <TableRow android:layout_marginLeft="@dimen/sixteen">
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:text="Rating:" />
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:layout_marginRight="@dimen/twenty_eight"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:id="@+id/rating_text" />
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:text="Slope:" />
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:id="@+id/slope_text" />
+                </TableRow>
+
+                <TableRow android:layout_marginLeft="@dimen/sixteen">
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:text="Front Rating:" />
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:layout_marginRight="@dimen/twenty_eight"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:id="@+id/front_rating_text" />
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:text="Front Slope:" />
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:id="@+id/front_slope_text" />
+                </TableRow>
+
+                <TableRow android:layout_marginLeft="@dimen/sixteen">
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:text="Back Rating:" />
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:layout_marginRight="@dimen/twenty_eight"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:id="@+id/back_rating_text" />
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:text="Back Slope:" />
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:id="@+id/back_slope_text" />
+                </TableRow>
+
+                <TableRow android:layout_marginLeft="@dimen/sixteen">
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:text="Bogey Rating:" />
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:layout_marginRight="@dimen/twenty_eight"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:id="@+id/bogey_rating_text" />
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:text="Gender:" />
+                    <TextView
+                        android:layout_margin="@dimen/four"
+                        android:textSize="@dimen/text_size_twelve"
+                        android:id="@+id/gender_text" />
+                </TableRow>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="@dimen/margin_four"
+                    android:background="@android:color/darker_gray"/>
+
+                <TableRow>
+
+                    <TableLayout
+                        android:layout_span="4"
+                        android:id="@+id/hole_ratings_row"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_four"
+                        android:layout_marginBottom="@dimen/margin_four"
+                        android:layout_marginLeft="@dimen/margin_twelve"
+                        android:layout_marginRight="@dimen/margin_twelve"
+                        android:stretchColumns="0,1,2,3">
+
+                        <TableRow>
+                            <TextView
+                                android:layout_marginBottom="@dimen/margin_eight"
+                                android:gravity="center"
+                                android:textSize="@dimen/text_size_twelve"
+                                android:textStyle="bold"
+                                android:text="Hole"/>
+                            <TextView
+                                android:layout_marginBottom="@dimen/margin_eight"
+                                android:gravity="center"
+                                android:textSize="@dimen/text_size_twelve"
+                                android:textStyle="bold"
+                                android:text="Par"/>
+                            <TextView
+                                android:layout_marginBottom="@dimen/margin_eight"
+                                android:gravity="center"
+                                android:textSize="@dimen/text_size_twelve"
+                                android:textStyle="bold"
+                                android:text="Yardage"/>
+                            <TextView
+                                android:layout_marginBottom="@dimen/margin_eight"
+                                android:gravity="center"
+                                android:textSize="@dimen/text_size_twelve"
+                                android:textStyle="bold"
+                                android:text="Handicap"/>
+                        </TableRow>
+
+                    </TableLayout>
+                </TableRow>
+
+            </TableLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

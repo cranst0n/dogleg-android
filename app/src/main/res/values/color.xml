@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="primary_dark">#ff388e3c</color>
+    <color name="primary_light">#A5D6A7</color>
+    <color name="primary">#ff4caf50</color>
+    <color name="accent">#ffff5722</color>
+
+    <color name="warn">#fffbc02d</color>
+
+    <color name="text_grey">#757575</color>
+
+    <color name="drawer_text">@color/text_grey</color>
+
+    <color name="ripple">#ffab91</color>
+    <color name="accent_pressed">#bf360c</color>
+
+</resources>
+
+

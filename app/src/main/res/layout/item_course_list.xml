@@ -1,0 +1,87 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                    android:id="@+id/course_list_item_card"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="@dimen/margin_four"
+                                    android:elevation="@dimen/elevation_ten"
+                                    card_view:cardCornerRadius="0px">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/course_image"
+            android:layout_width="fill_parent"
+            android:layout_height="125dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/stock_photo_0"/>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_alignLeft="@+id/course_image"
+            android:layout_alignRight="@+id/course_image"
+            android:layout_alignBottom="@+id/course_image"
+            android:paddingLeft="@dimen/padding_twelve"
+            android:paddingBottom="@dimen/padding_eight"
+            android:gravity="bottom"
+            android:background="#a222"/>
+
+        <TextView
+            android:id="@+id/course_name"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_alignLeft="@+id/course_image"
+            android:layout_alignBottom="@+id/course_image"
+            android:paddingLeft="@dimen/padding_twelve"
+            android:gravity="center|left"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_sixteen"
+            android:text="Course Name"/>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:rowCount="2"
+            android:columnCount="2"
+            android:layout_below="@id/course_image"
+            android:padding="@dimen/padding_eight">
+
+            <TextView
+                android:id="@+id/course_city"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:layout_margin="@dimen/margin_four"
+                android:textColor="@color/text_grey"
+                android:text="Anytown, USA"/>
+
+            <Button
+                android:id="@+id/course_navigation"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:layout_rowSpan="2"
+                android:padding="@dimen/padding_two"
+                android:layout_marginTop="-6dp"
+                android:layout_gravity="end|center_vertical"
+                android:background="@android:color/transparent"
+                android:textSize="@dimen/text_size_ten"
+                android:textColor="@color/text_grey"
+                android:drawableTop="@drawable/ic_navigation_icon"/>
+
+            <TextView
+                android:id="@+id/course_num_holes"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:layout_margin="@dimen/margin_four"
+                android:textColor="@color/text_grey"
+                android:text="18 Holes"/>
+
+        </GridLayout>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
