@@ -79,9 +79,10 @@ public class Courses extends BackendComponent {
           return new CourseSummary[0];
         } else {
 
-          CourseSummary[] unsorted = Arrays.copyOfRange(pinned, offset, Math.min(offset + num, pinned.length));
+          CourseSummary[] summaries =
+              Arrays.copyOfRange(pinned, offset, Math.min(offset + num, pinned.length));
 
-          Arrays.sort(unsorted, new Comparator<CourseSummary>() {
+          Arrays.sort(summaries, new Comparator<CourseSummary>() {
             @Override
             public int compare(final CourseSummary lhs, final CourseSummary rhs) {
               if (location != null) {
@@ -93,7 +94,7 @@ public class Courses extends BackendComponent {
             }
           });
 
-          return unsorted;
+          return summaries;
         }
       }
     });
@@ -218,7 +219,7 @@ public class Courses extends BackendComponent {
 
       File[] courseFiles = pinnedDir.listFiles();
 
-      for (File f : courseFiles) {
+      for (final File f : courseFiles) {
 
         Course c = loadFile(f);
 

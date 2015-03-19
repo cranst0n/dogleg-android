@@ -7,7 +7,7 @@
         android:title="Pinned Courses"
         app:showAsAction="ifRoom"
         app:actionViewClass="org.cranst0n.dogleg.android.views.PinSwitch"
-        android:visible="false"/>
+        android:visible="true"/>
 
     <item
         android:id="@+id/action_course_search"

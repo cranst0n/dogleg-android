@@ -1,5 +1,7 @@
 package org.cranst0n.dogleg.android.backend;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.google.gson.GsonBuilder;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
 
 public class BackendResponse<T extends JsonElement, U> {
 
@@ -178,27 +181,31 @@ public class BackendResponse<T extends JsonElement, U> {
           @Override
           protected void done() {
 
-            if (isCancelled()) {
-              notifyException(new CancellationException("Task was cancelled."));
-
-            } else {
-
-              try {
-
-                value = get();
-
-                if (value != null) {
-                  notifySuccess(value);
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+              @Override
+              public void run() {
+                if (isCancelled()) {
+                  notifyException(new CancellationException("Task was cancelled."));
                 } else {
-                  notifyException(new NullPointerException("Value was null"));
-                }
-              } catch (Exception e) {
-                Log.e(Tag, "Problems getting future value.", e);
-                notifyException(e);
-              }
-            }
 
-            notifyFinally();
+                  try {
+
+                    value = get(2, TimeUnit.SECONDS);
+
+                    if (value != null) {
+                      notifySuccess(value);
+                    } else {
+                      notifyException(new NullPointerException("Value was null"));
+                    }
+                  } catch (Exception e) {
+                    Log.e(Tag, "Problems getting future value.", e);
+                    notifyException(e);
+                  }
+                }
+
+                notifyFinally();
+              }
+            });
           }
         };
 
