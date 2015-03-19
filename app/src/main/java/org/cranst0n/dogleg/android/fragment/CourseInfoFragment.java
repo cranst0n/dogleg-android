@@ -213,7 +213,7 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
     if (pinCourseSwitch != null && course != null) {
 
       pinCourseSwitch.setChecked(Courses.isPinned(course));
-      pinMenuItem.setVisible(true);
+//      pinMenuItem.setVisible(true);
 
       if (activity != null) {
         activity.invalidateOptionsMenu();

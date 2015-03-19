@@ -79,7 +79,7 @@ public class Rounds extends BackendComponent {
 
       JsonArray holeScoreJson = new JsonArray();
 
-      for (HoleScore hs : round.holeScores) {
+      for (HoleScore hs : round.holeScores()) {
 
         JsonObject jo = new JsonObject();
 

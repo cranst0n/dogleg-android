@@ -1,5 +1,7 @@
 package org.cranst0n.dogleg.android.model;
 
+import java.util.Arrays;
+
 public class CourseRating {
 
   public final long id;
@@ -12,7 +14,7 @@ public class CourseRating {
   public final double backSlope;
   public final double bogeyRating;
   public final Gender gender;
-  public final HoleRating[] holeRatings;
+  private final HoleRating[] holeRatings;
 
   private int par;
   private int yardage;
@@ -37,6 +39,20 @@ public class CourseRating {
     this.bogeyRating = bogeyRating;
     this.gender = gender;
     this.holeRatings = holeRatings;
+  }
+
+  public HoleRating holeRating(final int holeNumber) {
+    for(HoleRating holeRating : holeRatings) {
+      if(holeRating.number == holeNumber) {
+        return holeRating;
+      }
+    }
+
+    return null;
+  }
+
+  public HoleRating[] holeRatings() {
+    return Arrays.copyOf(holeRatings, holeRatings.length);
   }
 
   public int par() {

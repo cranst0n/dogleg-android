@@ -177,16 +177,16 @@ public class PlayRoundHoleViewFragment extends BaseFragment {
     }
   }
 
-  public void holeScoreUpdated(final HoleScore holeScore) {
+  public void updateHole(final HoleScore holeScore) {
     if (isAdded() && currentHoleNumber() == holeScore.hole.number) {
       currentHoleScoreView.setText(String.valueOf(holeScore.score));
       currentHolePuttsView.setText(String.valueOf(holeScore.putts));
       currentHolePenaltiesView.setText(String.valueOf(holeScore.penaltyStrokes));
       currentHoleFairwayHitBox.setChecked(holeScore.fairwayHit);
       currentHoleGirBox.setChecked(holeScore.gir);
-
-      updateStats();
     }
+
+    updateStats();
   }
 
   private void updateStats() {

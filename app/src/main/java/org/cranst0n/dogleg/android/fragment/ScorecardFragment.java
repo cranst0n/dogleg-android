@@ -21,10 +21,10 @@ public class ScorecardFragment extends BaseFragment {
 
   protected Round round;
 
-  protected boolean enabled;
+  protected boolean enabled = true;
 
   protected View scorecardView;
-  private TableLayout scorecardTable;
+  protected TableLayout scorecardTable;
 
   protected TableRow front9HoleNumberRow;
   protected TableRow front9ParRow;
@@ -78,12 +78,47 @@ public class ScorecardFragment extends BaseFragment {
     scorecardView = inflater.inflate(R.layout.include_scorecard, container, false);
 
     findViews();
+    updateScorecard();
 
     return scorecardView;
   }
 
   public void setRound(final Round round) {
     this.round = round;
+    updateScorecard();
+  }
+
+  private void updateScorecard() {
+    if (round != null && isAdded()) {
+
+      HoleSet holeSet = round.holeSet();
+
+      for (int holeNum = holeStart(); holeNum <= holeEnd(); holeNum++) {
+
+        if (holeSet.includes(holeNum)) {
+
+          int ix = holeNum - holeStart();
+
+          holeFieldViews[ix].par.setText(String.valueOf(round.rating.holeRating(holeNum).par));
+          holeFieldViews[ix].yardage.setText(String.valueOf(round.rating.holeRating(holeNum).yardage));
+          holeFieldViews[ix].fairwayHit.setEnabled(round.rating.holeRating(holeNum).par > 3);
+          updateHole(round.holeScore(holeNum));
+        }
+      }
+
+      if (holeSet == HoleSet.Front9) {
+        setFront9Visibility(View.VISIBLE);
+        setBack9Visibility(View.GONE);
+      } else if (holeSet == HoleSet.Back9) {
+        setFront9Visibility(View.GONE);
+        setBack9Visibility(View.VISIBLE);
+      } else {
+        setFront9Visibility(View.VISIBLE);
+        setBack9Visibility(View.VISIBLE);
+      }
+
+      updateRoundStats(round);
+    }
   }
 
   public int holeStart() {
@@ -94,38 +129,19 @@ public class ScorecardFragment extends BaseFragment {
     return 18;
   }
 
+  public int numHoles() {
+    return holeEnd() - holeStart() + 1;
+  }
+
   public boolean includesHole(final int holeNumber) {
     return holeNumber >= holeStart() && holeNumber <= holeEnd();
   }
 
-  public void update(final Round round) {
-    if (round != null) {
+  public void updateHole(final HoleScore holeScore) {
 
-      HoleSet holeSet = round.holeSet();
-
-      for (int holeNum = holeStart(); holeNum <= holeEnd(); holeNum++) {
-
-        if (holeSet.includes(holeNum)) {
-
-          int ix = holeNum - holeStart();
-
-          holeFieldViews[ix].par.setText(String.valueOf(round.rating.holeRatings[holeNum - 1].par));
-          holeFieldViews[ix].yardage.setText(String.valueOf(round.rating.holeRatings[holeNum - 1].yardage));
-          holeFieldViews[ix].fairwayHit.setEnabled(round.rating.holeRatings[holeNum - 1].par > 3);
-          updateHole(round.holeScores[holeNum - round.holeSet().holeStart]);
-        }
-      }
-
-      updateRoundStats(round);
-    }
-  }
-
-  private void updateHole(final HoleScore holeScore) {
-    Log.d(getClass().getSimpleName(), "updateHole(): " + holeScore.hole.number);
     if (includesHole(holeScore.hole.number)) {
 
       int viewIdx = holeScore.hole.number - holeStart();
-      Log.d(getClass().getSimpleName(), "updateHole(): viewIdx" + viewIdx);
 
       HoleViewHolder viewHolder = holeFieldViews[viewIdx];
       viewHolder.score.setText(String.valueOf(holeScore.score));
@@ -134,9 +150,11 @@ public class ScorecardFragment extends BaseFragment {
       viewHolder.fairwayHit.setChecked(holeScore.fairwayHit);
       viewHolder.gir.setChecked(holeScore.gir);
     }
+
+    updateRoundStats(round);
   }
 
-  private void updateRoundStats(final Round round) {
+  protected void updateRoundStats(final Round round) {
 
     RoundStats stats = round.stats();
 
@@ -150,7 +168,7 @@ public class ScorecardFragment extends BaseFragment {
       front9GirText.setText(String.format("%.2f%%", stats.frontGirPercentage * 100));
     }
 
-    if (holeStart() == 10) {
+    if (holeEnd() == 18) {
       back9ParText.setText(String.valueOf(round.rating.backPar()));
       back9YardageText.setText(String.valueOf(round.rating.backYardage()));
       back9ScoreText.setText(String.valueOf(stats.backScore));
@@ -158,6 +176,32 @@ public class ScorecardFragment extends BaseFragment {
       back9PenaltiesText.setText(String.valueOf(stats.backPenalties));
       back9FairwayHitText.setText(String.format("%.2f%%", stats.backFairwayHitPercentage * 100));
       back9GirText.setText(String.format("%.2f%%", stats.backGirPercentage * 100));
+    }
+  }
+
+  public void setFront9Visibility(final int visibility) {
+    if(holeStart() == 1) {
+      front9HoleNumberRow.setVisibility(visibility);
+      front9ParRow.setVisibility(visibility);
+      front9YardageRow.setVisibility(visibility);
+      front9ScoreRow.setVisibility(visibility);
+      front9PuttsRow.setVisibility(visibility);
+      front9PenaltiesRow.setVisibility(visibility);
+      front9FairwayHitRow.setVisibility(visibility);
+      front9GirRow.setVisibility(visibility);
+    }
+  }
+
+  public void setBack9Visibility(final int visibility) {
+    if(holeEnd() == 18) {
+      back9HoleNumberRow.setVisibility(visibility);
+      back9ParRow.setVisibility(visibility);
+      back9YardageRow.setVisibility(visibility);
+      back9ScoreRow.setVisibility(visibility);
+      back9PuttsRow.setVisibility(visibility);
+      back9PenaltiesRow.setVisibility(visibility);
+      back9FairwayHitRow.setVisibility(visibility);
+      back9GirRow.setVisibility(visibility);
     }
   }
 
@@ -219,11 +263,11 @@ public class ScorecardFragment extends BaseFragment {
       holeFieldViews[ix - holeStart()] = new HoleViewHolder(ix);
     }
 
-    update(round);
+    setRound(round);
     setEnabled(enabled);
   }
 
-  private class HoleViewHolder {
+  protected class HoleViewHolder {
 
     public final TextView number;
     public final TextView yardage;

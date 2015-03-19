@@ -272,7 +272,13 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
 
   private void setRound(final Round round) {
     this.round = round;
-    scorecardFragment.roundUpdated(round);
+    scorecardFragment.setRound(round);
+
+    if (round.holeSet().includes(currentHoleNumber())) {
+      setHole(currentHoleNumber());
+    } else {
+      setHole(round.holeSet().holeStart);
+    }
   }
 
   public Round round() {
@@ -324,12 +330,12 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
   }
 
   public HoleRating currentHoleRating() {
-    return round.rating.holeRatings[currentHole - 1];
+    return round.rating.holeRating(currentHole);
   }
 
   public HoleScore currentHoleScore() {
     if (round != null && round.holeSet().includes(currentHole)) {
-      return round.holeScores[currentHole - round.holeSet().holeStart];
+      return round.holeScore(currentHole);
     } else {
       return HoleScore.empty();
     }
@@ -337,20 +343,15 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
 
   @Override
   public void updateScore(final HoleScore holeScore) {
-
-    int idx = holeScore.hole.number - round().holeSet().holeStart;
-
-    if (idx >= 0 && idx < round().holeScores.length) {
-      round.holeScores[idx] = holeScore;
-      scorecardFragment.holeScoreUpdated(round.holeScores[idx]);
-      playRoundFragment.holeScoreUpdated(round.holeScores[idx]);
-      holeViewFragment.holeScoreUpdated(round.holeScores[idx]);
-    }
+      round.updateScore(holeScore);
+      scorecardFragment.updateHole(holeScore);
+      playRoundFragment.updateHole(holeScore);
+      holeViewFragment.updateHole(holeScore);
   }
 
   @Override
   public void showScoreSelectionDialog(final int holeNumber) {
-    HoleRating holeRating = round().rating.holeRatings[holeNumber - 1];
+    HoleRating holeRating = round().rating.holeRating(holeNumber);
 
     final int scoreStart = Math.max(holeRating.par - 3, 1);
     final int scoreEnd = scoreStart + 10;
@@ -370,7 +371,7 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
                                   final int which, final CharSequence text) {
 
             int score = which + scoreStart;
-            updateScore(round().holeScores[holeNumber - round().holeSet().holeStart].score(score));
+            updateScore(round.holeScore(holeNumber).score(score));
           }
         }).show();
   }
@@ -391,8 +392,7 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
           @Override
           public void onSelection(final MaterialDialog dialog, final View view,
                                   final int which, final CharSequence text) {
-
-            updateScore(round().holeScores[holeNumber - round().holeSet().holeStart].putts(which));
+            updateScore(round.holeScore(holeNumber).putts(which));
           }
         }).show();
   }
@@ -413,9 +413,7 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
           @Override
           public void onSelection(final MaterialDialog dialog, final View view,
                                   final int which, final CharSequence text) {
-
-            updateScore(
-                round().holeScores[holeNumber - round().holeSet().holeStart].penaltyStrokes(which));
+            updateScore(round.holeScore(holeNumber).penaltyStrokes(which));
           }
         }).show();
   }
@@ -455,34 +453,29 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
             HoleSet selectedHoleSet =
                 HoleSet.available(round.course)[holeSetSpinner.getSelectedItemPosition()];
 
-            Round unhandicappedRound = Round.create(currentUser, round.course, selectedRating, round.time,
-                officialCheckBox.isChecked(), 0, handicapOverrideCheckBox.isChecked(),
-                handicapOverrideSpinner.getSelectedItemPosition(), round.holeScores,
+            final Round unhandicappedRound = Round.create(currentUser, round.course, selectedRating,
+                round.time, officialCheckBox.isChecked(), 0, handicapOverrideCheckBox.isChecked(),
+                handicapOverrideSpinner.getSelectedItemPosition(), round.holeScores(),
                 selectedHoleSet);
 
-            Arrays.sort(round.rating.holeRatings);
+            setRound(unhandicappedRound);
 
-            double slope = round.rating.slope;
+            // Try to get handicap from server side //
+            double slope = unhandicappedRound.rating.slope;
 
-            if (round.holeSet() == HoleSet.Front9) {
-              slope = round.rating.frontSlope;
-            } else if (round.holeSet() == HoleSet.Back9) {
-              slope = round.rating.backSlope;
+            if (unhandicappedRound.holeSet() == HoleSet.Front9) {
+              slope = unhandicappedRound.rating.frontSlope;
+            } else if (unhandicappedRound.holeSet() == HoleSet.Back9) {
+              slope = unhandicappedRound.rating.backSlope;
             }
 
-            rounds.handicapRound(slope, round.holeSet().numHoles, round.time).
+            rounds.handicapRound(slope, unhandicappedRound.holeSet().numHoles, unhandicappedRound.time).
                 onSuccess(new BackendResponse.BackendSuccessListener<RoundHandicapResponse>() {
                   @Override
                   public void onSuccess(final RoundHandicapResponse value) {
-                    setRound(round.withHandicap(value.handicap));
+                    setRound(unhandicappedRound.withHandicap(value.handicap));
                   }
                 });
-
-            if (round.holeSet().includes(currentHoleNumber())) {
-              setHole(currentHoleNumber());
-            } else {
-              setHole(round.holeSet().holeStart);
-            }
 
           }
         }).build();

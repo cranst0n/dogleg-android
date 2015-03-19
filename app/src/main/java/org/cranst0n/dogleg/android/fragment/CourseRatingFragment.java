@@ -111,16 +111,14 @@ public class CourseRatingFragment extends BaseFragment {
       bogeyRatingText.setText(String.format("%.1f", rating.bogeyRating));
       genderText.setText(rating.gender.toString());
 
-      Arrays.sort(rating.holeRatings);
-
-      if (rating.holeRatings.length == 9) {
+      if (rating.holeRatings().length == 9) {
         back9Table.setVisibility(View.GONE);
       }
 
-      for (int ix = 0; ix < rating.holeRatings.length; ix++) {
-        holeFieldViews[ix].par.setText("" + rating.holeRatings[ix].par);
-        holeFieldViews[ix].yardage.setText("" + rating.holeRatings[ix].yardage);
-        holeFieldViews[ix].handicap.setText("" + rating.holeRatings[ix].handicap);
+      for (int ix = 0; ix < rating.holeRatings().length; ix++) {
+        holeFieldViews[ix].par.setText("" + rating.holeRating(ix+1).par);
+        holeFieldViews[ix].yardage.setText("" + rating.holeRating(ix+1).yardage);
+        holeFieldViews[ix].handicap.setText("" + rating.holeRating(ix+1).handicap);
       }
 
       front9ParText.setText(String.valueOf(rating.frontPar()));

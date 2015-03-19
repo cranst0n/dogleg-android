@@ -16,7 +16,7 @@ public class Round {
   public final boolean isHandicapOverridden;
   public final int handicapOverride;
 
-  public final HoleScore[] holeScores;
+  private final HoleScore[] holeScores;
 
   private HoleSet holeSet;
 
@@ -34,6 +34,27 @@ public class Round {
     this.handicapOverride = handicapOverride;
 
     this.holeScores = holeScores;
+
+    Arrays.sort(this.holeScores);
+  }
+
+  public HoleScore[] holeScores() {
+    return Arrays.copyOf(holeScores, holeScores.length);
+  }
+
+  public HoleScore holeScore(final int holeNumber) {
+    for(HoleScore holeScore : holeScores) {
+      if(holeScore.hole.number == holeNumber) {
+        return holeScore;
+      }
+    }
+
+    return null;
+  }
+
+  public void updateScore(final HoleScore holeScore) {
+    int ix = holeScore.hole.number - holeSet().holeStart;
+    holeScores[ix] = holeScore;
   }
 
   public Round asUser(final User user) {
@@ -53,8 +74,6 @@ public class Round {
 
   public synchronized HoleSet holeSet() {
     if (holeSet == null) {
-      Arrays.sort(holeScores);
-
       if (holeScores[0].hole.number == 10) {
         holeSet = HoleSet.Back9;
       } else if (holeScores[holeScores.length - 1].hole.number == 18) {
@@ -97,35 +116,34 @@ public class Round {
                              final HoleScore[] oldHoleScores, final HoleSet holeSet) {
 
     Arrays.sort(course.holes);
-    Arrays.sort(rating.holeRatings);
 
     HoleScore[] newHoleScores = new HoleScore[holeSet.numHoles];
 
     if (oldHoleScores == null) {
-      for (int ix = holeSet.holeStart; ix <= holeSet.holeEnd; ix++) {
-        newHoleScores[ix - holeSet.holeStart] =
+      for (int holeNum = holeSet.holeStart; holeNum <= holeSet.holeEnd; holeNum++) {
+        newHoleScores[holeNum - holeSet.holeStart] =
             new HoleScore(-1, -1, 0, 0, 0, 0,
-                rating.holeRatings[ix - 1].par > 3, true, course.holes[ix - 1]);
+                rating.holeRating(holeNum).par > 3, true, course.holes[holeNum - 1]);
       }
     } else {
 
-      for (int ix = holeSet.holeStart; ix <= holeSet.holeEnd; ix++) {
+      for (int holeNum = holeSet.holeStart; holeNum <= holeSet.holeEnd; holeNum++) {
 
         HoleScore oldHoleScore = null;
 
         for (HoleScore old : oldHoleScores) {
-          if (old.hole.number == ix) {
+          if (old.hole.number == holeNum) {
             oldHoleScore = old;
           }
         }
 
         // Use the existing holeFeature score so we don't throw away information
         if (oldHoleScore == null) {
-          newHoleScores[ix - holeSet.holeStart] =
+          newHoleScores[holeNum - holeSet.holeStart] =
               new HoleScore(-1, -1, 0, 0, 0, 0,
-                  rating.holeRatings[ix - 1].par > 3, true, course.holes[ix - 1]);
+                  rating.holeRating(holeNum).par > 3, true, course.holes[holeNum - 1]);
         } else {
-          newHoleScores[ix - holeSet.holeStart] = oldHoleScore;
+          newHoleScores[holeNum - holeSet.holeStart] = oldHoleScore;
         }
       }
     }

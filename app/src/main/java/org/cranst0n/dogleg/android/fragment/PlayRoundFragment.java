@@ -164,7 +164,7 @@ public class PlayRoundFragment extends BaseFragment {
     }
   }
 
-  public void holeScoreUpdated(final HoleScore holeScore) {
+  public void updateHole(final HoleScore holeScore) {
     if (round() != null) {
       RoundStats stats = round().stats();
       roundScoreView.setText(String.valueOf(stats.score));

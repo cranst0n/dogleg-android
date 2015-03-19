@@ -35,7 +35,6 @@ public class HomeFragment extends BaseFragment {
 
   private final List<Fragment> visibleFragments = new ArrayList<>();
   private final Fragment courseListPage = new CourseListFragment();
-  private final Fragment feedPage = new FeedFragment();
   private final Fragment roundsPage = new RoundListFragment();
 
   @Override
@@ -76,9 +75,7 @@ public class HomeFragment extends BaseFragment {
   public void newUser(final User user) {
     if (user.isValid()) {
       visibleFragments.add(roundsPage);
-      visibleFragments.add(feedPage);
     } else {
-      visibleFragments.remove(feedPage);
       visibleFragments.remove(roundsPage);
     }
 

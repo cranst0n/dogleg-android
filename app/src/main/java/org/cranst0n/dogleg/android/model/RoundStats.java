@@ -58,10 +58,9 @@ public class RoundStats {
     int par5s = 0;
     int par5Score = 0;
 
-    for (int ix = 0; ix < round.holeScores.length; ix++) {
+    for(HoleScore holeScore : round.holeScores()) {
 
-      HoleScore holeScore = round.holeScores[ix];
-      HoleRating holeRating = round.rating.holeRatings[holeScore.hole.number - 1];
+      HoleRating holeRating = round.rating.holeRating(holeScore.hole.number);
 
       if (holeScore.score > 0 || holeScore.putts > 0) {
 
