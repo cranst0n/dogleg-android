@@ -11,11 +11,13 @@ import org.cranst0n.dogleg.android.model.Round;
 public class ScorecardFront9Fragment extends ScorecardFragment {
 
   public static ScorecardFront9Fragment instance(final Round round) {
-    return new ScorecardFront9Fragment(round);
+    ScorecardFront9Fragment fragment = new ScorecardFront9Fragment();
+    fragment.setRound(round);
+    return fragment;
   }
 
-  protected ScorecardFront9Fragment(final Round round) {
-    super(round);
+  public ScorecardFront9Fragment() {
+    super();
   }
 
   @Override

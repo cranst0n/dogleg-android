@@ -19,7 +19,7 @@ import org.cranst0n.dogleg.android.model.RoundStats;
 
 public class ScorecardFragment extends BaseFragment {
 
-  protected final Round round;
+  protected Round round;
 
   protected boolean enabled;
 
@@ -63,11 +63,13 @@ public class ScorecardFragment extends BaseFragment {
   protected HoleViewHolder[] holeFieldViews;
 
   public static ScorecardFragment instance(final Round round) {
-    return new ScorecardFragment(round);
+    ScorecardFragment fragment = new ScorecardFragment();
+    fragment.setRound(round);
+    return fragment;
   }
 
-  protected ScorecardFragment(final Round round) {
-    this.round = round;
+  public ScorecardFragment() {
+
   }
 
   @Override
@@ -78,6 +80,10 @@ public class ScorecardFragment extends BaseFragment {
     findViews();
 
     return scorecardView;
+  }
+
+  public void setRound(final Round round) {
+    this.round = round;
   }
 
   public int holeStart() {
