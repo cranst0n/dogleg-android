@@ -5,8 +5,10 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
-import android.location.LocationManager;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderApi;
+import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.otto.Produce;
@@ -19,7 +21,6 @@ import org.acra.sender.ReportSender;
 import org.cranst0n.dogleg.android.backend.Authentication;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.BusProvider;
-import org.cranst0n.dogleg.android.utils.Locations;
 import org.cranst0n.dogleg.android.utils.PreferencesEditor;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -31,10 +32,14 @@ public class DoglegApplication extends Application {
   private static final AtomicReference<Activity> currentActivity = new AtomicReference<>(null);
   private static User appUser;
 
+  private static GoogleApiClient googleApiClient;
+
   @Override
   public void onCreate() {
 
     doglegApplication = this;
+    googleApiClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API).build();
+    googleApiClient.connect();
 
     initARCA();
 
@@ -80,28 +85,16 @@ public class DoglegApplication extends Application {
     return doglegApplication.getApplicationContext();
   }
 
-  public static LocationManager locationManager() {
-    return (LocationManager) DoglegApplication.application().getSystemService(Context.LOCATION_SERVICE);
+  public static GoogleApiClient googleApiClient() {
+    return googleApiClient;
   }
 
-  public static Location lastKnownLocation() {
+  public FusedLocationProviderApi locationProviderApi() {
+    return LocationServices.FusedLocationApi;
+  }
 
-    LocationManager locationManager = locationManager();
-
-    Location networkLocation =
-        locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-    Location gpsLocation =
-        locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-    if (gpsLocation == null) {
-      return networkLocation;
-    } else if (networkLocation == null) {
-      return gpsLocation;
-    } else if (Locations.isBetterLocation(gpsLocation, networkLocation)) {
-      return gpsLocation;
-    } else {
-      return networkLocation;
-    }
+  public Location lastKnownLocation() {
+    return locationProviderApi().getLastLocation(googleApiClient);
   }
 
   @Produce

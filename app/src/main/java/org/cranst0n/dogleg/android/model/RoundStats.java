@@ -5,7 +5,11 @@ public class RoundStats {
   public final int score;
   public final int frontScore;
   public final int backScore;
+  public final int netScore;
+  public final int frontNetScore;
+  public final int backNetScore;
   public final int scoreToPar;
+  public final int netScoreToPar;
   public final int putts;
   public final int frontPutts;
   public final int backPutts;
@@ -30,10 +34,14 @@ public class RoundStats {
     int backHolesPlayed = 0;
 
     int scoreToPar = 0;
+    int netScoreToPar = 0;
 
     int score = 0;
     int frontScore = 0;
     int backScore = 0;
+    int netScore = 0;
+    int frontNetScore = 0;
+    int backNetScore = 0;
     int putts = 0;
     int frontPutts = 0;
     int backPutts = 0;
@@ -58,7 +66,7 @@ public class RoundStats {
     int par5s = 0;
     int par5Score = 0;
 
-    for(HoleScore holeScore : round.holeScores()) {
+    for (HoleScore holeScore : round.holeScores()) {
 
       HoleRating holeRating = round.rating.holeRating(holeScore.hole.number);
 
@@ -113,16 +121,20 @@ public class RoundStats {
         }
 
         score += holeScore.score;
+        netScore += holeScore.netScore;
         scoreToPar += (holeScore.score - holeRating.par);
+        netScoreToPar += (holeScore.netScore - holeRating.par);
         putts += holeScore.putts;
         penalties += holeScore.penaltyStrokes;
 
         if (holeScore.hole.number < 10) {
           frontScore += holeScore.score;
+          frontNetScore += holeScore.netScore;
           frontPutts += holeScore.putts;
           frontPenalties += holeScore.penaltyStrokes;
         } else {
           backScore += holeScore.score;
+          backNetScore += holeScore.netScore;
           backPutts += holeScore.putts;
           backPenalties += holeScore.penaltyStrokes;
         }
@@ -130,9 +142,13 @@ public class RoundStats {
     }
 
     this.scoreToPar = scoreToPar;
+    this.netScoreToPar = netScoreToPar;
     this.score = score;
     this.frontScore = frontScore;
     this.backScore = backScore;
+    this.netScore = netScore;
+    this.frontNetScore = frontNetScore;
+    this.backNetScore = backNetScore;
     this.putts = putts;
     this.frontPutts = frontPutts;
     this.backPutts = backPutts;
@@ -154,7 +170,15 @@ public class RoundStats {
 
   }
 
-  public String scoreToParString() {
+  public String grossScoreToParString() {
+    return scorToParString(scoreToPar);
+  }
+
+  public String netScoreToParString() {
+    return scorToParString(netScoreToPar);
+  }
+
+  public static String scorToParString(final int scoreToPar) {
     if (scoreToPar == 0) {
       return "E";
     } else if (scoreToPar > 0) {

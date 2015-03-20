@@ -35,6 +35,10 @@ public class HoleScore implements Comparable<HoleScore> {
     return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gir, hole);
   }
 
+  public final HoleScore netScore(final int netScore) {
+    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gir, hole);
+  }
+
   public final HoleScore addStroke() {
     return new HoleScore(id, roundId, score + 1, netScore, putts, penaltyStrokes, fairwayHit, gir, hole);
   }

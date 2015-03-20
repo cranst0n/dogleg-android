@@ -42,8 +42,8 @@ public class CourseRating {
   }
 
   public HoleRating holeRating(final int holeNumber) {
-    for(HoleRating holeRating : holeRatings) {
-      if(holeRating.number == holeNumber) {
+    for (HoleRating holeRating : holeRatings) {
+      if (holeRating.number == holeNumber) {
         return holeRating;
       }
     }

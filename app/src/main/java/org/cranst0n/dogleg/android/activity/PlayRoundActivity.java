@@ -1,8 +1,6 @@
 package org.cranst0n.dogleg.android.activity;
 
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -20,6 +18,8 @@ import android.widget.Spinner;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.doomonafireball.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.squareup.otto.Bus;
@@ -136,11 +136,8 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
     courseResponse.onSuccess(new BackendResponse.BackendSuccessListener<Course>() {
       @Override
       public void onSuccess(final Course value) {
-
         getSupportActionBar().setTitle(value.name);
-
-        DoglegApplication.locationManager().
-            requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1f, PlayRoundActivity.this);
+        startLocationUpdates();
       }
     });
   }
@@ -150,7 +147,7 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
     super.onDestroy();
 
     bus.unregister(this);
-    DoglegApplication.locationManager().removeUpdates(this);
+    stopLocationUpdates();
   }
 
   @Override
@@ -159,6 +156,23 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
 
     outState.putString(Round.class.getCanonicalName(), new Gson().toJson(round));
     outState.putInt(Integer.class.getCanonicalName(), currentHole);
+  }
+
+  private void startLocationUpdates() {
+
+    DoglegApplication app = DoglegApplication.application();
+
+    LocationRequest locationRequest = new LocationRequest();
+    locationRequest.setInterval(2000);
+    locationRequest.setFastestInterval(2000);
+    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+    app.locationProviderApi().requestLocationUpdates(app.googleApiClient(), locationRequest, this);
+  }
+
+  private void stopLocationUpdates() {
+    DoglegApplication app = DoglegApplication.application();
+    app.locationProviderApi().removeLocationUpdates(app.googleApiClient(), this);
   }
 
   @Override
@@ -227,22 +241,6 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
     locationUpdated(location);
   }
 
-  @Override
-  public void onStatusChanged(final String provider, final int status, final Bundle extras) {
-    locationStatus = status;
-    locationUpdated(lastKnownLocation);
-  }
-
-  @Override
-  public void onProviderEnabled(final String provider) {
-    locationUpdated(lastKnownLocation);
-  }
-
-  @Override
-  public void onProviderDisabled(final String provider) {
-    locationUpdated(lastKnownLocation);
-  }
-
   private void locationUpdated(final Location location) {
     if (Locations.isBetterLocation(location, lastKnownLocation)) {
       lastKnownLocation = location;
@@ -264,6 +262,10 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
     currentUser = user;
 
     invalidateOptionsMenu();
+
+    if (user.isValid() && round != null) {
+      fetchAutoHandicap(round);
+    }
   }
 
   public User currentUser() {
@@ -272,6 +274,7 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
 
   private void setRound(final Round round) {
     this.round = round;
+    playRoundFragment.roundUpdated(round);
     scorecardFragment.setRound(round);
 
     if (round.holeSet().includes(currentHoleNumber())) {
@@ -343,10 +346,30 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
 
   @Override
   public void updateScore(final HoleScore holeScore) {
-      round.updateScore(holeScore);
-      scorecardFragment.updateHole(holeScore);
-      playRoundFragment.updateHole(holeScore);
-      holeViewFragment.updateHole(holeScore);
+    HoleScore updatedScore = round.updateScore(holeScore);
+    scorecardFragment.updateHole(updatedScore);
+    playRoundFragment.scoreUpdated(updatedScore);
+    holeViewFragment.updateHole(updatedScore);
+  }
+
+  private void fetchAutoHandicap(final Round round) {
+
+    // Try to get handicap from server side //
+    double slope = round.rating.slope;
+
+    if (round.holeSet() == HoleSet.Front9) {
+      slope = round.rating.frontSlope;
+    } else if (round.holeSet() == HoleSet.Back9) {
+      slope = round.rating.backSlope;
+    }
+
+    rounds.handicapRound(slope, round.holeSet().numHoles, round.time).
+        onSuccess(new BackendResponse.BackendSuccessListener<RoundHandicapResponse>() {
+          @Override
+          public void onSuccess(final RoundHandicapResponse value) {
+            setRound(round.withHandicap(value.handicap));
+          }
+        });
   }
 
   @Override
@@ -460,22 +483,7 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
 
             setRound(unhandicappedRound);
 
-            // Try to get handicap from server side //
-            double slope = unhandicappedRound.rating.slope;
-
-            if (unhandicappedRound.holeSet() == HoleSet.Front9) {
-              slope = unhandicappedRound.rating.frontSlope;
-            } else if (unhandicappedRound.holeSet() == HoleSet.Back9) {
-              slope = unhandicappedRound.rating.backSlope;
-            }
-
-            rounds.handicapRound(slope, unhandicappedRound.holeSet().numHoles, unhandicappedRound.time).
-                onSuccess(new BackendResponse.BackendSuccessListener<RoundHandicapResponse>() {
-                  @Override
-                  public void onSuccess(final RoundHandicapResponse value) {
-                    setRound(unhandicappedRound.withHandicap(value.handicap));
-                  }
-                });
+            fetchAutoHandicap(unhandicappedRound);
 
           }
         }).build();

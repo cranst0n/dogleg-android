@@ -110,7 +110,7 @@ public class CourseListRecyclerAdapter extends RecyclerView.Adapter<CourseListRe
       courseLocationView.setText(courseSummary.city + ", " + courseSummary.state);
       courseStatsView.setText(String.format("%d Holes - Par %d", courseSummary.numHoles, courseSummary.par));
 
-      Location lastKnownLocation = DoglegApplication.lastKnownLocation();
+      Location lastKnownLocation = DoglegApplication.application().lastKnownLocation();
 
       if (lastKnownLocation != null) {
         double miles =

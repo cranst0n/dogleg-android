@@ -38,8 +38,11 @@ public class PlayRoundFragment extends BaseFragment {
   private TextView currentHoleParView;
   private TextView currentHoleYardageView;
   private TextView currentHoleHandicapView;
-  private TextView roundScoreView;
-  private TextView roundScoreToParView;
+
+  private TextView roundGrossScoreView;
+  private TextView roundGrossScoreToParView;
+  private TextView netScoreView;
+  private TextView netScoreToParView;
 
   private ImageButton previousHoleButton;
   private ImageButton nextHoleButton;
@@ -94,8 +97,10 @@ public class PlayRoundFragment extends BaseFragment {
     currentHoleParView = (TextView) playRoundView.findViewById(R.id.current_hole_par);
     currentHoleYardageView = (TextView) playRoundView.findViewById(R.id.current_hole_yardage);
     currentHoleHandicapView = (TextView) playRoundView.findViewById(R.id.current_hole_handicap);
-    roundScoreView = (TextView) playRoundView.findViewById(R.id.round_score);
-    roundScoreToParView = (TextView) playRoundView.findViewById(R.id.round_score_to_par);
+    roundGrossScoreView = (TextView) playRoundView.findViewById(R.id.round_gross_score);
+    roundGrossScoreToParView = (TextView) playRoundView.findViewById(R.id.round_gross_score_to_par);
+    netScoreView = (TextView) playRoundView.findViewById(R.id.round_net_score);
+    netScoreToParView = (TextView) playRoundView.findViewById(R.id.round_net_score_to_par);
 
     previousHoleButton = (ImageButton) playRoundView.findViewById(R.id.previous_hole_button);
     nextHoleButton = (ImageButton) playRoundView.findViewById(R.id.next_hole_button);
@@ -145,12 +150,24 @@ public class PlayRoundFragment extends BaseFragment {
     return null;
   }
 
+  private HoleScore currentHoleScore() {
+    if (activity instanceof PlayRoundActivity) {
+      return ((PlayRoundActivity) activity).currentHoleScore();
+    }
+
+    return null;
+  }
+
   private HoleRating currentHoleRating() {
     if (activity instanceof PlayRoundActivity) {
       return ((PlayRoundActivity) activity).currentHoleRating();
     }
 
     return null;
+  }
+
+  public void roundUpdated(final Round round) {
+    scoreUpdated(currentHoleScore());
   }
 
   public void holeUpdated(final int currentHole) {
@@ -164,11 +181,13 @@ public class PlayRoundFragment extends BaseFragment {
     }
   }
 
-  public void updateHole(final HoleScore holeScore) {
+  public void scoreUpdated(final HoleScore holeScore) {
     if (round() != null) {
       RoundStats stats = round().stats();
-      roundScoreView.setText(String.valueOf(stats.score));
-      roundScoreToParView.setText(String.format("(%s)", stats.scoreToParString()));
+      roundGrossScoreView.setText(String.valueOf(stats.score));
+      roundGrossScoreToParView.setText(String.format("(%s)", stats.grossScoreToParString()));
+      netScoreView.setText(String.valueOf(stats.netScore));
+      netScoreToParView.setText(String.format("(%s)", stats.netScoreToParString()));
     }
   }
 

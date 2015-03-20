@@ -3,7 +3,7 @@
              android:id="@+id/scorecard_table"
              android:layout_span="4"
              android:layout_width="match_parent"
-             android:layout_height="wrap_content"
+             android:layout_height="match_parent"
              android:background="@android:color/white"
              android:stretchColumns="1,2,3,4,5,6,7,8,9,10">
 
@@ -220,6 +220,56 @@
 
         <TextView
             android:id="@+id/front_9_score"
+            style="@style/ScorecardCell"/>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/front_9_net_score_row">
+
+        <TextView
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="Net"/>
+
+        <TextView
+            android:id="@+id/hole_1_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_2_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_3_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_4_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_5_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_6_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_7_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_8_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_9_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/front_9_net_score"
             style="@style/ScorecardCell"/>
 
     </TableRow>
@@ -775,6 +825,56 @@
 
         <TextView
             android:id="@+id/back_9_score"
+            style="@style/ScorecardCell"/>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/back_9_net_score_row">
+
+        <TextView
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="Net"/>
+
+        <TextView
+            android:id="@+id/hole_10_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_11_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_12_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_13_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_14_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_15_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_16_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_17_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_18_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/back_9_net_score"
             style="@style/ScorecardCell"/>
 
     </TableRow>

@@ -38,13 +38,17 @@ public class Round {
     Arrays.sort(this.holeScores);
   }
 
+  public int numHoles() {
+    return holeSet().numHoles;
+  }
+
   public HoleScore[] holeScores() {
     return Arrays.copyOf(holeScores, holeScores.length);
   }
 
   public HoleScore holeScore(final int holeNumber) {
-    for(HoleScore holeScore : holeScores) {
-      if(holeScore.hole.number == holeNumber) {
+    for (HoleScore holeScore : holeScores) {
+      if (holeScore.hole.number == holeNumber) {
         return holeScore;
       }
     }
@@ -52,9 +56,36 @@ public class Round {
     return null;
   }
 
-  public void updateScore(final HoleScore holeScore) {
+  public HoleScore updateScore(final HoleScore holeScore) {
+
+    HoleScore handicappedScore = handicapScore(holeScore);
+
     int ix = holeScore.hole.number - holeSet().holeStart;
-    holeScores[ix] = holeScore;
+    holeScores[ix] = handicappedScore;
+
+    return handicappedScore;
+  }
+
+  public Round handicapped() {
+    for (HoleScore holeScore : holeScores()) {
+      updateScore(handicapScore(holeScore));
+    }
+
+    return this;
+  }
+
+  public HoleScore handicapScore(final HoleScore holeScore) {
+    HoleRating holeRating = rating.holeRating(holeScore.hole.number);
+    int handicapToUse = handicap();
+
+    // If you're playing 9 holes of an 18 hole course, you need to divide each holes
+    // true handicap by 2 to apply stokes to the appropriate holes
+    int ratingCorrection = course.numHoles / holeSet().numHoles;
+
+    int netCorrection =
+        (int) Math.max(Math.ceil((handicapToUse - Math.ceil((double) holeRating.handicap / ratingCorrection) + 1) / numHoles()), 0);
+
+    return holeScore.netScore(holeScore.score - netCorrection);
   }
 
   public Round asUser(final User user) {
@@ -84,6 +115,14 @@ public class Round {
     }
 
     return holeSet;
+  }
+
+  public boolean hasHandicap() {
+    return isHandicapOverridden || handicap > 0;
+  }
+
+  public int handicap() {
+    return hasHandicap() ? (isHandicapOverridden ? handicapOverride : handicap) : 0;
   }
 
   public RoundStats stats() {
@@ -149,7 +188,7 @@ public class Round {
     }
 
     return new Round(user, course, rating, time, official, handicap, isHandicapOverridden,
-        handicapOverride, newHoleScores);
+        handicapOverride, newHoleScores).handicapped();
   }
 
   public static class RoundIssue {

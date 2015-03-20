@@ -26,12 +26,13 @@ import org.cranst0n.dogleg.android.backend.Rounds;
 import org.cranst0n.dogleg.android.constants.Photos;
 import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 import org.cranst0n.dogleg.android.model.Round;
+import org.cranst0n.dogleg.android.model.RoundStats;
+import org.cranst0n.dogleg.android.utils.Time;
 import org.cranst0n.dogleg.android.views.Views;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -176,6 +177,7 @@ public class RoundListFragment extends BaseFragment {
 
       private final ImageView courseImageView;
       private final TextView grossScoreView;
+      private final TextView grossScoreToParView;
       private final TextView courseNameView;
       private final TextView roundTimeView;
 
@@ -196,6 +198,7 @@ public class RoundListFragment extends BaseFragment {
 
         courseImageView = (ImageView) itemView.findViewById(R.id.course_image);
         grossScoreView = (TextView) itemView.findViewById(R.id.round_gross_score_view);
+        grossScoreToParView = (TextView) itemView.findViewById(R.id.round_gross_score_to_par);
         courseNameView = (TextView) itemView.findViewById(R.id.round_course_name);
         roundTimeView = (TextView) itemView.findViewById(R.id.round_date);
 
@@ -248,9 +251,12 @@ public class RoundListFragment extends BaseFragment {
 
       private void setRound(final Round round) {
 
-        grossScoreView.setText(String.valueOf(round.stats().score));
+        RoundStats roundStats = round.stats();
+
+        grossScoreView.setText(String.valueOf(roundStats.score));
+        grossScoreToParView.setText(String.format("(%s)", roundStats.grossScoreToParString()));
         courseNameView.setText(round.course.name);
-        roundTimeView.setText(dateFormatter.format(new Date(round.time)));
+        roundTimeView.setText(Time.ago(round.time));
 
         Ion.with(courseImageView)
             .centerCrop()

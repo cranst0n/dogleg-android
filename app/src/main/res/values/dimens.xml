@@ -118,4 +118,6 @@
 
     <dimen name="play_round_stat_size">@dimen/text_size_ten</dimen>
 
+    <dimen name="round_list_item_header_height">45dp</dimen>
+
 </resources>

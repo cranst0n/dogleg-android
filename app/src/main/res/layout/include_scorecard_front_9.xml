@@ -224,6 +224,56 @@
     </TableRow>
 
     <TableRow
+        android:id="@+id/front_9_net_score_row">
+
+        <TextView
+            style="@style/ScorecardCell"
+            android:textStyle="bold"
+            android:text="Net"/>
+
+        <TextView
+            android:id="@+id/hole_1_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_2_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_3_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_4_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_5_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_6_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_7_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_8_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/hole_9_net_score"
+            style="@style/ScorecardCell"/>
+
+        <TextView
+            android:id="@+id/front_9_net_score"
+            style="@style/ScorecardCell"/>
+
+    </TableRow>
+
+    <TableRow
         android:id="@+id/front_9_putts_row">
 
         <TextView

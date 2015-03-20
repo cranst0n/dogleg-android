@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -415,6 +416,10 @@ public class PlayRoundMapFragment extends BaseFragment implements GoogleMap.OnMa
 
     if (reference != null) {
 
+      if (userDistanceMarker != null) {
+        userDistanceMarker.remove();
+      }
+
       userDistanceMarker =
           map.addMarker(new MarkerOptions().
               icon(BitmapDescriptorFactory.fromBitmap(userDistanceIconFactory.makeIcon("Drag"))).
@@ -475,8 +480,13 @@ public class PlayRoundMapFragment extends BaseFragment implements GoogleMap.OnMa
     Location markerLocation = markerLocation(marker);
     int distance =
         (int) Math.round(Units.metersToYards(toLocation.distanceTo(markerLocation)));
-    marker.setIcon(
-        BitmapDescriptorFactory.fromBitmap(iconGenerator.makeIcon(String.valueOf(distance))));
+
+    try {
+      marker.setIcon(
+          BitmapDescriptorFactory.fromBitmap(iconGenerator.makeIcon(String.valueOf(distance))));
+    } catch (Exception ex) {
+      Log.e(getClass().getSimpleName(), "Marker ex: " + ex.getMessage(), ex);
+    }
   }
 
   private Location markerLocation(final Marker marker) {

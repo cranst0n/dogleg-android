@@ -5,19 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 
-import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.activity.PlayRoundActivity;
-import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
-import org.cranst0n.dogleg.android.model.HoleScore;
-import org.cranst0n.dogleg.android.model.HoleSet;
 import org.cranst0n.dogleg.android.model.Round;
-import org.cranst0n.dogleg.android.model.RoundStats;
 
 public class PlayRoundScorecardFragment extends ScorecardFragment {
 
@@ -38,7 +29,7 @@ public class PlayRoundScorecardFragment extends ScorecardFragment {
 
     super.onCreateView(inflater, container, savedInstanceState);
 
-    for(int holeIx = 0; holeIx < numHoles(); holeIx++ ) {
+    for (int holeIx = 0; holeIx < numHoles(); holeIx++) {
 
       final int holeNumber = holeStart() + holeIx;
 

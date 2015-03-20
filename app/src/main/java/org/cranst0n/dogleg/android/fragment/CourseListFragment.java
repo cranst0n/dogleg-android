@@ -69,7 +69,7 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
 
     setHasOptionsMenu(true);
 
-    lastLocation = DoglegApplication.lastKnownLocation();
+    lastLocation = DoglegApplication.application().lastKnownLocation();
   }
 
   @Override

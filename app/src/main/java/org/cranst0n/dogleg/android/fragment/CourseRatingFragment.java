@@ -13,8 +13,6 @@ import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 import org.cranst0n.dogleg.android.model.CourseRating;
 
-import java.util.Arrays;
-
 public class CourseRatingFragment extends BaseFragment {
 
   private CourseRating rating;
@@ -116,9 +114,9 @@ public class CourseRatingFragment extends BaseFragment {
       }
 
       for (int ix = 0; ix < rating.holeRatings().length; ix++) {
-        holeFieldViews[ix].par.setText("" + rating.holeRating(ix+1).par);
-        holeFieldViews[ix].yardage.setText("" + rating.holeRating(ix+1).yardage);
-        holeFieldViews[ix].handicap.setText("" + rating.holeRating(ix+1).handicap);
+        holeFieldViews[ix].par.setText("" + rating.holeRating(ix + 1).par);
+        holeFieldViews[ix].yardage.setText("" + rating.holeRating(ix + 1).yardage);
+        holeFieldViews[ix].handicap.setText("" + rating.holeRating(ix + 1).handicap);
       }
 
       front9ParText.setText(String.valueOf(rating.frontPar()));

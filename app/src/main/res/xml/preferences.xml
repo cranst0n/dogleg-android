@@ -13,6 +13,12 @@
             android:persistent="true"
             android:layout="@layout/preference_custom"/>
 
+        <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
+            android:key="version"
+            android:title="@string/version"
+            android:layout="@layout/preference_custom"
+            android:enabled="false"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen>
