@@ -58,8 +58,12 @@ public class PlayRoundMapFragment extends BaseFragment implements GoogleMap.OnMa
   private final List<Circle> standardDistanceCircles = new ArrayList<>();
   private boolean mapInitialized;
 
-  private IconGenerator holeFeatureIconFactory;
-  private IconGenerator userDistanceIconFactory;
+  private IconGenerator greenIconFactory;
+  private IconGenerator lightGreenIconFactory;
+  private IconGenerator orangeIconFactory;
+  private IconGenerator blueIconFactory;
+  private IconGenerator sandIconFactory;
+  private IconGenerator greyIconFactory;
 
   @Override
   public void onCreate(final Bundle savedInstanceState) {
@@ -67,14 +71,18 @@ public class PlayRoundMapFragment extends BaseFragment implements GoogleMap.OnMa
 
     bus = BusProvider.Instance.bus;
     bus.register(this);
-
-    holeFeatureIconFactory = new IconGenerator(context);
-    userDistanceIconFactory = new IconGenerator(context);
   }
 
   @Override
   public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                            final Bundle savedInstanceState) {
+
+    greenIconFactory = createTextIconFactory(inflater, R.drawable.map_marker_green);
+    lightGreenIconFactory = createTextIconFactory(inflater, R.drawable.map_marker_light_green);
+    orangeIconFactory = createTextIconFactory(inflater, R.drawable.map_marker_orange);
+    blueIconFactory = createTextIconFactory(inflater, R.drawable.map_marker_blue);
+    sandIconFactory = createTextIconFactory(inflater, R.drawable.map_marker_sand);
+    greyIconFactory = createTextIconFactory(inflater, R.drawable.map_marker_grey);
 
     mapFragmentView = inflater.inflate(R.layout.fragment_play_round_map, container, false);
 
@@ -93,7 +101,7 @@ public class PlayRoundMapFragment extends BaseFragment implements GoogleMap.OnMa
       @Override
       public void onMapClick(final LatLng latLng) {
         userDistanceMarker.setPosition(latLng);
-        updateDistanceMarker(userDistanceMarker, referenceLocation(), userDistanceIconFactory);
+        updateDistanceMarker(userDistanceMarker, referenceLocation(), orangeIconFactory);
         userDistanceMarker.setVisible(true);
       }
     });
@@ -146,15 +154,17 @@ public class PlayRoundMapFragment extends BaseFragment implements GoogleMap.OnMa
       }
     });
 
-    View mapDistanceMarker = inflater.inflate(R.layout.map_distance_marker, null);
-    holeFeatureIconFactory.setBackground(null);
-    holeFeatureIconFactory.setContentView(mapDistanceMarker);
-
-    View mapDraggableDistanceMarker = inflater.inflate(R.layout.map_user_distance_marker, null);
-    userDistanceIconFactory.setBackground(null);
-    userDistanceIconFactory.setContentView(mapDraggableDistanceMarker);
-
     return mapFragmentView;
+  }
+
+  private IconGenerator createTextIconFactory(final LayoutInflater inflater, int backgroundResource) {
+    View greenMapMarker = inflater.inflate(R.layout.map_text_marker, null);
+    greenMapMarker.setBackgroundResource(backgroundResource);
+    IconGenerator greenIG = new IconGenerator(context);
+    greenIG.setBackground(null);
+    greenIG.setContentView(greenMapMarker);
+
+    return greenIG;
   }
 
   @Override
@@ -422,7 +432,7 @@ public class PlayRoundMapFragment extends BaseFragment implements GoogleMap.OnMa
 
       userDistanceMarker =
           map.addMarker(new MarkerOptions().
-              icon(BitmapDescriptorFactory.fromBitmap(userDistanceIconFactory.makeIcon("Drag"))).
+              icon(BitmapDescriptorFactory.fromBitmap(orangeIconFactory.makeIcon("Drag"))).
               position(hole.teeFeature().center().toLatLng()).
               draggable(true).
               visible(false).
@@ -430,13 +440,16 @@ public class PlayRoundMapFragment extends BaseFragment implements GoogleMap.OnMa
 
       for (HoleFeature feature : hole.displayableFeatures()) {
 
+        IconGenerator iconFactory = iconFactoryForFeature(feature);
+
         for (LatLon latLon : feature.coordinates) {
 
           String distance = String.format("%d",
               (int) Math.round(Units.metersToYards(latLon.distanceTo(reference))));
 
           MarkerOptions markerOptions = new MarkerOptions().
-              icon(BitmapDescriptorFactory.fromBitmap(holeFeatureIconFactory.makeIcon(distance))).
+              title(feature.name).
+              icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(distance))).
               position(latLon.toLatLng()).
               anchor(0.5f, 1f);
 
@@ -466,13 +479,13 @@ public class PlayRoundMapFragment extends BaseFragment implements GoogleMap.OnMa
 
   private void updateFeatureDistanceMarkers(final Location location) {
     for (Marker featureMarker : featureDistanceMarkers) {
-      updateDistanceMarker(featureMarker, location, holeFeatureIconFactory);
+      updateDistanceMarker(featureMarker, location, iconFactoryForName(featureMarker.getTitle().toLowerCase()));
     }
   }
 
   private void updateUserDistanceMarker(final Location location) {
     if (userDistanceMarker != null) {
-      updateDistanceMarker(userDistanceMarker, location, userDistanceIconFactory);
+      updateDistanceMarker(userDistanceMarker, location, orangeIconFactory);
     }
   }
 
@@ -497,4 +510,26 @@ public class PlayRoundMapFragment extends BaseFragment implements GoogleMap.OnMa
     return markerLocation;
   }
 
+  private IconGenerator iconFactoryForFeature(final HoleFeature holeFeature) {
+    return iconFactoryForName(holeFeature.name.toLowerCase());
+  }
+
+  private IconGenerator iconFactoryForName(final String name) {
+
+    if (name == null) {
+      return greenIconFactory;
+    }
+
+    if (name.equals("green")) {
+      return lightGreenIconFactory;
+    } else if (name.contains("water") || name.contains("lake") || name.contains("creek") || name.contains("pond")) {
+      return blueIconFactory;
+    } else if (name.contains("sand") || name.contains("bunker") || name.contains("trap") || name.contains("waste")) {
+      return sandIconFactory;
+    } else if (name.contains("cart")) {
+      return greyIconFactory;
+    } else {
+      return greenIconFactory;
+    }
+  }
 }
