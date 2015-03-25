@@ -154,7 +154,7 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
   public void onDestroy() {
     super.onDestroy();
 
-    if(courseInfoQuery != null) {
+    if (courseInfoQuery != null) {
       courseInfoQuery.cancel();
     }
   }

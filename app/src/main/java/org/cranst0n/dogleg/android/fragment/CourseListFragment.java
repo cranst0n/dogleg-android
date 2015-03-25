@@ -4,7 +4,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.internal.widget.TintImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -26,8 +25,8 @@ import org.cranst0n.dogleg.android.backend.Courses;
 import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 import org.cranst0n.dogleg.android.model.CourseSummary;
 import org.cranst0n.dogleg.android.model.LatLon;
-import org.cranst0n.dogleg.android.utils.Colors;
 import org.cranst0n.dogleg.android.views.PinSwitch;
+import org.cranst0n.dogleg.android.views.Views;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,7 +75,7 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
   public void onDestroy() {
     super.onDestroy();
 
-    if(queryCall != null) {
+    if (queryCall != null) {
       queryCall.cancel();
     }
   }
@@ -116,14 +115,7 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
     courseSearchMenuItem = menu.findItem(R.id.action_course_search);
     courseSearchView = (SearchView) MenuItemCompat.getActionView(courseSearchMenuItem);
 
-    SearchView.SearchAutoComplete searchTextField =
-        (SearchView.SearchAutoComplete) courseSearchView.findViewById(R.id.search_src_text);
-    TintImageView searchButton = (TintImageView) courseSearchView.findViewById(R.id.search_button);
-    TintImageView closeButton = (TintImageView) courseSearchView.findViewById(R.id.search_close_btn);
-
-    searchTextField.setTextColor(getResources().getColor(android.R.color.white));
-    searchButton.setImageDrawable(Colors.colorize(searchButton.getDrawable(), android.R.color.white, context));
-    closeButton.setImageDrawable(Colors.colorize(closeButton.getDrawable(), android.R.color.white, context));
+    Views.colorizeSearchView(courseSearchView, android.R.color.white, context);
 
     pinnedMenuItem = menu.findItem(R.id.pinned_switch);
     pinnedCoursesSwitch = (PinSwitch) MenuItemCompat.getActionView(pinnedMenuItem);

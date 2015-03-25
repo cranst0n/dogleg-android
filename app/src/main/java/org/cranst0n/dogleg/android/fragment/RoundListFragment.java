@@ -88,7 +88,7 @@ public class RoundListFragment extends BaseFragment {
   public void onDestroy() {
     super.onDestroy();
 
-    if(queryCall != null) {
+    if (queryCall != null) {
       queryCall.cancel();
     }
   }

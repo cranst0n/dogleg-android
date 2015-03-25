@@ -69,7 +69,7 @@ public class BackendResponse<T extends JsonElement, U> {
   public void cancel() {
     if (ionCall instanceof SimpleFuture) {
       ((SimpleFuture) ionCall).cancelSilently();
-    } else if(ionCall != null) {
+    } else if (ionCall != null) {
       ionCall.cancel();
     }
   }
