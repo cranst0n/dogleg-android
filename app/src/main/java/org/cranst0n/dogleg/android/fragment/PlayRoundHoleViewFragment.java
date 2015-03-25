@@ -406,10 +406,8 @@ public class PlayRoundHoleViewFragment extends BaseFragment {
                   @Override
                   public void onPositive(final MaterialDialog dialog) {
 
-                    final MaterialDialog progressDialog = new MaterialDialog.Builder(activity)
-                        .content("Submitting round...")
-                        .progress(true, 0)
-                        .show();
+                    final MaterialDialog progressDialog =
+                        Dialogs.showBusyDialog(activity, "Submitting round...");
 
                     new Rounds(context).postRound(round().asUser(currentUser())).
                         onSuccess(new BackendResponse.BackendSuccessListener<Round>() {
@@ -421,14 +419,14 @@ public class PlayRoundHoleViewFragment extends BaseFragment {
                         onError(new BackendResponse.BackendErrorListener() {
                           @Override
                           public void onError(final BackendMessage message) {
-                            SnackBars.showSimple(
+                            Dialogs.showMessageDialog(
                                 activity, "Round submission failed: " + message.message);
                           }
                         }).
                         onException(new BackendResponse.BackendExceptionListener() {
                           @Override
                           public void onException(final Exception exception) {
-                            SnackBars.showSimple(
+                            Dialogs.showMessageDialog(
                                 activity, "Round submission failed: " + exception.getMessage());
                           }
                         }).onFinally(new BackendResponse.BackendFinallyListener() {

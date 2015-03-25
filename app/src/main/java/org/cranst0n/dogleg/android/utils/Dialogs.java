@@ -23,6 +23,20 @@ public class Dialogs {
 
   }
 
+  public static MaterialDialog showBusyDialog(final Activity activity, final String text) {
+    return new MaterialDialog.Builder(activity)
+        .content(text)
+        .progress(true, 0)
+        .cancelable(false)
+        .show();
+  }
+
+  public static MaterialDialog showMessageDialog(final Activity activity, final String text) {
+    return new MaterialDialog.Builder(activity)
+        .content(text)
+        .show();
+  }
+
   public static void showLoginDialog(final Activity activity) {
 
     MaterialDialog dialog = new MaterialDialog.Builder(activity)

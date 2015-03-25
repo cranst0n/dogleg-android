@@ -1,5 +1,6 @@
 package org.cranst0n.dogleg.android.activity;
 
+import android.content.DialogInterface;
 import android.location.Location;
 import android.location.LocationProvider;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import org.cranst0n.dogleg.android.DoglegApplication;
 import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.activity.api.BaseActivity;
 import org.cranst0n.dogleg.android.backend.Authentication;
+import org.cranst0n.dogleg.android.backend.BackendMessage;
 import org.cranst0n.dogleg.android.backend.BackendResponse;
 import org.cranst0n.dogleg.android.backend.Courses;
 import org.cranst0n.dogleg.android.backend.Rounds;
@@ -115,6 +117,8 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
       long courseId = (Long) getIntent().getSerializableExtra(
           getResources().getString(R.string.intent_course_id_key));
 
+      final MaterialDialog progressDialog = Dialogs.showBusyDialog(this, "Starting round...");
+
       courseResponse = courses.info(courseId).
           onSuccess(new BackendResponse.BackendSuccessListener<Course>() {
             @Override
@@ -122,7 +126,42 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
               setRound(Round.create(currentUser(), value, HoleSet.available(value)[0]));
               showRoundSettings();
             }
+          }).
+          onError(new BackendResponse.BackendErrorListener() {
+            @Override
+            public void onError(BackendMessage message) {
+              progressDialog.dismiss();
+              new MaterialDialog.Builder(PlayRoundActivity.this).
+                  content("Error starting round: " + message.message).
+                  dismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(final DialogInterface dialogInterface) {
+                      finish();
+                    }
+                  }).build().show();
+            }
+          }).
+          onException(new BackendResponse.BackendExceptionListener() {
+            @Override
+            public void onException(final Exception exception) {
+              progressDialog.dismiss();
+              new MaterialDialog.Builder(PlayRoundActivity.this).
+                  content("Error starting round: " + exception.getMessage()).
+                  dismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(final DialogInterface dialogInterface) {
+                      finish();
+                    }
+                  }).build().show();
+            }
+          }).
+          onFinally(new BackendResponse.BackendFinallyListener() {
+            @Override
+            public void onFinally() {
+              progressDialog.dismiss();
+            }
           });
+
     } else {
 
       Round savedRound = new Gson().fromJson(
