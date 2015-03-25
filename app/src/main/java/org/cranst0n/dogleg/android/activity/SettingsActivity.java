@@ -1,53 +1,13 @@
 package org.cranst0n.dogleg.android.activity;
 
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
 
-import org.cranst0n.dogleg.android.BuildConfig;
 import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.activity.api.BaseActivity;
+import org.cranst0n.dogleg.android.fragment.SettingsFragment;
 
 public class SettingsActivity extends BaseActivity {
-
-  public class SettingsFragment extends PreferenceFragment {
-    @Override
-    public void onCreate(final Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
-      addPreferencesFromResource(R.xml.preferences);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-      View v = super.onCreateView(inflater, container, savedInstanceState);
-
-      if (v != null) {
-
-        ListView lv = (ListView) v.findViewById(android.R.id.list);
-
-        lv.setPadding(lv.getPaddingLeft(), 20,
-            lv.getPaddingRight(), lv.getPaddingBottom());
-      }
-
-      try {
-        String appVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-        if (BuildConfig.DEBUG) {
-          appVersion += "-SNAPSHOT";
-        }
-        findPreference("version").setSummary(appVersion);
-      } catch (PackageManager.NameNotFoundException e) {
-        findPreference("version").setSummary("Unknown");
-      }
-
-      return v;
-    }
-  }
 
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
