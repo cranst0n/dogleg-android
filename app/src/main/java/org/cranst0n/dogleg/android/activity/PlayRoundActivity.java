@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.doomonafireball.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.gson.Gson;
@@ -160,14 +161,25 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
 
   private void startLocationUpdates() {
 
-    DoglegApplication app = DoglegApplication.application();
+    final DoglegApplication app = DoglegApplication.application();
 
-    LocationRequest locationRequest = new LocationRequest();
-    locationRequest.setInterval(2000);
-    locationRequest.setFastestInterval(2000);
-    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    app.googleApiClient().registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+      @Override
+      public void onConnected(final Bundle bundle) {
+        LocationRequest locationRequest = new LocationRequest();
+        locationRequest.setInterval(2000);
+        locationRequest.setFastestInterval(2000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-    app.locationProviderApi().requestLocationUpdates(app.googleApiClient(), locationRequest, this);
+        app.locationProviderApi().requestLocationUpdates(
+            app.googleApiClient(), locationRequest, PlayRoundActivity.this);
+      }
+
+      @Override
+      public void onConnectionSuspended(int i) {
+
+      }
+    });
   }
 
   private void stopLocationUpdates() {

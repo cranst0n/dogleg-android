@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -96,15 +97,6 @@ public class PlayRoundMapFragment extends BaseFragment implements GoogleMap.OnMa
 
     // Gets to GoogleMap from the MapView and does initialization stuff
     map = mapView.getMap();
-    map.setOnMarkerDragListener(this);
-    map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-      @Override
-      public void onMapClick(final LatLng latLng) {
-        userDistanceMarker.setPosition(latLng);
-        updateDistanceMarker(userDistanceMarker, referenceLocation(), orangeIconFactory);
-        userDistanceMarker.setVisible(true);
-      }
-    });
 
     if (map != null) {
 
@@ -119,12 +111,26 @@ public class PlayRoundMapFragment extends BaseFragment implements GoogleMap.OnMa
         }
       });
 
+      map.setOnMarkerDragListener(this);
+      map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        @Override
+        public void onMapClick(final LatLng latLng) {
+          userDistanceMarker.setPosition(latLng);
+          updateDistanceMarker(userDistanceMarker, referenceLocation(), orangeIconFactory);
+          userDistanceMarker.setVisible(true);
+        }
+      });
+
       // Needs to call MapsInitializer before doing any CameraUpdateFactory calls
       MapsInitializer.initialize(getActivity());
       mapInitialized = true;
 
     } else {
-      SnackBars.showSimple(activity, "Map view is unavailable.");
+      SnackBars.showSimple(activity, GooglePlayServicesUtil.getErrorString(
+          GooglePlayServicesUtil.isGooglePlayServicesAvailable(context)));
+
+      GooglePlayServicesUtil.getErrorDialog(
+          GooglePlayServicesUtil.isGooglePlayServicesAvailable(context), activity, 0).show();
     }
 
     resetCameraButton.setOnClickListener(new View.OnClickListener() {
