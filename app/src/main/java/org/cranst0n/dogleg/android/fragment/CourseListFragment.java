@@ -42,7 +42,7 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
   private View courseListView;
   private SwipeRefreshLayout swipeRefreshLayout;
   private RecyclerView recyclerView;
-  private SmoothProgressBar loadInProgressBar;
+  private SmoothProgressBar appendInProgressBar;
 
   private BackendResponse<JsonArray, CourseSummary[]> queryCall;
 
@@ -80,7 +80,7 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
 
     swipeRefreshLayout = (SwipeRefreshLayout) courseListView.findViewById(R.id.swipe_refresh_container);
     recyclerView = (RecyclerView) courseListView.findViewById(R.id.course_list_recycler);
-    loadInProgressBar = (SmoothProgressBar) courseListView.findViewById(R.id.search_in_progress_bar);
+    appendInProgressBar = (SmoothProgressBar) courseListView.findViewById(R.id.append_in_progress_bar);
 
     swipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accent);
 
@@ -221,11 +221,13 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
   private void addToCourseList(final boolean append) {
 
     loading = true;
-    loadInProgressBar.setVisibility(View.VISIBLE);
 
-    if (!append) {
+    if (append) {
+      appendInProgressBar.setVisibility(View.VISIBLE);
+    } else {
       recyclerView.setVisibility(View.INVISIBLE);
       displayedCourseList.clear();
+      swipeRefreshLayout.setRefreshing(true);
       endOfListReached = false;
     }
 
@@ -260,7 +262,7 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
             loading = false;
             recyclerView.getAdapter().notifyDataSetChanged();
             recyclerView.setVisibility(View.VISIBLE);
-            loadInProgressBar.setVisibility(View.GONE);
+            appendInProgressBar.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
           }
         });

@@ -44,6 +44,8 @@ import org.cranst0n.dogleg.android.views.PinSwitch;
 import java.util.Arrays;
 import java.util.List;
 
+import fr.castorflex.android.circularprogressbar.CircularProgressBar;
+
 public class CourseInfoFragment extends BaseFragment implements ObservableScrollViewCallbacks {
 
   private View courseInfoView;
@@ -57,7 +59,7 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
   private ImageView courseImageView;
   private ObservableScrollView scrollView;
 
-  private TextView loadingIndicator;
+  private CircularProgressBar loadingIndicator;
 
   private TextView cityTextView;
   private TextView stateTextView;
@@ -84,7 +86,7 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
     scrollView = (ObservableScrollView) courseInfoView.findViewById(R.id.scroll);
     scrollView.setScrollViewCallbacks(this);
 
-    loadingIndicator = (TextView) courseInfoView.findViewById(R.id.loading_indicator);
+    loadingIndicator = (CircularProgressBar) courseInfoView.findViewById(R.id.loading_indicator);
 
     courseImageView = (ImageView) courseInfoView.findViewById(R.id.course_image);
     cityTextView = (TextView) courseInfoView.findViewById(R.id.course_city);

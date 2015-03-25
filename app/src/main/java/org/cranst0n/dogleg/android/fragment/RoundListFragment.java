@@ -36,11 +36,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.TimeZone;
 
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
+
 public class RoundListFragment extends BaseFragment {
 
   private View roundListView;
   private SwipeRefreshLayout swipeRefreshLayout;
   private RecyclerView recyclerView;
+  private SmoothProgressBar appendInProgressBar;
 
   private Rounds rounds;
 
@@ -71,6 +74,8 @@ public class RoundListFragment extends BaseFragment {
         addToRoundList(false);
       }
     });
+
+    appendInProgressBar = (SmoothProgressBar) roundListView.findViewById(R.id.append_in_progress_bar);
 
     initRecyclerView();
 
@@ -122,9 +127,12 @@ public class RoundListFragment extends BaseFragment {
 
     loading = true;
 
-    if (!append) {
+    if (append) {
+      appendInProgressBar.setVisibility(View.VISIBLE);
+    } else {
       recyclerView.setVisibility(View.INVISIBLE);
       displayedRoundList.clear();
+      swipeRefreshLayout.setRefreshing(true);
       endOfListReached = false;
     }
 
@@ -148,6 +156,7 @@ public class RoundListFragment extends BaseFragment {
             loading = false;
             recyclerView.getAdapter().notifyDataSetChanged();
             recyclerView.setVisibility(View.VISIBLE);
+            appendInProgressBar.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
           }
         });
