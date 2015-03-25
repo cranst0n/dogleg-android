@@ -10,11 +10,16 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.GridLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.doomonafireball.betterpickers.calendardatepicker.CalendarDatePickerDialog;
@@ -56,6 +61,8 @@ import org.joda.time.DateTime;
 
 import java.util.Arrays;
 
+import fr.castorflex.android.circularprogressbar.CircularProgressBar;
+
 public class PlayRoundActivity extends BaseActivity implements LocationListener,
     PlayRoundFragment.PlayRoundListener {
 
@@ -81,8 +88,13 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
   private Spinner holeSetSpinner;
   private Button pickDateButton;
   private CheckBox officialCheckBox;
-  private CheckBox handicapOverrideCheckBox;
-  private Spinner handicapOverrideSpinner;
+
+  private GridLayout handicapLayout;
+  private RadioButton autoHandicapButton;
+  private CircularProgressBar fetchingAutoHandicapIndicator;
+  private TextView autoHandicapText;
+  private RadioButton overrideHandicapButton;
+  private Spinner overrideHandicapSpinner;
 
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
@@ -400,10 +412,12 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
 
   @Override
   public void updateScore(final HoleScore holeScore) {
-    HoleScore updatedScore = round.updateScore(holeScore);
-    scorecardFragment.updateHole(updatedScore);
-    playRoundFragment.scoreUpdated(updatedScore);
-    holeViewFragment.updateHole(updatedScore);
+    if(round != null && round.holeSet().includes((holeScore.hole.number))) {
+      HoleScore updatedScore = round.updateScore(holeScore);
+      scorecardFragment.updateHole(updatedScore);
+      playRoundFragment.scoreUpdated(updatedScore);
+      holeViewFragment.updateHole(updatedScore);
+    }
   }
 
   private void fetchAutoHandicap(final Round round) {
@@ -531,8 +545,8 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
                 HoleSet.available(round.course)[holeSetSpinner.getSelectedItemPosition()];
 
             final Round unhandicappedRound = Round.create(currentUser, round.course, selectedRating,
-                round.time, officialCheckBox.isChecked(), 0, handicapOverrideCheckBox.isChecked(),
-                handicapOverrideSpinner.getSelectedItemPosition(), round.holeScores(),
+                round.time, officialCheckBox.isChecked(), 0, overrideHandicapButton.isChecked(),
+                overrideHandicapSpinner.getSelectedItemPosition(), round.holeScores(),
                 selectedHoleSet);
 
             setRound(unhandicappedRound);
@@ -547,10 +561,15 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
     pickDateButton = (Button) dialog.getCustomView().findViewById(R.id.pick_date_button);
     officialCheckBox =
         (CheckBox) dialog.getCustomView().findViewById(R.id.play_round_official_checkbox);
-    handicapOverrideCheckBox =
-        (CheckBox) dialog.getCustomView().findViewById(R.id.play_round_handicap_override_checkbox);
-    handicapOverrideSpinner =
-        (Spinner) dialog.getCustomView().findViewById(R.id.play_round_handicap_override_spinner);
+    handicapLayout = (GridLayout) dialog.getCustomView().findViewById(R.id.handicap_layout);
+    autoHandicapButton = (RadioButton) dialog.getCustomView().findViewById(R.id.auto_handicap_button);
+    fetchingAutoHandicapIndicator =
+        (CircularProgressBar) dialog.getCustomView().findViewById(R.id.fetching_auto_handicap_indicator);
+    autoHandicapText = (TextView) dialog.getCustomView().findViewById(R.id.auto_handicap_text);
+    overrideHandicapButton =
+        (RadioButton) dialog.getCustomView().findViewById(R.id.override_handicap_button);
+    overrideHandicapSpinner =
+        (Spinner) dialog.getCustomView().findViewById(R.id.override_handicap_spinner);
 
     int ratingIx = -1;
     for (int ix = 0; ix < round.course.ratings.length; ix++) {
@@ -564,11 +583,35 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
     holeSetSpinner.setAdapter(holeSetAdapter());
     holeSetSpinner.setSelection(Arrays.asList(HoleSet.available(round.course)).indexOf(round.holeSet()));
     officialCheckBox.setChecked(round.official);
-    handicapOverrideCheckBox.setChecked(round.isHandicapOverridden);
-    handicapOverrideSpinner.setAdapter(handicapAdapter());
-    handicapOverrideSpinner.setSelection(round.handicapOverride);
-    handicapOverrideSpinner.setVisibility(
-        handicapOverrideCheckBox.isChecked() ? View.VISIBLE : View.INVISIBLE);
+
+    overrideHandicapSpinner.setAdapter(handicapAdapter());
+    overrideHandicapSpinner.setSelection(round.handicapOverride);
+    overrideHandicapSpinner.setVisibility(
+        overrideHandicapButton.isChecked() ? View.VISIBLE : View.INVISIBLE);
+
+    ratingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        updateAutoHandicapValue();
+      }
+
+      @Override
+      public void onNothingSelected(AdapterView<?> adapterView) {
+
+      }
+    });
+
+    holeSetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        updateAutoHandicapValue();
+      }
+
+      @Override
+      public void onNothingSelected(AdapterView<?> adapterView) {
+
+      }
+    });
 
     pickDateButton.setText(new DateTime(round.time).toString("MMM dd yyyy @ hh:mma"));
     pickDateButton.setOnClickListener(new View.OnClickListener() {
@@ -578,14 +621,87 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
       }
     });
 
-    handicapOverrideCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+    officialCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       @Override
-      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        handicapOverrideSpinner.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
+      public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        handicapLayout.setVisibility(b ? View.VISIBLE : View.GONE);
       }
     });
 
+    autoHandicapButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+      @Override
+      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        overrideHandicapButton.setChecked(!isChecked);
+        autoHandicapText.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
+      }
+    });
+
+    overrideHandicapButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+      @Override
+      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        autoHandicapButton.setChecked(!isChecked);
+        overrideHandicapSpinner.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
+      }
+    });
+
+    autoHandicapButton.setChecked(!round.isHandicapOverridden);
+    overrideHandicapButton.setChecked(round.isHandicapOverridden);
+
     dialog.show();
+  }
+
+  private void updateAutoHandicapValue() {
+
+    CourseRating selectedRating =
+        round.course.ratings[ratingSpinner.getSelectedItemPosition()];
+
+    HoleSet selectedHoleSet =
+        HoleSet.available(round.course)[holeSetSpinner.getSelectedItemPosition()];
+
+    double slope;
+    switch (selectedHoleSet) {
+      case Front9: {
+        slope = selectedRating.frontSlope;
+        break;
+      }
+      case Back9: {
+        slope = selectedRating.backSlope;
+        break;
+      }
+      default: {
+        slope = selectedRating.slope;
+        break;
+      }
+    }
+
+    long time = round.time;
+
+    updateAutoHandicapValue(slope, selectedHoleSet.numHoles, round.time);
+  }
+
+  private void updateAutoHandicapValue(final double slope, final int numHoles, final long time) {
+
+    if(autoHandicapButton.isChecked()) {
+      autoHandicapText.setVisibility(View.GONE);
+      fetchingAutoHandicapIndicator.setVisibility(View.VISIBLE);
+    }
+
+    rounds.handicapRound(slope, numHoles, time).
+        onSuccess(new BackendResponse.BackendSuccessListener<RoundHandicapResponse>() {
+          @Override
+          public void onSuccess(final RoundHandicapResponse value) {
+            autoHandicapText.setText(String.valueOf(value.handicap));
+          }
+        }).
+        onFinally(new BackendResponse.BackendFinallyListener() {
+          @Override
+          public void onFinally() {
+            if (autoHandicapButton.isChecked()) {
+              autoHandicapText.setVisibility(View.VISIBLE);
+              fetchingAutoHandicapIndicator.setVisibility(View.GONE);
+            }
+          }
+        });
   }
 
   private ArrayAdapter<String> teeAdapter() {
@@ -637,6 +753,7 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
                        public void onTimeSet(final RadialTimePickerDialog radialTimePickerDialog, final int hourOfDay, final int minuteOfHour) {
                          setRound(round.withTime(initial.withHourOfDay(hourOfDay).withMinuteOfHour(minuteOfHour).getMillis()));
                          pickDateButton.setText(new DateTime(round.time).toString("MMM dd yyyy @ hh:mma"));
+                         updateAutoHandicapValue();
                        }
                      }, initial.getHourOfDay(), initial.getMinuteOfHour(),
             DateFormat.is24HourFormat(this));

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="@dimen/margin_four"
@@ -49,40 +50,88 @@
             android:layout_row="2"
             android:layout_column="1"
             android:layout_columnSpan="2"
-            android:layout_marginBottom="@dimen/margin_eight"
-            android:padding="@dimen/padding_eight"
-            android:background="@drawable/border_accent"
+            android:paddingBottom="@dimen/padding_four"
+            android:paddingLeft="@dimen/padding_eight"
+            android:background="@android:color/transparent"
+            android:textSize="@dimen/text_size_sixteen"
             android:textColor="@color/accent"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_row="3"
-            android:layout_column="0"
-            android:layout_columnSpan="3"
-            android:layout_margin="@dimen/margin_eight"
-            android:background="@color/text_grey"/>
 
         <CheckBox
             android:id="@+id/play_round_official_checkbox"
-            android:layout_row="4"
+            android:layout_row="3"
             android:layout_column="0"
             android:layout_columnSpan="2"
+            android:layout_marginTop="@dimen/margin_eight"
             android:text="@string/official"/>
 
-        <CheckBox
-            android:id="@+id/play_round_handicap_override_checkbox"
+        <GridLayout
+            android:id="@+id/handicap_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_row="5"
             android:layout_column="0"
-            android:layout_columnSpan="2"
-            android:text="@string/handicap_override"/>
+            android:layout_columnSpan="3"
+            android:rowCount="3"
+            android:columnCount="2">
 
-        <Spinner
-            android:id="@+id/play_round_handicap_override_spinner"
-            android:layout_row="5"
-            android:layout_column="2"
-            android:layout_marginTop="-2dp"
-            android:layout_marginLeft="@dimen/margin_sixteen"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:layout_columnSpan="2"
+                android:layout_margin="@dimen/margin_sixteen"
+                android:background="@color/text_grey"/>
+            
+            <RadioButton
+                android:id="@+id/auto_handicap_button"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:text="Auto-Handicap"/>
+
+            <TextView
+                android:id="@+id/auto_handicap_text"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:layout_marginLeft="@dimen/margin_twenty_four"
+                android:textSize="@dimen/text_size_sixteen"
+                android:textColor="@android:color/black"/>
+
+            <fr.castorflex.android.circularprogressbar.CircularProgressBar
+                android:id="@+id/fetching_auto_handicap_indicator"
+                android:layout_width="@dimen/sixteen"
+                android:layout_height="@dimen/sixteen"
+                android:layout_gravity="center"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:indeterminate="true"
+                android:visibility="gone"
+                app:cpb_color="@color/primary"
+                app:cpb_stroke_width="@dimen/two"
+                app:cpb_rotation_speed="1.0"
+                app:cpb_sweep_speed="1.0"/>
+
+            <RadioButton
+                android:id="@+id/override_handicap_button"
+                android:layout_row="2"
+                android:layout_column="0"
+                android:text="Override Handicap"/>
+
+            <Spinner
+                android:id="@+id/override_handicap_spinner"
+                android:layout_row="2"
+                android:layout_column="1"
+                android:layout_marginTop="-2dp"
+                android:layout_marginLeft="@dimen/margin_sixteen"/>
+
+        </GridLayout>
+        
+        <!--<CheckBox-->
+            <!--android:id="@+id/play_round_handicap_override_checkbox"-->
+            <!--android:layout_row="5"-->
+            <!--android:layout_column="0"-->
+            <!--android:layout_columnSpan="2"-->
+            <!--android:text="@string/handicap_override"/>-->
 
     </GridLayout>
 
