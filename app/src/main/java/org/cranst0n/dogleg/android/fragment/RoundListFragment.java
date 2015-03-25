@@ -85,6 +85,15 @@ public class RoundListFragment extends BaseFragment {
   }
 
   @Override
+  public void onDestroy() {
+    super.onDestroy();
+
+    if(queryCall != null) {
+      queryCall.cancel();
+    }
+  }
+
+  @Override
   public String getTitle() {
     return "Rounds";
   }

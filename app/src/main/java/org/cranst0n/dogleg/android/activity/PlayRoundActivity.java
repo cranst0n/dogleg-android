@@ -23,6 +23,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.koushikdutta.ion.Ion;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -148,6 +149,8 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
     super.onDestroy();
 
     bus.unregister(this);
+    Ion.getDefault(this).cancelAll(this);
+
     stopLocationUpdates();
   }
 

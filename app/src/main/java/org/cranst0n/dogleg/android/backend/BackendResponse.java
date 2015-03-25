@@ -58,10 +58,18 @@ public class BackendResponse<T extends JsonElement, U> {
 
   }
 
+  public boolean isDone() {
+    if (ionCall != null) {
+      return ionCall.isDone();
+    } else {
+      return value != null || errorMessage != null || exception != null;
+    }
+  }
+
   public void cancel() {
     if (ionCall instanceof SimpleFuture) {
       ((SimpleFuture) ionCall).cancelSilently();
-    } else {
+    } else if(ionCall != null) {
       ionCall.cancel();
     }
   }

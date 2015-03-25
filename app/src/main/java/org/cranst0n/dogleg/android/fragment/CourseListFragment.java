@@ -73,6 +73,15 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
   }
 
   @Override
+  public void onDestroy() {
+    super.onDestroy();
+
+    if(queryCall != null) {
+      queryCall.cancel();
+    }
+  }
+
+  @Override
   public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
 
     courses = new Courses(context);

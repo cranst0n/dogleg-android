@@ -26,6 +26,7 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.koushikdutta.ion.Ion;
 import com.nineoldandroids.view.ViewHelper;
 
@@ -51,6 +52,8 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
   private View courseInfoView;
 
   private Courses courses;
+
+  private BackendResponse<JsonObject, Course> courseInfoQuery;
   private Course course;
 
   private MenuItem pinMenuItem;
@@ -135,7 +138,7 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
         .load("android.resource://" + activity.getPackageName() + "/" + Photos.photoFor((int) courseId));
 
     courses = new Courses(context);
-    courses.info(courseId).
+    courseInfoQuery = courses.info(courseId).
         onSuccess(new BackendResponse.BackendSuccessListener<Course>() {
           @Override
           public void onSuccess(final Course value) {
@@ -145,6 +148,15 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
 
 
     return courseInfoView;
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+
+    if(courseInfoQuery != null) {
+      courseInfoQuery.cancel();
+    }
   }
 
   @Override

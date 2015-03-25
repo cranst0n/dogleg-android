@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.koushikdutta.ion.Ion;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 import com.nispok.snackbar.listeners.ActionClickListener;
@@ -57,6 +58,8 @@ public class HomeActivity extends BaseActivity {
   protected void onDestroy() {
     super.onDestroy();
     bus.unregister(this);
+
+    Ion.getDefault(this).cancelAll(this);
   }
 
   @Override
