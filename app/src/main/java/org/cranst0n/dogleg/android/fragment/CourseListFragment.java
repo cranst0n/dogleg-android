@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 
@@ -41,6 +42,7 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
   private SwipeRefreshLayout swipeRefreshLayout;
   private RecyclerView recyclerView;
   private SmoothProgressBar appendInProgressBar;
+  private TextView noCoursesIndicator;
 
   private BackendResponse<JsonArray, List<CourseSummary>> queryCall;
 
@@ -88,6 +90,7 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
     swipeRefreshLayout = (SwipeRefreshLayout) courseListView.findViewById(R.id.swipe_refresh_container);
     recyclerView = (RecyclerView) courseListView.findViewById(R.id.course_list_recycler);
     appendInProgressBar = (SmoothProgressBar) courseListView.findViewById(R.id.append_in_progress_bar);
+    noCoursesIndicator = (TextView) courseListView.findViewById(R.id.course_list_none_indicator);
 
     swipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accent);
 
@@ -221,6 +224,7 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
   private void addToCourseList(final boolean append) {
 
     loading = true;
+    noCoursesIndicator.setVisibility(View.GONE);
 
     if (append) {
       appendInProgressBar.setVisibility(View.VISIBLE);
@@ -264,6 +268,10 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
             recyclerView.setVisibility(View.VISIBLE);
             appendInProgressBar.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
+
+            if (displayedCourseList.isEmpty()) {
+              noCoursesIndicator.setVisibility(View.VISIBLE);
+            }
           }
         });
   }

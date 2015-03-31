@@ -22,6 +22,19 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <TextView
+        android:id="@+id/round_list_none_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:text="No Rounds Found."
+        android:visibility="gone"/>
+
     <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
         android:id="@+id/append_in_progress_bar"
         android:layout_width="match_parent"

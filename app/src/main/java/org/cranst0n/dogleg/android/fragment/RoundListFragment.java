@@ -43,6 +43,7 @@ public class RoundListFragment extends BaseFragment {
   private SwipeRefreshLayout swipeRefreshLayout;
   private RecyclerView recyclerView;
   private SmoothProgressBar appendInProgressBar;
+  private TextView noRoundsIndicator;
 
   private Rounds rounds;
 
@@ -65,6 +66,7 @@ public class RoundListFragment extends BaseFragment {
 
     swipeRefreshLayout = (SwipeRefreshLayout) roundListView.findViewById(R.id.swipe_refresh_container);
     recyclerView = (RecyclerView) roundListView.findViewById(R.id.round_list_recycler);
+    noRoundsIndicator = (TextView) roundListView.findViewById(R.id.round_list_none_indicator);
 
     swipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accent);
     swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -135,6 +137,8 @@ public class RoundListFragment extends BaseFragment {
 
     loading = true;
 
+    noRoundsIndicator.setVisibility(View.GONE);
+
     if (append) {
       appendInProgressBar.setVisibility(View.VISIBLE);
     } else {
@@ -166,6 +170,10 @@ public class RoundListFragment extends BaseFragment {
             recyclerView.setVisibility(View.VISIBLE);
             appendInProgressBar.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
+
+            if (displayedRoundList.isEmpty()) {
+              noRoundsIndicator.setVisibility(View.VISIBLE);
+            }
           }
         });
   }
