@@ -32,7 +32,6 @@ import org.cranst0n.dogleg.android.views.Views;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -49,7 +48,7 @@ public class RoundListFragment extends BaseFragment {
 
   private final List<Round> displayedRoundList = new ArrayList<>();
 
-  private BackendResponse<JsonArray, Round[]> queryCall;
+  private BackendResponse<JsonArray, List<Round>> queryCall;
 
   private int previousTotal = 0;
   private boolean loading = true;
@@ -152,11 +151,11 @@ public class RoundListFragment extends BaseFragment {
     queryCall = rounds.list(20, displayedRoundList.size());
 
     queryCall.
-        onSuccess(new BackendResponse.BackendSuccessListener<Round[]>() {
+        onSuccess(new BackendResponse.BackendSuccessListener<List<Round>>() {
           @Override
-          public void onSuccess(final Round[] value) {
-            endOfListReached = value.length == 0;
-            displayedRoundList.addAll(Arrays.asList(value));
+          public void onSuccess(final List<Round> value) {
+            endOfListReached = value.isEmpty();
+            displayedRoundList.addAll(value);
           }
         }).
         onFinally(new BackendResponse.BackendFinallyListener() {

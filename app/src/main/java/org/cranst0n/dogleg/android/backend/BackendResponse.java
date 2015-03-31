@@ -14,6 +14,7 @@ import com.koushikdutta.ion.Response;
 import org.apache.http.HttpStatus;
 import org.cranst0n.dogleg.android.utils.Threads;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -24,6 +25,8 @@ import java.util.concurrent.TimeUnit;
 public class BackendResponse<T extends JsonElement, U> {
 
   private final Future<Response<T>> ionCall;
+
+  protected final Type type;
   protected final Class<U> clazz;
 
   protected final String Tag = getClass().getSimpleName();
@@ -40,6 +43,18 @@ public class BackendResponse<T extends JsonElement, U> {
   private BackendResponse() {
     ionCall = null;
     clazz = null;
+    type = null;
+
+    before();
+  }
+
+  public BackendResponse(final Future<Response<T>> ionCall, final Type type) {
+
+    this.ionCall = ionCall;
+    this.type = type;
+    this.clazz = null;
+
+    this.ionCall.setCallback(new ResultCallback());
 
     before();
   }
@@ -47,6 +62,7 @@ public class BackendResponse<T extends JsonElement, U> {
   public BackendResponse(final Future<Response<T>> ionCall, final Class<U> clazz) {
 
     this.ionCall = ionCall;
+    this.type = null;
     this.clazz = clazz;
 
     this.ionCall.setCallback(new ResultCallback());
@@ -146,7 +162,13 @@ public class BackendResponse<T extends JsonElement, U> {
         Log.e(Tag, "Result exception: " + result.getException().getMessage(), result.getException());
         notifyException(result.getException());
       } else if (result.getHeaders() != null && result.getHeaders().code() == HttpStatus.SC_OK) {
-        value = new GsonBuilder().create().fromJson(result.getResult(), clazz);
+
+        if (type != null) {
+          value = new GsonBuilder().create().fromJson(result.getResult(), type);
+        } else {
+          value = new GsonBuilder().create().fromJson(result.getResult(), clazz);
+        }
+
         errorMessage = null;
 
         notifySuccess(value);
@@ -224,7 +246,7 @@ public class BackendResponse<T extends JsonElement, U> {
     return response;
   }
 
-  public static <T extends JsonElement, U> BackendResponse<T, U> pure(final U value) {
+  public static <T extends JsonElement, U> BackendResponse<T, U> pure(final U pureValue) {
     return new BackendResponse<T, U>() {
 
       @Override
@@ -233,7 +255,12 @@ public class BackendResponse<T extends JsonElement, U> {
       }
 
       public BackendResponse<T, U> onSuccess(final BackendSuccessListener<U> listener) {
-        listener.onSuccess(value);
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+          @Override
+          public void run() {
+            listener.onSuccess(pureValue);
+          }
+        });
         return this;
       }
 
@@ -246,7 +273,12 @@ public class BackendResponse<T extends JsonElement, U> {
       }
 
       public BackendResponse<T, U> onFinally(final BackendFinallyListener listener) {
-        listener.onFinally();
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+          @Override
+          public void run() {
+            listener.onFinally();
+          }
+        });
         return this;
       }
     };

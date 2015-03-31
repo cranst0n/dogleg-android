@@ -29,7 +29,6 @@ import org.cranst0n.dogleg.android.views.PinSwitch;
 import org.cranst0n.dogleg.android.views.Views;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
@@ -43,7 +42,7 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
   private RecyclerView recyclerView;
   private SmoothProgressBar appendInProgressBar;
 
-  private BackendResponse<JsonArray, CourseSummary[]> queryCall;
+  private BackendResponse<JsonArray, List<CourseSummary>> queryCall;
 
   private boolean pinMode = false;
   private MenuItem pinnedMenuItem;
@@ -250,11 +249,11 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
     }
 
     queryCall.
-        onSuccess(new BackendResponse.BackendSuccessListener<CourseSummary[]>() {
+        onSuccess(new BackendResponse.BackendSuccessListener<List<CourseSummary>>() {
           @Override
-          public void onSuccess(final CourseSummary[] value) {
-            endOfListReached = value.length == 0;
-            displayedCourseList.addAll(Arrays.asList(value));
+          public void onSuccess(final List<CourseSummary> value) {
+            endOfListReached = value.isEmpty();
+            displayedCourseList.addAll(value);
           }
         }).
         onFinally(new BackendResponse.BackendFinallyListener() {

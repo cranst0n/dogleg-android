@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.koushikdutta.ion.Ion;
 
 import org.cranst0n.dogleg.android.DoglegApplication;
@@ -20,9 +21,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 public class Courses extends BackendComponent {
@@ -34,14 +38,22 @@ public class Courses extends BackendComponent {
   private static final String LIST_BY_LOCATION_URL = "/courses?lat=%.5f&lon=%.5f&num=%d&offset=%d";
   private static final String SEARCH_URL = "/courses/search?searchText=%s&num=%d&offset=%d";
 
-  private static Course[] pinnedCache = null;
+  private static Map<Long, Course> pinnedCache = new HashMap<>();
+  private static Map<Long, Course> courseCache = new LinkedHashMap<Long, Course>() {
+    @Override
+    protected boolean removeEldestEntry(final Entry<Long, Course> eldest) {
+      return courseCache.size() > 10;
+    }
+  };
 
   public Courses(final Context context) {
     super(context);
   }
 
   public BackendResponse<JsonObject, Course> info(final long id) {
-    if (isPinned(id)) {
+    if (courseCache.containsKey(id)) {
+      return BackendResponse.pure(courseCache.get(id));
+    } else if (isPinned(id)) {
       return BackendResponse.fromCallable(new Callable<Course>() {
         @Override
         public Course call() throws Exception {
@@ -49,14 +61,24 @@ public class Courses extends BackendComponent {
         }
       });
     } else {
-      return new BackendResponse<>(Ion.with(context)
-          .load(serverUrl(String.format(INFO_URL, id)))
-          .asJsonObject()
-          .withResponse(), Course.class);
+      return backendCourseInfo(id);
     }
   }
 
-  public BackendResponse<JsonArray, CourseSummary[]> list(final LatLon location, final int num, final int offset) {
+  private BackendResponse<JsonObject, Course> backendCourseInfo(final long id) {
+    return new BackendResponse<>(Ion.with(context)
+        .load(serverUrl(String.format(INFO_URL, id)))
+        .asJsonObject()
+        .withResponse(), Course.class).
+        onSuccess(new BackendResponse.BackendSuccessListener<Course>() {
+          @Override
+          public void onSuccess(final Course value) {
+            courseCache.put(value.id, value);
+          }
+        });
+  }
+
+  public BackendResponse<JsonArray, List<CourseSummary>> list(final LatLon location, final int num, final int offset) {
     String url = serverUrl(
         location == null ?
             String.format(LIST_URL, num, offset) :
@@ -64,25 +86,26 @@ public class Courses extends BackendComponent {
     );
 
     return new BackendResponse<>(Ion.with(context)
-        .load(url).asJsonArray().withResponse(), CourseSummary[].class);
+        .load(url).asJsonArray().withResponse(), new TypeToken<List<CourseSummary>>() {
+    }.getType());
   }
 
-  public BackendResponse<JsonArray, CourseSummary[]> listPinned(final LatLon location, final int num, final int offset) {
+  public BackendResponse<JsonArray, List<CourseSummary>> listPinned(final LatLon location, final int num, final int offset) {
 
-    return BackendResponse.fromCallable(new Callable<CourseSummary[]>() {
+    return BackendResponse.fromCallable(new Callable<List<CourseSummary>>() {
       @Override
-      public CourseSummary[] call() throws Exception {
+      public List<CourseSummary> call() throws Exception {
 
-        CourseSummary[] pinned = pinnedSummaries();
+        List<CourseSummary> pinned = pinnedSummaries();
 
-        if (pinned.length < offset) {
-          return new CourseSummary[0];
+        if (pinned.size() < offset) {
+          return new ArrayList<CourseSummary>();
         } else {
 
-          CourseSummary[] summaries =
-              Arrays.copyOfRange(pinned, offset, Math.min(offset + num, pinned.length));
+          List<CourseSummary> summaries =
+              pinned.subList(offset, Math.min(offset + num, pinned.size()));
 
-          Arrays.sort(summaries, new Comparator<CourseSummary>() {
+          Collections.sort(summaries, new Comparator<CourseSummary>() {
             @Override
             public int compare(final CourseSummary lhs, final CourseSummary rhs) {
               if (location != null) {
@@ -90,7 +113,6 @@ public class Courses extends BackendComponent {
               } else {
                 return (int) (lhs.id - rhs.id);
               }
-
             }
           });
 
@@ -100,29 +122,30 @@ public class Courses extends BackendComponent {
     });
   }
 
-  public BackendResponse<JsonArray, CourseSummary[]> search(final String query, final int num, final int offset) {
+  public BackendResponse<JsonArray, List<CourseSummary>> search(final String query, final int num, final int offset) {
     return new BackendResponse<>(Ion.with(context)
         .load(serverUrl() + String.format(SEARCH_URL, query, num, offset))
         .asJsonArray()
-        .withResponse(), CourseSummary[].class);
+        .withResponse(), new TypeToken<List<CourseSummary>>() {
+    }.getType());
   }
 
-  public BackendResponse<JsonArray, CourseSummary[]> searchPinned(final String query, final int num, final int offset) {
+  public BackendResponse<JsonArray, List<CourseSummary>> searchPinned(final String query, final int num, final int offset) {
 
-    return BackendResponse.fromCallable(new Callable<CourseSummary[]>() {
+    return BackendResponse.fromCallable(new Callable<List<CourseSummary>>() {
       @Override
-      public CourseSummary[] call() throws Exception {
+      public List<CourseSummary> call() throws Exception {
 
-        CourseSummary[] pinned = pinnedSummaries();
+        List<CourseSummary> pinned = pinnedSummaries();
 
-        if (pinned.length < offset) {
-          return new CourseSummary[0];
+        if (pinned.size() < offset) {
+          return new ArrayList<CourseSummary>();
         } else {
 
-          CourseSummary[] unsorted =
-              Arrays.copyOfRange(pinned, offset, Math.min(offset + num, pinned.length));
+          List<CourseSummary> summaries =
+              pinned.subList(offset, Math.min(offset + num, pinned.size()));
 
-          Arrays.sort(unsorted, new Comparator<CourseSummary>() {
+          Collections.sort(summaries, new Comparator<CourseSummary>() {
             @Override
             public int compare(final CourseSummary lhs, final CourseSummary rhs) {
               return Strings.levensteinDistance(query, lhs.name) -
@@ -130,7 +153,7 @@ public class Courses extends BackendComponent {
             }
           });
 
-          return unsorted;
+          return summaries;
         }
       }
     });
@@ -139,7 +162,7 @@ public class Courses extends BackendComponent {
   public static boolean pin(final Course course) {
     if (!isPinned(course)) {
 
-      pinnedCache = null;
+      pinnedCache.put(course.id, course);
 
       File file = pinFile(course.id);
       file.getParentFile().mkdirs();
@@ -198,22 +221,20 @@ public class Courses extends BackendComponent {
     return pinFile(id).exists();
   }
 
-  private static CourseSummary[] pinnedSummaries() {
+  private static List<CourseSummary> pinnedSummaries() {
 
-    Course[] courses = pinned();
-    CourseSummary[] summaries = new CourseSummary[courses.length];
+    List<CourseSummary> summaries = new ArrayList<>();
 
-    for (int ix = 0; ix < courses.length; ix++) {
-      summaries[ix] = courses[ix].summary();
+    for (Course course : pinned().values()) {
+      summaries.add(course.summary());
     }
 
     return summaries;
   }
 
-  private static synchronized Course[] pinned() {
+  private static synchronized Map<Long, Course> pinned() {
     if (pinnedCache == null) {
 
-      List<Course> courseList = new ArrayList<>();
       File pinnedDir = new File(DoglegApplication.context().getFilesDir(), "courses/");
       pinnedDir.mkdirs();
 
@@ -224,11 +245,9 @@ public class Courses extends BackendComponent {
         Course c = loadFile(f);
 
         if (c != null) {
-          courseList.add(c);
+          pinnedCache.put(c.id, c);
         }
       }
-
-      pinnedCache = courseList.toArray(new Course[courseList.size()]);
     }
 
     return pinnedCache;

@@ -31,7 +31,6 @@ import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.RoundStats;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.Dialogs;
-import org.cranst0n.dogleg.android.utils.SnackBars;
 import org.cranst0n.dogleg.android.views.HoleFeatureItem;
 
 import java.util.ArrayList;

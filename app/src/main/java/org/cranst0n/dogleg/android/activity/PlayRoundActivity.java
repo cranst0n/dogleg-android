@@ -17,7 +17,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.GridLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -412,7 +411,7 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
 
   @Override
   public void updateScore(final HoleScore holeScore) {
-    if(round != null && round.holeSet().includes((holeScore.hole.number))) {
+    if (round != null && round.holeSet().includes((holeScore.hole.number))) {
       HoleScore updatedScore = round.updateScore(holeScore);
       scorecardFragment.updateHole(updatedScore);
       playRoundFragment.scoreUpdated(updatedScore);
@@ -681,7 +680,7 @@ public class PlayRoundActivity extends BaseActivity implements LocationListener,
 
   private void updateAutoHandicapValue(final double slope, final int numHoles, final long time) {
 
-    if(autoHandicapButton.isChecked()) {
+    if (autoHandicapButton.isChecked()) {
       autoHandicapText.setVisibility(View.GONE);
       fetchingAutoHandicapIndicator.setVisibility(View.VISIBLE);
     }

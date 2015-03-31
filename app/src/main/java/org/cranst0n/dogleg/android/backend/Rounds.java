@@ -9,6 +9,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.gson.reflect.TypeToken;
 import com.koushikdutta.ion.Ion;
 
 import org.cranst0n.dogleg.android.model.HoleScore;
@@ -16,6 +17,7 @@ import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.RoundHandicapResponse;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 public class Rounds extends BackendComponent {
 
@@ -28,13 +30,14 @@ public class Rounds extends BackendComponent {
     super(context);
   }
 
-  public BackendResponse<JsonArray, Round[]> list(final int num, final int offset) {
+  public BackendResponse<JsonArray, List<Round>> list(final int num, final int offset) {
 
     String url = String.format(LIST_URL, num, offset);
 
     return new BackendResponse<>(Ion.with(context)
         .load(serverUrl(url)).setHeader(AuthTokenHeader, authToken())
-        .asJsonArray().withResponse(), Round[].class);
+        .asJsonArray().withResponse(), new TypeToken<List<Round>>() {
+    }.getType());
   }
 
   public BackendResponse<JsonObject, Round> postRound(final Round round) {
