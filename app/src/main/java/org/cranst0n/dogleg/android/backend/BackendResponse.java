@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.google.gson.GsonBuilder;
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
@@ -12,6 +12,7 @@ import com.koushikdutta.async.future.SimpleFuture;
 import com.koushikdutta.ion.Response;
 
 import org.apache.http.HttpStatus;
+import org.cranst0n.dogleg.android.utils.Json;
 import org.cranst0n.dogleg.android.utils.Threads;
 
 import java.lang.reflect.Type;
@@ -163,10 +164,12 @@ public class BackendResponse<T extends JsonElement, U> {
         notifyException(result.getException());
       } else if (result.getHeaders() != null && result.getHeaders().code() == HttpStatus.SC_OK) {
 
+        final Gson gson = Json.pimpedGson();
+
         if (type != null) {
-          value = new GsonBuilder().create().fromJson(result.getResult(), type);
+          value = gson.fromJson(result.getResult(), type);
         } else {
-          value = new GsonBuilder().create().fromJson(result.getResult(), clazz);
+          value = gson.fromJson(result.getResult(), clazz);
         }
 
         errorMessage = null;
@@ -175,8 +178,7 @@ public class BackendResponse<T extends JsonElement, U> {
       } else {
 
         value = null;
-        errorMessage =
-            new GsonBuilder().create().fromJson(result.getResult(), BackendMessage.class);
+        errorMessage = Json.pimpedGson().fromJson(result.getResult(), BackendMessage.class);
 
         if (errorMessage == null || errorMessage.isIncomplete()) {
           errorMessage = new BackendMessage(

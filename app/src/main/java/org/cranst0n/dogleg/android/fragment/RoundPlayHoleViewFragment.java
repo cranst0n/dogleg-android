@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.cranst0n.dogleg.android.R;
-import org.cranst0n.dogleg.android.activity.PlayRoundActivity;
+import org.cranst0n.dogleg.android.activity.RoundPlayActivity;
 import org.cranst0n.dogleg.android.backend.BackendMessage;
 import org.cranst0n.dogleg.android.backend.BackendResponse;
 import org.cranst0n.dogleg.android.backend.Rounds;
@@ -38,11 +38,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class PlayRoundHoleViewFragment extends BaseFragment {
+public class RoundPlayHoleViewFragment extends BaseFragment {
 
-  private static final String Tag = PlayRoundHoleViewFragment.class.getSimpleName();
+  private static final String Tag = RoundPlayHoleViewFragment.class.getSimpleName();
 
-  private PlayRoundFragment.PlayRoundListener playRoundListener;
+  private RoundPlayFragment.PlayRoundListener playRoundListener;
 
   private View playRoundHoleView;
 
@@ -76,8 +76,8 @@ public class PlayRoundHoleViewFragment extends BaseFragment {
   public void onAttach(final Activity activity) {
     super.onAttach(activity);
 
-    if (activity instanceof PlayRoundFragment.PlayRoundListener) {
-      playRoundListener = (PlayRoundFragment.PlayRoundListener) activity;
+    if (activity instanceof RoundPlayFragment.PlayRoundListener) {
+      playRoundListener = (RoundPlayFragment.PlayRoundListener) activity;
     }
   }
 
@@ -85,7 +85,7 @@ public class PlayRoundHoleViewFragment extends BaseFragment {
   public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                            final Bundle savedInstanceState) {
 
-    playRoundHoleView = inflater.inflate(R.layout.fragment_play_round_hole_view, container, false);
+    playRoundHoleView = inflater.inflate(R.layout.fragment_round_play_hole_view, container, false);
 
     setHasOptionsMenu(true);
 
@@ -100,48 +100,48 @@ public class PlayRoundHoleViewFragment extends BaseFragment {
   }
 
   private User currentUser() {
-    if (activity instanceof PlayRoundActivity) {
-      return ((PlayRoundActivity) activity).currentUser();
+    if (activity instanceof RoundPlayActivity) {
+      return ((RoundPlayActivity) activity).currentUser();
     }
 
     return User.NO_USER;
   }
 
   private Location lastKnownLocation() {
-    if (activity instanceof PlayRoundActivity) {
-      return ((PlayRoundActivity) activity).lastKnownLocation();
+    if (activity instanceof RoundPlayActivity) {
+      return ((RoundPlayActivity) activity).lastKnownLocation();
     }
 
     return null;
   }
 
   private Round round() {
-    if (activity instanceof PlayRoundActivity) {
-      return ((PlayRoundActivity) activity).round();
+    if (activity instanceof RoundPlayActivity) {
+      return ((RoundPlayActivity) activity).round();
     }
 
     return null;
   }
 
   private int currentHoleNumber() {
-    if (activity instanceof PlayRoundActivity) {
-      return ((PlayRoundActivity) activity).currentHoleNumber();
+    if (activity instanceof RoundPlayActivity) {
+      return ((RoundPlayActivity) activity).currentHoleNumber();
     }
 
     return 1;
   }
 
   private HoleRating currentHoleRating() {
-    if (activity instanceof PlayRoundActivity) {
-      return ((PlayRoundActivity) activity).currentHoleRating();
+    if (activity instanceof RoundPlayActivity) {
+      return ((RoundPlayActivity) activity).currentHoleRating();
     }
 
     return null;
   }
 
   private HoleScore currentHoleScore() {
-    if (activity instanceof PlayRoundActivity) {
-      return ((PlayRoundActivity) activity).currentHoleScore();
+    if (activity instanceof RoundPlayActivity) {
+      return ((RoundPlayActivity) activity).currentHoleScore();
     }
 
     return null;

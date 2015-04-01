@@ -47,6 +47,10 @@
         <item name="thumb_margin">-17dp</item>
     </style>
 
+    <style name="ScorecardRow">
+        <item name="android:background">@android:color/white</item>
+    </style>
+
     <style name="ScorecardCell">
         <item name="android:paddingTop">@dimen/padding_four</item>
         <item name="android:paddingBottom">@dimen/padding_four</item>

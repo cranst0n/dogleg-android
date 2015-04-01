@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="@dimen/margin_two"
+                                    android:layout_marginLeft="@dimen/margin_four"
+                                    android:layout_marginRight="@dimen/margin_four"
+                                    android:elevation="@dimen/elevation_ten"
+                                    card_view:cardCornerRadius="0px">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_eight"
+        android:orientation="horizontal">
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:rowCount="6"
+            android:columnCount="2">
+
+            <TextView
+                android:layout_row="0"
+                android:layout_column="0"
+                android:layout_marginTop="@dimen/margin_two"
+                android:layout_marginBottom="@dimen/margin_two"
+                android:layout_marginLeft="@dimen/margin_two"
+                android:layout_marginRight="@dimen/margin_eight"
+                android:textSize="@dimen/text_size_twelve"
+                android:textStyle="bold"
+                android:text="Course:"/>
+
+            <TextView
+                android:id="@+id/round_details_course_name"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:layout_margin="@dimen/margin_two"
+                android:textSize="@dimen/text_size_twelve"/>
+
+            <TextView
+                android:layout_row="1"
+                android:layout_column="0"
+                android:layout_marginTop="@dimen/margin_two"
+                android:layout_marginBottom="@dimen/margin_two"
+                android:layout_marginLeft="@dimen/margin_two"
+                android:layout_marginRight="@dimen/margin_eight"
+                android:textSize="@dimen/text_size_twelve"
+                android:textStyle="bold"
+                android:text="Time:"/>
+
+            <TextView
+                android:id="@+id/round_details_time"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:layout_margin="@dimen/margin_two"
+                android:textSize="@dimen/text_size_twelve"/>
+
+            <TextView
+                android:layout_row="2"
+                android:layout_column="0"
+                android:layout_marginTop="@dimen/margin_two"
+                android:layout_marginBottom="@dimen/margin_two"
+                android:layout_marginLeft="@dimen/margin_two"
+                android:layout_marginRight="@dimen/margin_eight"
+                android:textSize="@dimen/text_size_twelve"
+                android:textStyle="bold"
+                android:text="Tees:"/>
+
+            <TextView
+                android:id="@+id/round_details_rating"
+                android:layout_row="2"
+                android:layout_column="1"
+                android:layout_margin="@dimen/margin_two"
+                android:textSize="@dimen/text_size_twelve"/>
+
+            <TextView
+                android:layout_row="3"
+                android:layout_column="0"
+                android:layout_marginTop="@dimen/margin_two"
+                android:layout_marginBottom="@dimen/margin_two"
+                android:layout_marginLeft="@dimen/margin_two"
+                android:layout_marginRight="@dimen/margin_eight"
+                android:textSize="@dimen/text_size_twelve"
+                android:textStyle="bold"
+                android:text="Holes:"/>
+
+            <TextView
+                android:id="@+id/round_details_hole_set"
+                android:layout_row="3"
+                android:layout_column="1"
+                android:layout_margin="@dimen/margin_two"
+                android:textSize="@dimen/text_size_twelve"/>
+
+            <TextView
+                android:layout_row="4"
+                android:layout_column="0"
+                android:layout_marginTop="@dimen/margin_two"
+                android:layout_marginBottom="@dimen/margin_two"
+                android:layout_marginLeft="@dimen/margin_two"
+                android:layout_marginRight="@dimen/margin_eight"
+                android:textSize="@dimen/text_size_twelve"
+                android:textStyle="bold"
+                android:text="Official:"/>
+
+            <TextView
+                android:id="@+id/round_details_official"
+                android:layout_row="4"
+                android:layout_column="1"
+                android:layout_margin="@dimen/margin_two"
+                android:textSize="@dimen/text_size_twelve"/>
+
+            <TextView
+                android:layout_row="5"
+                android:layout_column="0"
+                android:layout_marginTop="@dimen/margin_two"
+                android:layout_marginBottom="@dimen/margin_two"
+                android:layout_marginLeft="@dimen/margin_two"
+                android:layout_marginRight="@dimen/margin_eight"
+                android:textSize="@dimen/text_size_twelve"
+                android:textStyle="bold"
+                android:text="Handicap:"/>
+
+            <TextView
+                android:id="@+id/round_details_handicap"
+                android:layout_row="5"
+                android:layout_column="1"
+                android:layout_margin="@dimen/margin_two"
+                android:textSize="@dimen/text_size_twelve"/>
+
+        </GridLayout>
+
+        <ImageButton
+            android:id="@+id/round_details_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin_eight"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_action_settings"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

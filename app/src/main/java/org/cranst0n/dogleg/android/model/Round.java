@@ -1,16 +1,18 @@
 package org.cranst0n.dogleg.android.model;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Round {
 
-  public final long id = -1;
+  public final long id;
   public final User user;
   public final Course course;
   public final CourseRating rating;
-  public final long time;
+  public final DateTime time;
   public final boolean official;
   public final int handicap;
   public final boolean isHandicapOverridden;
@@ -20,10 +22,11 @@ public class Round {
 
   private HoleSet holeSet;
 
-  private Round(final User user, final Course course, final CourseRating rating, final long time,
+  private Round(final long id, final User user, final Course course, final CourseRating rating, final DateTime time,
                 final boolean official, final int handicap, final boolean isHandicapOverridden,
                 final int handicapOverride, final HoleScore[] holeScores) {
 
+    this.id = id;
     this.user = user;
     this.course = course;
     this.rating = rating;
@@ -40,6 +43,34 @@ public class Round {
 
   public int numHoles() {
     return holeSet().numHoles;
+  }
+
+  public double roundRating() {
+    switch (holeSet()) {
+      case Front9: {
+        return rating.frontRating;
+      }
+      case Back9: {
+        return rating.backRating;
+      }
+      default: {
+        return rating.rating;
+      }
+    }
+  }
+
+  public double roundSlope() {
+    switch (holeSet()) {
+      case Front9: {
+        return rating.frontSlope;
+      }
+      case Back9: {
+        return rating.backSlope;
+      }
+      default: {
+        return rating.slope;
+      }
+    }
   }
 
   public HoleScore[] holeScores() {
@@ -89,18 +120,18 @@ public class Round {
   }
 
   public Round asUser(final User user) {
-    return new Round(user, course, rating, time, official,
+    return new Round(id, user, course, rating, time, official,
         handicap, isHandicapOverridden, handicapOverride, holeScores);
   }
 
-  public Round withTime(final long time) {
-    return new Round(user, course, rating, time, official,
+  public Round withTime(final DateTime time) {
+    return new Round(id, user, course, rating, time, official,
         handicap, isHandicapOverridden, handicapOverride, holeScores);
   }
 
-  public Round withHandicap(final int handicap) {
-    return new Round(user, course, rating, time, official,
-        handicap, isHandicapOverridden, handicapOverride, holeScores);
+  public Round withAutoHandicap(final int handicap) {
+    return new Round(id, user, course, rating, time, official,
+        handicap, false, handicapOverride, holeScores).handicapped();
   }
 
   public synchronized HoleSet holeSet() {
@@ -144,15 +175,17 @@ public class Round {
     return issues;
   }
 
-  public static Round create(final User user, final Course course, final HoleSet holeSet) {
-    return create(user, course, course.ratings[0], System.currentTimeMillis(),
+  public static Round create(final long id, final User user, final Course course,
+                             final HoleSet holeSet) {
+    return create(id, user, course, course.ratings[0], DateTime.now(),
         true, 0, false, 0, null, holeSet);
   }
 
-  public static Round create(final User user, final Course course, final CourseRating rating,
-                             final long time, final boolean official, final int handicap,
-                             final boolean isHandicapOverridden, final int handicapOverride,
-                             final HoleScore[] oldHoleScores, final HoleSet holeSet) {
+  public static Round create(final long id, final User user, final Course course,
+                             final CourseRating rating, final DateTime time, final boolean official,
+                             final int handicap, final boolean isHandicapOverridden,
+                             final int handicapOverride, final HoleScore[] oldHoleScores,
+                             final HoleSet holeSet) {
 
     Arrays.sort(course.holes);
 
@@ -187,7 +220,7 @@ public class Round {
       }
     }
 
-    return new Round(user, course, rating, time, official, handicap, isHandicapOverridden,
+    return new Round(id, user, course, rating, time, official, handicap, isHandicapOverridden,
         handicapOverride, newHoleScores).handicapped();
   }
 

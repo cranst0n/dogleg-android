@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.cranst0n.dogleg.android">
+    package="org.cranst0n.dogleg.android">
 
     <uses-sdk
         android:minSdkVersion="17"
@@ -47,13 +47,17 @@
         </activity>
 
         <activity
-            android:name=".activity.PlayRoundActivity"
+            android:name=".activity.RoundPlayActivity"
             android:parentActivityName=".activity.HomeActivity"
             android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
 
+        <activity android:name=".activity.SettingsActivity">
+        </activity>
+
         <activity
-            android:name=".activity.SettingsActivity">
+            android:name=".activity.RoundShowActivity"
+            android:parentActivityName=".activity.HomeActivity">
         </activity>
     </application>
 

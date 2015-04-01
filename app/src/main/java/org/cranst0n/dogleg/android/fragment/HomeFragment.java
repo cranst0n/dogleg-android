@@ -1,5 +1,6 @@
 package org.cranst0n.dogleg.android.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,8 +16,10 @@ import com.squareup.otto.Subscribe;
 
 import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
+import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.BusProvider;
+import org.cranst0n.dogleg.android.utils.Json;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +37,8 @@ public class HomeFragment extends BaseFragment {
   private HomePagerAdapter viewPagerAdapter;
 
   private final List<Fragment> visibleFragments = new ArrayList<>();
-  private final Fragment courseListPage = new CourseListFragment();
-  private final Fragment roundsPage = new RoundListFragment();
+  private final CourseListFragment courseListPage = new CourseListFragment();
+  private final RoundListFragment roundsPage = new RoundListFragment();
 
   @Override
   public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
@@ -113,6 +116,27 @@ public class HomeFragment extends BaseFragment {
     @Override
     public int getCount() {
       return fragments != null ? fragments.size() : 0;
+    }
+  }
+
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    switch (resultCode) {
+      case R.integer.round_edit_result: {
+        Round r = Json.pimpedGson().fromJson(
+            data.getStringExtra(Round.class.getCanonicalName()), Round.class);
+        roundsPage.roundUpdated(r);
+        break;
+      }
+      case R.integer.round_delete_result: {
+        Round r = Json.pimpedGson().fromJson(
+            data.getStringExtra(Round.class.getCanonicalName()), Round.class);
+        roundsPage.roundDeleted(r);
+        break;
+      }
+      default: {
+        super.onActivityResult(requestCode, resultCode, data);
+      }
     }
   }
 }

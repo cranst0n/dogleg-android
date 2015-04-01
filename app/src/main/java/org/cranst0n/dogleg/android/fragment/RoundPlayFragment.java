@@ -15,7 +15,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.cranst0n.dogleg.android.R;
-import org.cranst0n.dogleg.android.activity.PlayRoundActivity;
+import org.cranst0n.dogleg.android.activity.RoundPlayActivity;
 import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 import org.cranst0n.dogleg.android.gesture.SwipeLeftRightGestureListener;
 import org.cranst0n.dogleg.android.model.HoleRating;
@@ -24,7 +24,7 @@ import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.RoundStats;
 import org.cranst0n.dogleg.android.utils.Strings;
 
-public class PlayRoundFragment extends BaseFragment {
+public class RoundPlayFragment extends BaseFragment {
 
   private PlayRoundListener playRoundListener;
 
@@ -47,15 +47,15 @@ public class PlayRoundFragment extends BaseFragment {
   private ImageButton previousHoleButton;
   private ImageButton nextHoleButton;
 
-  private PlayRoundHoleViewFragment holeViewFragment;
-  private PlayRoundScorecardFragment scorecardFragment;
-  private PlayRoundMapFragment mapFragment;
+  private RoundPlayHoleViewFragment holeViewFragment;
+  private RoundPlayScorecardFragment scorecardFragment;
+  private RoundPlayMapFragment mapFragment;
 
-  public static PlayRoundFragment instance(final PlayRoundHoleViewFragment holeViewFragment,
-                                           final PlayRoundScorecardFragment scorecardFragment,
-                                           final PlayRoundMapFragment mapFragment) {
+  public static RoundPlayFragment instance(final RoundPlayHoleViewFragment holeViewFragment,
+                                           final RoundPlayScorecardFragment scorecardFragment,
+                                           final RoundPlayMapFragment mapFragment) {
 
-    PlayRoundFragment prf = new PlayRoundFragment();
+    RoundPlayFragment prf = new RoundPlayFragment();
 
     prf.holeViewFragment = holeViewFragment;
     prf.scorecardFragment = scorecardFragment;
@@ -76,7 +76,7 @@ public class PlayRoundFragment extends BaseFragment {
   @Override
   public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
 
-    playRoundView = inflater.inflate(R.layout.fragment_play_round, container, false);
+    playRoundView = inflater.inflate(R.layout.fragment_round_play, container, false);
 
     loadViewComponents();
     attachListeners();
@@ -143,24 +143,24 @@ public class PlayRoundFragment extends BaseFragment {
   }
 
   private Round round() {
-    if (activity instanceof PlayRoundActivity) {
-      return ((PlayRoundActivity) activity).round();
+    if (activity instanceof RoundPlayActivity) {
+      return ((RoundPlayActivity) activity).round();
     }
 
     return null;
   }
 
   private HoleScore currentHoleScore() {
-    if (activity instanceof PlayRoundActivity) {
-      return ((PlayRoundActivity) activity).currentHoleScore();
+    if (activity instanceof RoundPlayActivity) {
+      return ((RoundPlayActivity) activity).currentHoleScore();
     }
 
     return null;
   }
 
   private HoleRating currentHoleRating() {
-    if (activity instanceof PlayRoundActivity) {
-      return ((PlayRoundActivity) activity).currentHoleRating();
+    if (activity instanceof RoundPlayActivity) {
+      return ((RoundPlayActivity) activity).currentHoleRating();
     }
 
     return null;

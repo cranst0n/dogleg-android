@@ -43,7 +43,7 @@ public class Photos {
     return stock[new Random().nextInt(stock.length)];
   }
 
-  public static final int photoFor(final int value) {
-    return stock[value % stock.length];
+  public static final int photoFor(final long value) {
+    return stock[(int) value % stock.length];
   }
 }

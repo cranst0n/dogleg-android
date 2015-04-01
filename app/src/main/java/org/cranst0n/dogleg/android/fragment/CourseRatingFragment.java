@@ -7,11 +7,10 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-
 import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 import org.cranst0n.dogleg.android.model.CourseRating;
+import org.cranst0n.dogleg.android.utils.Json;
 
 public class CourseRatingFragment extends BaseFragment {
 
@@ -80,7 +79,7 @@ public class CourseRatingFragment extends BaseFragment {
     super.onActivityCreated(savedInstanceState);
 
     if (savedInstanceState != null) {
-      rating = new Gson().fromJson(
+      rating = Json.pimpedGson().fromJson(
           savedInstanceState.getString(CourseRating.class.getCanonicalName()), CourseRating.class);
     }
   }
@@ -88,7 +87,7 @@ public class CourseRatingFragment extends BaseFragment {
   @Override
   public void onSaveInstanceState(final Bundle outState) {
     super.onSaveInstanceState(outState);
-    outState.putString(CourseRating.class.getCanonicalName(), new Gson().toJson(rating));
+    outState.putString(CourseRating.class.getCanonicalName(), Json.pimpedGson().toJson(rating));
   }
 
   public void setRating(final CourseRating rating) {

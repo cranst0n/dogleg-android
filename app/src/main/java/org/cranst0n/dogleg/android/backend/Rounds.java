@@ -12,9 +12,10 @@ import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 import com.koushikdutta.ion.Ion;
 
-import org.cranst0n.dogleg.android.model.HoleScore;
 import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.RoundHandicapResponse;
+import org.cranst0n.dogleg.android.utils.Json;
+import org.joda.time.DateTime;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -23,6 +24,8 @@ public class Rounds extends BackendComponent {
 
   private static final String LIST_URL = "/rounds?num=%d&offset=%d";
   private static final String POST_URL = "/rounds";
+  private static final String UPDATE_URL = "/rounds";
+  private static final String DELETE_URL = "/rounds/%d";
 
   private static final String HANDICAP_URL = "/handicap?slope=%.2f&numHoles=%d&time=%d";
 
@@ -42,7 +45,9 @@ public class Rounds extends BackendComponent {
 
   public BackendResponse<JsonObject, Round> postRound(final Round round) {
 
-    Gson gson = new GsonBuilder().registerTypeAdapter(Round.class, new RoundRequestSerializer())
+    Gson gson = new GsonBuilder()
+        .registerTypeAdapter(DateTime.class, new Json.DateTimeTypeConverter())
+        .registerTypeAdapter(Round.class, new RoundRequestSerializer())
         .create();
 
     JsonObject jsonObject = gson.toJsonTree(round).getAsJsonObject();
@@ -55,9 +60,39 @@ public class Rounds extends BackendComponent {
         .withResponse(), Round.class);
   }
 
-  public BackendResponse<JsonObject, RoundHandicapResponse> handicapRound(final double slope, final int numHoles, final long time) {
+  public BackendResponse<JsonObject, Round> updateRound(final Round round) {
 
-    String url = String.format(HANDICAP_URL, slope, numHoles, time);
+    Gson gson = new GsonBuilder()
+        .registerTypeAdapter(DateTime.class, new Json.DateTimeTypeConverter())
+        .registerTypeAdapter(Round.class, new RoundSerializer())
+        .create();
+
+    JsonObject roundObject = gson.toJsonTree(round).getAsJsonObject();
+
+    return new BackendResponse<>(Ion.with(context)
+        .load("PUT", serverUrl(UPDATE_URL))
+        .setHeader(AuthTokenHeader, authToken())
+        .setJsonObjectBody(roundObject)
+        .asJsonObject()
+        .withResponse(), Round.class);
+  }
+
+  public BackendResponse<JsonObject, BackendMessage> deleteRound(final long roundId) {
+
+    String url = String.format(DELETE_URL, roundId);
+
+    return new BackendResponse<>(Ion.with(context)
+        .load("DELETE", serverUrl(url))
+        .setHeader(AuthTokenHeader, authToken())
+        .asJsonObject()
+        .withResponse(), BackendMessage.class);
+  }
+
+  public BackendResponse<JsonObject, RoundHandicapResponse> handicapRound(final double slope,
+                                                                          final int numHoles,
+                                                                          final DateTime time) {
+
+    String url = String.format(HANDICAP_URL, slope, numHoles, time.getMillis());
 
     return new BackendResponse<>(Ion.with(context)
         .load(serverUrl(url))
@@ -67,44 +102,45 @@ public class Rounds extends BackendComponent {
   }
 
   private class RoundRequestSerializer implements JsonSerializer<Round> {
-    public JsonElement serialize(final Round round, final Type type, final JsonSerializationContext context) {
+    public JsonElement serialize(final Round round, final Type type,
+                                 final JsonSerializationContext context) {
 
       JsonObject result = new JsonObject();
 
       result.addProperty("courseId", round.course.id);
       result.addProperty("ratingId", round.rating.id);
-      result.addProperty("time", round.time);
+      result.addProperty("time", round.time.getMillis());
       result.addProperty("official", round.official);
 
       if (round.isHandicapOverridden) {
         result.addProperty("handicapOverride", round.handicapOverride);
       }
 
-      JsonArray holeScoreJson = new JsonArray();
+      result.add("holeScores", context.serialize(round.holeScores()));
 
-      for (HoleScore hs : round.holeScores()) {
+      return result;
+    }
+  }
 
-        JsonObject jo = new JsonObject();
+  private class RoundSerializer implements JsonSerializer<Round> {
+    public JsonElement serialize(final Round round, final Type type,
+                                 final JsonSerializationContext context) {
 
-        jo.addProperty("score", hs.score);
-        jo.addProperty("netScore", 0);
-        jo.addProperty("putts", hs.putts);
-        jo.addProperty("penaltyStrokes", hs.penaltyStrokes);
-        jo.addProperty("fairwayHit", hs.fairwayHit);
-        jo.addProperty("gir", hs.gir);
+      JsonObject result = new JsonObject();
 
-        JsonObject joHole = new JsonObject();
+      result.addProperty("id", round.id);
+      result.add("user", context.serialize(round.user));
+      result.add("course", context.serialize(round.course));
+      result.add("rating", context.serialize(round.rating));
+      result.addProperty("time", round.time.getMillis());
+      result.addProperty("official", round.official);
+      result.addProperty("handicap", round.handicap);
 
-        joHole.addProperty("id", hs.hole.id);
-        joHole.addProperty("number", hs.hole.number);
-        joHole.add("features", new JsonArray());
-
-        jo.add("hole", joHole);
-
-        holeScoreJson.add(jo);
+      if (round.isHandicapOverridden) {
+        result.addProperty("handicapOverride", round.handicapOverride);
       }
 
-      result.add("holeScores", holeScoreJson);
+      result.add("holeScores", context.serialize(round.holeScores()));
 
       return result;
     }

@@ -9,8 +9,6 @@ import android.location.Location;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationServices;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 
@@ -21,6 +19,7 @@ import org.acra.sender.ReportSender;
 import org.cranst0n.dogleg.android.backend.Authentication;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.BusProvider;
+import org.cranst0n.dogleg.android.utils.Json;
 import org.cranst0n.dogleg.android.utils.PreferencesEditor;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -50,8 +49,7 @@ public class DoglegApplication extends Application {
     String userJson = PreferencesEditor.getStringPreference(this, R.string.app_user_key, "");
 
     if (!userJson.isEmpty()) {
-      Gson gson = new GsonBuilder().create();
-      appUser = gson.fromJson(userJson, User.class);
+      appUser = Json.pimpedGson().fromJson(userJson, User.class);
 
       // Make sure auth token is still valid
       new Authentication(this).authUser();
@@ -107,7 +105,7 @@ public class DoglegApplication extends Application {
     appUser = user;
 
     if (appUser.isValid()) {
-      PreferencesEditor.savePreference(this, R.string.app_user_key, new GsonBuilder().create().toJson(appUser));
+      PreferencesEditor.savePreference(this, R.string.app_user_key, Json.pimpedGson().toJson(appUser));
     } else {
       PreferencesEditor.removePreference(this, R.string.app_user_key);
     }

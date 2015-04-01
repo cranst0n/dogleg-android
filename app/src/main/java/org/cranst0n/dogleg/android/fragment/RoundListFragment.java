@@ -1,6 +1,7 @@
 package org.cranst0n.dogleg.android.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -21,12 +22,14 @@ import com.google.gson.JsonArray;
 import com.koushikdutta.ion.Ion;
 
 import org.cranst0n.dogleg.android.R;
+import org.cranst0n.dogleg.android.activity.RoundShowActivity;
 import org.cranst0n.dogleg.android.backend.BackendResponse;
 import org.cranst0n.dogleg.android.backend.Rounds;
 import org.cranst0n.dogleg.android.constants.Photos;
 import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.RoundStats;
+import org.cranst0n.dogleg.android.utils.Json;
 import org.cranst0n.dogleg.android.utils.Time;
 import org.cranst0n.dogleg.android.views.Views;
 
@@ -97,6 +100,26 @@ public class RoundListFragment extends BaseFragment {
   @Override
   public String getTitle() {
     return "Rounds";
+  }
+
+  public void roundUpdated(final Round updatedRound) {
+    for (int ix = 0; ix < displayedRoundList.size(); ix++) {
+      if (displayedRoundList.get(ix).id == updatedRound.id) {
+        displayedRoundList.set(ix, updatedRound);
+        recyclerView.getAdapter().notifyDataSetChanged();
+        break;
+      }
+    }
+  }
+
+  public void roundDeleted(final Round deletedRound) {
+    for (Round r : displayedRoundList) {
+      if (r.id == deletedRound.id) {
+        displayedRoundList.remove(r);
+        recyclerView.getAdapter().notifyDataSetChanged();
+        break;
+      }
+    }
   }
 
   private void initRecyclerView() {
@@ -198,6 +221,8 @@ public class RoundListFragment extends BaseFragment {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+      private Round round;
+
       private final Activity activity;
 
       private final ImageView courseImageView;
@@ -226,6 +251,17 @@ public class RoundListFragment extends BaseFragment {
         grossScoreToParView = (TextView) itemView.findViewById(R.id.round_gross_score_to_par);
         courseNameView = (TextView) itemView.findViewById(R.id.round_course_name);
         roundTimeView = (TextView) itemView.findViewById(R.id.round_date);
+
+        courseImageView.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(final View view) {
+            Intent intent = new Intent(activity, RoundShowActivity.class);
+            intent.putExtra(activity.getResources().getString(R.string.intent_round_data_key),
+                Json.pimpedGson().toJson(round));
+            intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            getParentFragment().startActivityForResult(intent, 0);
+          }
+        });
 
         scorecardViewPager = (ViewPager) itemView.findViewById(R.id.item_round_scorecard_view_pager);
         scorecardViewPager.setId(Views.generateViewId());
@@ -276,6 +312,8 @@ public class RoundListFragment extends BaseFragment {
 
       private void setRound(final Round round) {
 
+        this.round = round;
+
         RoundStats roundStats = round.stats();
 
         grossScoreView.setText(String.valueOf(roundStats.score));
@@ -285,7 +323,7 @@ public class RoundListFragment extends BaseFragment {
 
         Ion.with(courseImageView)
             .centerCrop()
-            .load("android.resource://" + activity.getPackageName() + "/" + Photos.photoFor((int) round.course.id));
+            .load("android.resource://" + activity.getPackageName() + "/" + Photos.photoFor(round.course.id));
 
         List<Fragment> newFragments = new ArrayList<>();
 

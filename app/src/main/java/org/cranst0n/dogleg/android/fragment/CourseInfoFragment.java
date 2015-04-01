@@ -25,13 +25,12 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.koushikdutta.ion.Ion;
 import com.nineoldandroids.view.ViewHelper;
 
 import org.cranst0n.dogleg.android.R;
-import org.cranst0n.dogleg.android.activity.PlayRoundActivity;
+import org.cranst0n.dogleg.android.activity.RoundPlayActivity;
 import org.cranst0n.dogleg.android.backend.BackendResponse;
 import org.cranst0n.dogleg.android.backend.Courses;
 import org.cranst0n.dogleg.android.constants.Photos;
@@ -39,6 +38,7 @@ import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 import org.cranst0n.dogleg.android.model.Course;
 import org.cranst0n.dogleg.android.model.CourseRating;
 import org.cranst0n.dogleg.android.utils.Intents;
+import org.cranst0n.dogleg.android.utils.Json;
 import org.cranst0n.dogleg.android.utils.SnackBars;
 import org.cranst0n.dogleg.android.views.PinSwitch;
 
@@ -124,7 +124,7 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
     startRoundButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Intent intent = new Intent(activity, PlayRoundActivity.class);
+        Intent intent = new Intent(activity, RoundPlayActivity.class);
         intent.putExtra(getResources().getString(R.string.intent_course_id_key), course.id);
         activity.startActivity(intent);
       }
@@ -135,7 +135,7 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
 
     Ion.with(courseImageView)
         .centerCrop()
-        .load("android.resource://" + activity.getPackageName() + "/" + Photos.photoFor((int) courseId));
+        .load("android.resource://" + activity.getPackageName() + "/" + Photos.photoFor(courseId));
 
     courses = new Courses(context);
     courseInfoQuery = courses.info(courseId).
@@ -164,7 +164,7 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
     super.onActivityCreated(savedInstanceState);
 
     if (savedInstanceState != null) {
-      setCourse(new Gson().fromJson(
+      setCourse(Json.pimpedGson().fromJson(
           savedInstanceState.getString(Course.class.getCanonicalName()), Course.class));
     }
   }
@@ -190,7 +190,7 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
   public void onSaveInstanceState(final Bundle outState) {
     super.onSaveInstanceState(outState);
 
-    outState.putString(Course.class.getCanonicalName(), new Gson().toJson(course));
+    outState.putString(Course.class.getCanonicalName(), Json.pimpedGson().toJson(course));
   }
 
   private void setCourse(final Course course) {

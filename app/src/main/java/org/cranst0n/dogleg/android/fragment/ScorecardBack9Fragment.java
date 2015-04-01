@@ -25,7 +25,7 @@ public class ScorecardBack9Fragment extends ScorecardFragment {
 
     scorecardView = inflater.inflate(R.layout.include_scorecard_back_9, container, false);
 
-    findViews();
+    findViews(scorecardView);
 
     return scorecardView;
   }

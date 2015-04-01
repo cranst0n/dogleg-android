@@ -7,7 +7,8 @@
              android:stretchColumns="1,2,3,4,5,6,7,8,9,10">
 
     <TableRow
-        android:id="@+id/front_9_hole_number_row">
+        android:id="@+id/front_9_hole_number_row"
+        style="@style/ScorecardRow">
 
         <TextView
             style="@style/ScorecardCell"/>
@@ -74,7 +75,8 @@
     </TableRow>
 
     <TableRow
-        android:id="@+id/front_9_par_row">
+        android:id="@+id/front_9_par_row"
+        style="@style/ScorecardRow">
 
         <TextView
             style="@style/ScorecardCell"
@@ -124,7 +126,8 @@
     </TableRow>
 
     <TableRow
-        android:id="@+id/front_9_yardage_row">
+        android:id="@+id/front_9_yardage_row"
+        style="@style/ScorecardRow">
 
         <TextView
             style="@style/ScorecardCell"
@@ -174,7 +177,8 @@
     </TableRow>
 
     <TableRow
-        android:id="@+id/front_9_score_row">
+        android:id="@+id/front_9_score_row"
+        style="@style/ScorecardRow">
 
         <TextView
             style="@style/ScorecardCell"
@@ -224,7 +228,8 @@
     </TableRow>
 
     <TableRow
-        android:id="@+id/front_9_net_score_row">
+        android:id="@+id/front_9_net_score_row"
+        style="@style/ScorecardRow">
 
         <TextView
             style="@style/ScorecardCell"
@@ -274,7 +279,8 @@
     </TableRow>
 
     <TableRow
-        android:id="@+id/front_9_putts_row">
+        android:id="@+id/front_9_putts_row"
+        style="@style/ScorecardRow">
 
         <TextView
             style="@style/ScorecardCell"
@@ -324,7 +330,8 @@
     </TableRow>
 
     <TableRow
-        android:id="@+id/front_9_penalties_row">
+        android:id="@+id/front_9_penalties_row"
+        style="@style/ScorecardRow">
 
         <TextView
             style="@style/ScorecardCell"
@@ -374,7 +381,8 @@
     </TableRow>
 
     <TableRow
-        android:id="@+id/front_9_fairway_hit_row">
+        android:id="@+id/front_9_fairway_hit_row"
+        style="@style/ScorecardRow">
 
         <TextView
             android:layout_width="wrap_content"
@@ -492,7 +500,8 @@
     </TableRow>
 
     <TableRow
-        android:id="@+id/front_9_gir_row">
+        android:id="@+id/front_9_gir_row"
+        style="@style/ScorecardRow">
 
         <TextView
             android:layout_width="wrap_content"

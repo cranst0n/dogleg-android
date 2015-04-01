@@ -26,6 +26,7 @@
     <string name="app_user_key">app_user</string>
 
     <string name="intent_course_id_key">courseId</string>
+    <string name="intent_round_data_key">roundData</string>
 
     <string name="com.google.android.maps.v2.API_KEY">AIzaSyAyCP_wYA3fMnHtKrJRYMeefoqyxkTyAb0</string>
 

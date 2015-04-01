@@ -27,7 +27,7 @@ import com.google.maps.android.ui.IconGenerator;
 import com.squareup.otto.Bus;
 
 import org.cranst0n.dogleg.android.R;
-import org.cranst0n.dogleg.android.activity.PlayRoundActivity;
+import org.cranst0n.dogleg.android.activity.RoundPlayActivity;
 import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 import org.cranst0n.dogleg.android.model.Hole;
 import org.cranst0n.dogleg.android.model.HoleFeature;
@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PlayRoundMapFragment extends BaseFragment implements GoogleMap.OnMarkerDragListener {
+public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMarkerDragListener {
 
   private Bus bus;
 
@@ -85,7 +85,7 @@ public class PlayRoundMapFragment extends BaseFragment implements GoogleMap.OnMa
     sandIconFactory = createTextIconFactory(inflater, R.drawable.map_marker_sand);
     greyIconFactory = createTextIconFactory(inflater, R.drawable.map_marker_grey);
 
-    mapFragmentView = inflater.inflate(R.layout.fragment_play_round_map, container, false);
+    mapFragmentView = inflater.inflate(R.layout.fragment_round_play_map, container, false);
 
     // Gets the MapView from the XML layout and creates it
     mapView = (MapView) mapFragmentView.findViewById(R.id.round_map_view);
@@ -215,24 +215,24 @@ public class PlayRoundMapFragment extends BaseFragment implements GoogleMap.OnMa
   }
 
   private Hole currentHole() {
-    if (activity instanceof PlayRoundActivity) {
-      return ((PlayRoundActivity) activity).currentHole();
+    if (activity instanceof RoundPlayActivity) {
+      return ((RoundPlayActivity) activity).currentHole();
     }
 
     return null;
   }
 
   private HoleRating currentHoleRating() {
-    if (activity instanceof PlayRoundActivity) {
-      return ((PlayRoundActivity) activity).currentHoleRating();
+    if (activity instanceof RoundPlayActivity) {
+      return ((RoundPlayActivity) activity).currentHoleRating();
     }
 
     return null;
   }
 
   private Location lastKnownLocation() {
-    if (activity instanceof PlayRoundActivity) {
-      return ((PlayRoundActivity) activity).lastKnownLocation();
+    if (activity instanceof RoundPlayActivity) {
+      return ((RoundPlayActivity) activity).lastKnownLocation();
     }
 
     return null;

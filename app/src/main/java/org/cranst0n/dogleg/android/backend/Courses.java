@@ -3,8 +3,6 @@ package org.cranst0n.dogleg.android.backend;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -15,6 +13,7 @@ import org.cranst0n.dogleg.android.model.Course;
 import org.cranst0n.dogleg.android.model.CourseSummary;
 import org.cranst0n.dogleg.android.model.LatLon;
 import org.cranst0n.dogleg.android.utils.Files;
+import org.cranst0n.dogleg.android.utils.Json;
 import org.cranst0n.dogleg.android.utils.Strings;
 
 import java.io.File;
@@ -171,7 +170,7 @@ public class Courses extends BackendComponent {
       try {
 
         outputStream = new FileOutputStream(file);
-        outputStream.write(new GsonBuilder().create().toJson(course).getBytes());
+        outputStream.write(Json.pimpedGson().toJson(course).getBytes());
 
         return true;
       } catch (final Exception e) {
@@ -255,12 +254,10 @@ public class Courses extends BackendComponent {
 
   private static Course loadFile(final File f) {
 
-    Gson gson = new GsonBuilder().create();
-
     try {
 
       String jsonString = Files.getStringFromFile(f);
-      return gson.fromJson(jsonString, Course.class);
+      return Json.pimpedGson().fromJson(jsonString, Course.class);
 
     } catch (final IOException e) {
       Log.e(Tag, "Failed to read course file: " + f.getName(), e);

@@ -7,19 +7,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
-import org.cranst0n.dogleg.android.activity.PlayRoundActivity;
+import org.cranst0n.dogleg.android.activity.RoundPlayActivity;
 import org.cranst0n.dogleg.android.model.Round;
 
-public class PlayRoundScorecardFragment extends ScorecardFragment {
+public class RoundPlayScorecardFragment extends ScorecardFragment {
 
-  private PlayRoundFragment.PlayRoundListener playRoundListener;
+  private RoundPlayFragment.PlayRoundListener playRoundListener;
 
   @Override
   public void onAttach(final Activity activity) {
     super.onAttach(activity);
 
-    if (activity instanceof PlayRoundFragment.PlayRoundListener) {
-      playRoundListener = (PlayRoundFragment.PlayRoundListener) activity;
+    if (activity instanceof RoundPlayFragment.PlayRoundListener) {
+      playRoundListener = (RoundPlayFragment.PlayRoundListener) activity;
     }
   }
 
@@ -83,8 +83,8 @@ public class PlayRoundScorecardFragment extends ScorecardFragment {
   }
 
   private Round round() {
-    if (activity instanceof PlayRoundActivity) {
-      return ((PlayRoundActivity) activity).round();
+    if (activity instanceof RoundPlayActivity) {
+      return ((RoundPlayActivity) activity).round();
     }
 
     return null;

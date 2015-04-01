@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -80,10 +81,14 @@ public class ScorecardFragment extends BaseFragment {
 
     scorecardView = inflater.inflate(R.layout.include_scorecard, container, false);
 
-    findViews();
+    findViews(scorecardView);
     updateScorecard();
 
     return scorecardView;
+  }
+
+  public Round getRound() {
+    return round;
   }
 
   public void setRound(final Round round) {
@@ -91,7 +96,7 @@ public class ScorecardFragment extends BaseFragment {
     updateScorecard();
   }
 
-  private void updateScorecard() {
+  protected void updateScorecard() {
     if (round != null && isAdded()) {
 
       HoleSet holeSet = round.holeSet();
@@ -104,7 +109,7 @@ public class ScorecardFragment extends BaseFragment {
 
           holeFieldViews[ix].par.setText(String.valueOf(round.rating.holeRating(holeNum).par));
           holeFieldViews[ix].yardage.setText(String.valueOf(round.rating.holeRating(holeNum).yardage));
-          holeFieldViews[ix].fairwayHit.setEnabled(round.rating.holeRating(holeNum).par > 3);
+          holeFieldViews[ix].fairwayHit.setEnabled(enabled && round.rating.holeRating(holeNum).par > 3);
           updateHole(round.holeScore(holeNum));
         }
       }
@@ -177,7 +182,7 @@ public class ScorecardFragment extends BaseFragment {
       back9ParText.setText(String.valueOf(round.rating.backPar()));
       back9YardageText.setText(String.valueOf(round.rating.backYardage()));
       back9ScoreText.setText(String.valueOf(stats.backScore));
-      back9NetScoreText.setText("-");
+      back9NetScoreText.setText(String.valueOf(stats.backNetScore));
       back9PuttsText.setText(String.valueOf(stats.backPutts));
       back9PenaltiesText.setText(String.valueOf(stats.backPenalties));
       back9FairwayHitText.setText(String.format("%.2f%%", stats.backFairwayHitPercentage * 100));
@@ -196,6 +201,16 @@ public class ScorecardFragment extends BaseFragment {
       front9PenaltiesRow.setVisibility(visibility);
       front9FairwayHitRow.setVisibility(visibility);
       front9GirRow.setVisibility(visibility);
+
+      if (holeEnd() == 18) {
+
+        int back9TopMargin = (visibility == View.INVISIBLE || visibility == View.GONE) ? 0 : 8;
+
+        ViewGroup.LayoutParams lp = back9HoleNumberRow.getLayoutParams();
+        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(lp);
+        llp.setMargins(0, back9TopMargin, 0, 0);
+        back9HoleNumberRow.setLayoutParams(llp);
+      }
     }
   }
 
@@ -217,7 +232,7 @@ public class ScorecardFragment extends BaseFragment {
 
     this.enabled = enabled;
 
-    if (isAdded()) {
+    if (holeFieldViews != null) {
       for (HoleViewHolder viewHolder : holeFieldViews) {
         viewHolder.fairwayHit.setEnabled(enabled);
         viewHolder.gir.setEnabled(enabled);
@@ -227,9 +242,9 @@ public class ScorecardFragment extends BaseFragment {
     return this;
   }
 
-  protected void findViews() {
+  protected void findViews(final View parentView) {
 
-    scorecardTable = (TableLayout) scorecardView.findViewById(R.id.scorecard_table);
+    scorecardTable = (TableLayout) parentView.findViewById(R.id.scorecard_table);
 
     front9HoleNumberRow = (TableRow) scorecardTable.findViewById(R.id.front_9_hole_number_row);
     front9ParRow = (TableRow) scorecardTable.findViewById(R.id.front_9_par_row);
@@ -272,7 +287,7 @@ public class ScorecardFragment extends BaseFragment {
     holeFieldViews = new HoleViewHolder[holeEnd() - holeStart() + 1];
 
     for (int ix = holeStart(); ix <= holeEnd(); ix++) {
-      holeFieldViews[ix - holeStart()] = new HoleViewHolder(ix);
+      holeFieldViews[ix - holeStart()] = new HoleViewHolder(ix, parentView);
     }
 
     setRound(round);
@@ -280,6 +295,8 @@ public class ScorecardFragment extends BaseFragment {
   }
 
   protected class HoleViewHolder {
+
+    public final int holeNumber;
 
     public final TextView number;
     public final TextView yardage;
@@ -291,22 +308,27 @@ public class ScorecardFragment extends BaseFragment {
     public final CheckBox fairwayHit;
     public final CheckBox gir;
 
-    private HoleViewHolder(final int holeNumber) {
+    private HoleViewHolder(final int holeNumber, final View parentView) {
 
-      number = (TextView) holeView(holeNumber, "number");
-      par = (TextView) holeView(holeNumber, "par");
-      yardage = (TextView) holeView(holeNumber, "yardage");
-      score = (TextView) holeView(holeNumber, "score");
-      netScore = (TextView) holeView(holeNumber, "net_score");
-      putts = (TextView) holeView(holeNumber, "putts");
-      penalties = (TextView) holeView(holeNumber, "penalties");
-      fairwayHit = (CheckBox) holeView(holeNumber, "fairway_hit");
-      gir = (CheckBox) holeView(holeNumber, "gir");
+      this.holeNumber = holeNumber;
+
+      number = (TextView) holeView(holeNumber, "number", parentView);
+      par = (TextView) holeView(holeNumber, "par", parentView);
+      yardage = (TextView) holeView(holeNumber, "yardage", parentView);
+      score = (TextView) holeView(holeNumber, "score", parentView);
+      netScore = (TextView) holeView(holeNumber, "net_score", parentView);
+      putts = (TextView) holeView(holeNumber, "putts", parentView);
+      penalties = (TextView) holeView(holeNumber, "penalties", parentView);
+      fairwayHit = (CheckBox) holeView(holeNumber, "fairway_hit", parentView);
+      gir = (CheckBox) holeView(holeNumber, "gir", parentView);
+
+      fairwayHit.setEnabled(enabled);
+      gir.setEnabled(enabled);
     }
 
-    private View holeView(final int holeNum, final String fieldSuffix) {
+    private View holeView(final int holeNum, final String fieldSuffix, final View parentView) {
       String s = String.format("hole_%d_%s", holeNum, fieldSuffix);
-      return scorecardView.findViewById(
+      return parentView.findViewById(
           getResources().getIdentifier(s, "id", activity.getPackageName()));
     }
   }

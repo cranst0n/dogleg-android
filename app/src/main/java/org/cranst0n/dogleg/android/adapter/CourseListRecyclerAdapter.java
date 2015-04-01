@@ -104,7 +104,7 @@ public class CourseListRecyclerAdapter extends RecyclerView.Adapter<CourseListRe
 
       Ion.with(courseImageView)
           .centerCrop()
-          .load("android.resource://" + activity.getPackageName() + "/" + Photos.photoFor((int) courseSummary.id));
+          .load("android.resource://" + activity.getPackageName() + "/" + Photos.photoFor(courseSummary.id));
 
       courseNameView.setText(courseSummary.name);
       courseLocationView.setText(courseSummary.city + ", " + courseSummary.state);
