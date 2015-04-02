@@ -27,8 +27,8 @@
     <style name="ButtonStyle" parent="@android:style/Widget.Button">
         <item name="android:background">@color/primary</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:paddingTop">@dimen/padding_four</item>
-        <item name="android:paddingBottom">@dimen/padding_four</item>
+        <item name="android:paddingTop">@dimen/padding_six</item>
+        <item name="android:paddingBottom">@dimen/padding_six</item>
         <item name="android:paddingLeft">@dimen/padding_thirty_two</item>
         <item name="android:paddingRight">@dimen/padding_thirty_two</item>
         <item name="android:radius">@dimen/radius_four</item>

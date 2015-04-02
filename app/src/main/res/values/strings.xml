@@ -3,6 +3,8 @@
 
     <string name="app_name">Dogleg</string>
     <string name="version">Version</string>
+
+    <string name="account_activity_title">Account</string>
     <string name="settings_activity_title">Settings</string>
 
     <string name="action_login">Log In</string>

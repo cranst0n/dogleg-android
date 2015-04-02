@@ -25,7 +25,7 @@ import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.activity.RoundShowActivity;
 import org.cranst0n.dogleg.android.backend.BackendResponse;
 import org.cranst0n.dogleg.android.backend.Rounds;
-import org.cranst0n.dogleg.android.constants.Photos;
+import org.cranst0n.dogleg.android.utils.Photos;
 import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.RoundStats;

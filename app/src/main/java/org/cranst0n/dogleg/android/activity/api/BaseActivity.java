@@ -1,7 +1,6 @@
 package org.cranst0n.dogleg.android.activity.api;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -12,12 +11,9 @@ import android.widget.RelativeLayout;
 
 import org.cranst0n.dogleg.android.DoglegApplication;
 import org.cranst0n.dogleg.android.R;
-import org.cranst0n.dogleg.android.activity.HomeActivity;
-import org.cranst0n.dogleg.android.activity.SettingsActivity;
-import org.cranst0n.dogleg.android.constants.DrawerMenu;
 import org.cranst0n.dogleg.android.fragment.DrawerFragment;
 
-public abstract class BaseActivity extends ActionBarActivity implements DrawerFragment.NavigationDrawerCallbacks {
+public abstract class BaseActivity extends ActionBarActivity {
 
   protected Toolbar toolbar;
   protected DrawerLayout drawerLayout;
@@ -71,33 +67,6 @@ public abstract class BaseActivity extends ActionBarActivity implements DrawerFr
     Activity currActivity = DoglegApplication.currentActivity();
     if (currActivity != null && currActivity.equals(this)) {
       DoglegApplication.setCurrentActivity(null);
-    }
-  }
-
-  @Override
-  public void onNavigationDrawerItemSelected(final int position) {
-
-    switch (position) {
-      case DrawerMenu.HOME: {
-        if (getClass() != HomeActivity.class) {
-          Intent intent = new Intent(this, HomeActivity.class);
-          intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-          startActivity(intent);
-        } else {
-          drawerLayout.closeDrawers();
-        }
-        break;
-      }
-      case DrawerMenu.SETTINGS:
-        if (getClass() != SettingsActivity.class) {
-          Intent intent = new Intent(this, SettingsActivity.class);
-          intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-          startActivity(intent);
-        } else {
-          drawerLayout.closeDrawers();
-        }
-
-        break;
     }
   }
 

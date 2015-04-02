@@ -147,7 +147,7 @@ public class ScorecardFragment extends BaseFragment {
 
   public void updateHole(final HoleScore holeScore) {
 
-    if (includesHole(holeScore.hole.number)) {
+    if (includesHole(holeScore.hole.number) && holeFieldViews != null) {
 
       int viewIdx = holeScore.hole.number - holeStart();
 
@@ -165,28 +165,30 @@ public class ScorecardFragment extends BaseFragment {
 
   protected void updateRoundStats(final Round round) {
 
-    RoundStats stats = round.stats();
+    if (isAdded()) {
+      RoundStats stats = round.stats();
 
-    if (holeStart() == 1) {
-      front9ParText.setText(String.valueOf(round.rating.frontPar()));
-      front9YardageText.setText(String.valueOf(round.rating.frontYardage()));
-      front9ScoreText.setText(String.valueOf(stats.frontScore));
-      front9NetScoreText.setText(String.valueOf(stats.frontNetScore));
-      front9PuttsText.setText(String.valueOf(stats.frontPutts));
-      front9PenaltiesText.setText(String.valueOf(stats.frontPenalties));
-      front9FairwayHitText.setText(formatPercentage(stats.frontFairwayHitPercentage));
-      front9GirText.setText(formatPercentage(stats.frontGirPercentage));
-    }
+      if (holeStart() == 1) {
+        front9ParText.setText(String.valueOf(round.rating.frontPar()));
+        front9YardageText.setText(String.valueOf(round.rating.frontYardage()));
+        front9ScoreText.setText(String.valueOf(stats.frontScore));
+        front9NetScoreText.setText(String.valueOf(stats.frontNetScore));
+        front9PuttsText.setText(String.valueOf(stats.frontPutts));
+        front9PenaltiesText.setText(String.valueOf(stats.frontPenalties));
+        front9FairwayHitText.setText(formatPercentage(stats.frontFairwayHitPercentage));
+        front9GirText.setText(formatPercentage(stats.frontGirPercentage));
+      }
 
-    if (holeEnd() == 18) {
-      back9ParText.setText(String.valueOf(round.rating.backPar()));
-      back9YardageText.setText(String.valueOf(round.rating.backYardage()));
-      back9ScoreText.setText(String.valueOf(stats.backScore));
-      back9NetScoreText.setText(String.valueOf(stats.backNetScore));
-      back9PuttsText.setText(String.valueOf(stats.backPutts));
-      back9PenaltiesText.setText(String.valueOf(stats.backPenalties));
-      back9FairwayHitText.setText(formatPercentage(stats.backFairwayHitPercentage));
-      back9GirText.setText(formatPercentage(stats.backGirPercentage));
+      if (holeEnd() == 18) {
+        back9ParText.setText(String.valueOf(round.rating.backPar()));
+        back9YardageText.setText(String.valueOf(round.rating.backYardage()));
+        back9ScoreText.setText(String.valueOf(stats.backScore));
+        back9NetScoreText.setText(String.valueOf(stats.backNetScore));
+        back9PuttsText.setText(String.valueOf(stats.backPutts));
+        back9PenaltiesText.setText(String.valueOf(stats.backPenalties));
+        back9FairwayHitText.setText(formatPercentage(stats.backFairwayHitPercentage));
+        back9GirText.setText(formatPercentage(stats.backGirPercentage));
+      }
     }
   }
 

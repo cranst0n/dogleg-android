@@ -189,15 +189,18 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
   }
 
   private void updateStats() {
-    RoundStats stats = round().stats();
+    if (isAdded()) {
 
-    statsPuttsView.setText(String.valueOf(stats.putts));
-    statsPuttsAverageView.setText(String.format("%.2f", stats.puttAverage));
-    statsFairwayHitView.setText(String.format("%.2f%%", stats.fairwayHitPercentage * 100));
-    statsGirView.setText(String.format("%.2f%%", stats.girPercentage * 100));
-    statsPar3AverageView.setText(String.format("%.2f", stats.par3ScoringAverage));
-    statsPar4AverageView.setText(String.format("%.2f", stats.par4ScoringAverage));
-    statsPar5AverageView.setText(String.format("%.2f", stats.par5ScoringAverage));
+      RoundStats stats = round().stats();
+
+      statsPuttsView.setText(String.valueOf(stats.putts));
+      statsPuttsAverageView.setText(String.format("%.2f", stats.puttAverage));
+      statsFairwayHitView.setText(String.format("%.2f%%", stats.fairwayHitPercentage * 100));
+      statsGirView.setText(String.format("%.2f%%", stats.girPercentage * 100));
+      statsPar3AverageView.setText(String.format("%.2f", stats.par3ScoringAverage));
+      statsPar4AverageView.setText(String.format("%.2f", stats.par4ScoringAverage));
+      statsPar5AverageView.setText(String.format("%.2f", stats.par5ScoringAverage));
+    }
   }
 
   private void updateGpsDisplay(final Location location) {

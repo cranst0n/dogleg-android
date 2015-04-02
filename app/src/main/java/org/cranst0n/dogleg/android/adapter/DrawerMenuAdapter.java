@@ -11,28 +11,28 @@ import android.widget.TextView;
 
 import org.cranst0n.dogleg.android.DoglegApplication;
 import org.cranst0n.dogleg.android.R;
-import org.cranst0n.dogleg.android.constants.DrawerMenu;
+import org.cranst0n.dogleg.android.fragment.DrawerFragment;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class DrawerMenuAdapter extends BaseAdapter {
 
-  private final Context mContext;
-  private final ArrayList<DrawerMenu.DrawerMenuItem> mListItemsDrawerMenuBean;
+  private final Context context;
+  private final List<DrawerFragment.DrawerMenuItem> menuItems;
 
-  public DrawerMenuAdapter(final Context mContext, final ArrayList<DrawerMenu.DrawerMenuItem> mListItemsDrawer) {
-    this.mContext = mContext;
-    this.mListItemsDrawerMenuBean = mListItemsDrawer;
+  public DrawerMenuAdapter(final Context context, final List<DrawerFragment.DrawerMenuItem> listItems) {
+    this.context = context;
+    this.menuItems = listItems;
   }
 
   @Override
   public int getCount() {
-    return mListItemsDrawerMenuBean.size();
+    return menuItems.size();
   }
 
   @Override
   public Object getItem(final int position) {
-    return mListItemsDrawerMenuBean.get(position);
+    return menuItems.get(position);
   }
 
   @Override
@@ -47,28 +47,39 @@ public class DrawerMenuAdapter extends BaseAdapter {
 
     if (convertView == null) {
 
-      LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+      LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
       convertView = mInflater.inflate(R.layout.fragment_drawer_menu_item, null);
 
-      holder = new ViewHolder();
-      holder.mIcon = (ImageView) convertView.findViewById(R.id.fragment_drawerMenu_comp_icon);
-      holder.mTitle = (TextView) convertView.findViewById(R.id.fragment_drawerMenu_comp_title);
+      ImageView iconView = (ImageView) convertView.findViewById(R.id.fragment_drawerMenu_comp_icon);
+      TextView titleView = (TextView) convertView.findViewById(R.id.fragment_drawerMenu_comp_title);
+      holder = new ViewHolder(iconView, titleView);
 
       convertView.setTag(holder);
+
     } else {
       holder = (ViewHolder) convertView.getTag();
     }
 
-    DrawerMenu.DrawerMenuItem item = mListItemsDrawerMenuBean.get(position);
-    holder.mIcon.setImageDrawable(DoglegApplication.context().getResources().getDrawable(item.iconRes));
-    holder.mTitle.setText(item.title);
+    DrawerFragment.DrawerMenuItem item = menuItems.get(position);
+
+    holder.iconView.setImageDrawable(DoglegApplication.context().getResources().getDrawable(item.iconRes));
+    holder.titleView.setText(item.title);
+    holder.menuItem = item;
 
     return convertView;
   }
 
-  private static class ViewHolder {
-    ImageView mIcon;
-    TextView mTitle;
+  public static class ViewHolder {
+
+    public final ImageView iconView;
+    public final TextView titleView;
+
+    public DrawerFragment.DrawerMenuItem menuItem;
+
+    private ViewHolder(final ImageView iconView, final TextView titleView) {
+      this.iconView = iconView;
+      this.titleView = titleView;
+    }
   }
 
 }

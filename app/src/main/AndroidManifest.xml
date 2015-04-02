@@ -52,6 +52,12 @@
             android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
 
+        <activity
+            android:name=".activity.AccountActivity"
+            android:parentActivityName=".activity.HomeActivity">
+        </activity>
+
+
         <activity android:name=".activity.SettingsActivity">
         </activity>
 

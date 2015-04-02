@@ -1,4 +1,4 @@
-package org.cranst0n.dogleg.android.constants;
+package org.cranst0n.dogleg.android.utils;
 
 import org.cranst0n.dogleg.android.R;
 

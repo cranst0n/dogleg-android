@@ -1,25 +1,25 @@
 <resources>
 
     <!-- Text Sizes -->
-    <dimen name="text_size_two">2dp</dimen>
-    <dimen name="text_size_four">4dp</dimen>
-    <dimen name="text_size_six">6dp</dimen>
-    <dimen name="text_size_eight">8dp</dimen>
-    <dimen name="text_size_ten">10dp</dimen>
-    <dimen name="text_size_twelve">12dp</dimen>
-    <dimen name="text_size_fourteen">14dp</dimen>
-    <dimen name="text_size_sixteen">16dp</dimen>
-    <dimen name="text_size_eighteen">18dp</dimen>
-    <dimen name="text_size_twenty">20dp</dimen>
-    <dimen name="text_size_twenty_two">22dp</dimen>
-    <dimen name="text_size_twenty_four">24dp</dimen>
-    <dimen name="text_size_twenty_six">26dp</dimen>
-    <dimen name="text_size_twenty_eight">28dp</dimen>
-    <dimen name="text_size_thirty">30dp</dimen>
-    <dimen name="text_size_thirty_two">32dp</dimen>
-    <dimen name="text_size_thirty_six">36dp</dimen>
-    <dimen name="text_size_fourty_two">42dp</dimen>
-    <dimen name="text_size_fourty_eight">48dp</dimen>
+    <dimen name="text_size_two">2sp</dimen>
+    <dimen name="text_size_four">4sp</dimen>
+    <dimen name="text_size_six">6sp</dimen>
+    <dimen name="text_size_eight">8sp</dimen>
+    <dimen name="text_size_ten">10sp</dimen>
+    <dimen name="text_size_twelve">12sp</dimen>
+    <dimen name="text_size_fourteen">14sp</dimen>
+    <dimen name="text_size_sixteen">16sp</dimen>
+    <dimen name="text_size_eighteen">18sp</dimen>
+    <dimen name="text_size_twenty">20sp</dimen>
+    <dimen name="text_size_twenty_two">22sp</dimen>
+    <dimen name="text_size_twenty_four">24sp</dimen>
+    <dimen name="text_size_twenty_six">26sp</dimen>
+    <dimen name="text_size_twenty_eight">28sp</dimen>
+    <dimen name="text_size_thirty">30sp</dimen>
+    <dimen name="text_size_thirty_two">32sp</dimen>
+    <dimen name="text_size_thirty_six">36sp</dimen>
+    <dimen name="text_size_fourty_two">42sp</dimen>
+    <dimen name="text_size_fourty_eight">48sp</dimen>
 
     <!-- Spacings -->
     <dimen name="two">2dp</dimen>
