@@ -167,8 +167,15 @@ public class RoundListFragment extends BaseFragment {
     } else {
       recyclerView.setVisibility(View.INVISIBLE);
       displayedRoundList.clear();
-      swipeRefreshLayout.setRefreshing(true);
       endOfListReached = false;
+
+      // Workaround to address bug: https://code.google.com/p/android/issues/detail?id=77712
+      swipeRefreshLayout.post(new Runnable() {
+        @Override
+        public void run() {
+          swipeRefreshLayout.setRefreshing(true);
+        }
+      });
     }
 
     if (queryCall != null) {

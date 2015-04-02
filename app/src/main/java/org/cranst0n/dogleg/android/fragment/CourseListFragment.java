@@ -231,8 +231,15 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
     } else {
       recyclerView.setVisibility(View.INVISIBLE);
       displayedCourseList.clear();
-      swipeRefreshLayout.setRefreshing(true);
       endOfListReached = false;
+
+      // Workaround to address bug: https://code.google.com/p/android/issues/detail?id=77712
+      swipeRefreshLayout.post(new Runnable() {
+        @Override
+        public void run() {
+          swipeRefreshLayout.setRefreshing(true);
+        }
+      });
     }
 
     if (queryCall != null) {
