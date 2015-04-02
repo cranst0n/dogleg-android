@@ -58,16 +58,14 @@
         <item name="android:paddingRight">@dimen/padding_two</item>
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/border</item>
-        <item name="android:textSize">@dimen/text_size_eight</item>
+        <item name="android:textSize">@dimen/text_size_ten</item>
     </style>
 
-    <style name="ScorecardCheckboxCell">
-        <item name="android:layout_margin">0dp</item>
-        <item name="android:padding">0dp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textSize">0dp</item>
-        <item name="android:scaleX">0.7</item>
-        <item name="android:scaleY">0.7</item>
+    <style name="ScorecardCheckboxStyle" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/border</item>
+        <item name="android:layout_width">@dimen/twenty_two</item>
+        <item name="android:layout_height">@dimen/twenty_two</item>
+        <item name="android:padding">@dimen/padding_four</item>
     </style>
 
 </resources>

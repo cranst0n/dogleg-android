@@ -358,7 +358,7 @@ public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMa
         bearing = cameraLocation.bearingTo(nextPoint.toLocation());
         animationDuration =
             (int) (cameraLocation.distanceTo(nextPoint.toLocation()) *
-                Math.min(20 * (step / 2d), 750));
+                Math.min(20 * (step / 2d), 600));
       }
 
       CameraPosition cp = new CameraPosition.Builder()

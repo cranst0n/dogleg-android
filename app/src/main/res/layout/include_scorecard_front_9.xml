@@ -391,104 +391,41 @@
             android:textStyle="bold"
             android:text="Fairway"/>
 
-        <RelativeLayout
-            android:background="@drawable/border">
+        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+            android:id="@+id/hole_1_fairway_hit"
+            style="@style/ScorecardCheckboxStyle"/>
 
-            <CheckBox
-                android:id="@+id/hole_1_fairway_hit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ScorecardCheckboxCell"/>
+        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+            android:id="@+id/hole_2_fairway_hit"
+            style="@style/ScorecardCheckboxStyle"/>
 
-        </RelativeLayout>
+        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+            android:id="@+id/hole_3_fairway_hit"
+            style="@style/ScorecardCheckboxStyle"/>
 
-        <RelativeLayout
-            android:background="@drawable/border">
+        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+            android:id="@+id/hole_4_fairway_hit"
+            style="@style/ScorecardCheckboxStyle"/>
 
-            <CheckBox
-                android:id="@+id/hole_2_fairway_hit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ScorecardCheckboxCell"/>
+        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+            android:id="@+id/hole_5_fairway_hit"
+            style="@style/ScorecardCheckboxStyle"/>
 
-        </RelativeLayout>
+        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+            android:id="@+id/hole_6_fairway_hit"
+            style="@style/ScorecardCheckboxStyle"/>
 
-        <RelativeLayout
-            android:background="@drawable/border">
+        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+            android:id="@+id/hole_7_fairway_hit"
+            style="@style/ScorecardCheckboxStyle"/>
 
-            <CheckBox
-                android:id="@+id/hole_3_fairway_hit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ScorecardCheckboxCell"/>
+        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+            android:id="@+id/hole_8_fairway_hit"
+            style="@style/ScorecardCheckboxStyle"/>
 
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:background="@drawable/border">
-
-            <CheckBox
-                android:id="@+id/hole_4_fairway_hit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ScorecardCheckboxCell"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:background="@drawable/border">
-
-            <CheckBox
-                android:id="@+id/hole_5_fairway_hit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ScorecardCheckboxCell"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:background="@drawable/border">
-
-            <CheckBox
-                android:id="@+id/hole_6_fairway_hit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ScorecardCheckboxCell"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:background="@drawable/border">
-
-            <CheckBox
-                android:id="@+id/hole_7_fairway_hit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ScorecardCheckboxCell"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:background="@drawable/border">
-
-            <CheckBox
-                android:id="@+id/hole_8_fairway_hit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ScorecardCheckboxCell"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:background="@drawable/border">
-
-            <CheckBox
-                android:id="@+id/hole_9_fairway_hit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ScorecardCheckboxCell"/>
-
-        </RelativeLayout>
+        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+            android:id="@+id/hole_9_fairway_hit"
+            style="@style/ScorecardCheckboxStyle"/>
 
         <TextView
             android:id="@+id/front_9_fairway_hit"
@@ -510,104 +447,41 @@
             android:textStyle="bold"
             android:text="GIR"/>
 
-        <RelativeLayout
-            android:background="@drawable/border">
+        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+            android:id="@+id/hole_1_gir"
+            style="@style/ScorecardCheckboxStyle"/>
 
-            <CheckBox
-                android:id="@+id/hole_1_gir"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ScorecardCheckboxCell"/>
+        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+            android:id="@+id/hole_2_gir"
+            style="@style/ScorecardCheckboxStyle"/>
 
-        </RelativeLayout>
+        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+            android:id="@+id/hole_3_gir"
+            style="@style/ScorecardCheckboxStyle"/>
 
-        <RelativeLayout
-            android:background="@drawable/border">
+        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+            android:id="@+id/hole_4_gir"
+            style="@style/ScorecardCheckboxStyle"/>
 
-            <CheckBox
-                android:id="@+id/hole_2_gir"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ScorecardCheckboxCell"/>
+        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+            android:id="@+id/hole_5_gir"
+            style="@style/ScorecardCheckboxStyle"/>
 
-        </RelativeLayout>
+        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+            android:id="@+id/hole_6_gir"
+            style="@style/ScorecardCheckboxStyle"/>
 
-        <RelativeLayout
-            android:background="@drawable/border">
+        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+            android:id="@+id/hole_7_gir"
+            style="@style/ScorecardCheckboxStyle"/>
 
-            <CheckBox
-                android:id="@+id/hole_3_gir"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ScorecardCheckboxCell"/>
+        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+            android:id="@+id/hole_8_gir"
+            style="@style/ScorecardCheckboxStyle"/>
 
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:background="@drawable/border">
-
-            <CheckBox
-                android:id="@+id/hole_4_gir"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ScorecardCheckboxCell"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:background="@drawable/border">
-
-            <CheckBox
-                android:id="@+id/hole_5_gir"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ScorecardCheckboxCell"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:background="@drawable/border">
-
-            <CheckBox
-                android:id="@+id/hole_6_gir"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ScorecardCheckboxCell"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:background="@drawable/border">
-
-            <CheckBox
-                android:id="@+id/hole_7_gir"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ScorecardCheckboxCell"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:background="@drawable/border">
-
-            <CheckBox
-                android:id="@+id/hole_8_gir"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ScorecardCheckboxCell"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:background="@drawable/border">
-
-            <CheckBox
-                android:id="@+id/hole_9_gir"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ScorecardCheckboxCell"/>
-
-        </RelativeLayout>
+        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+            android:id="@+id/hole_9_gir"
+            style="@style/ScorecardCheckboxStyle"/>
 
         <TextView
             android:id="@+id/front_9_gir"

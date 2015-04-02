@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,6 +32,7 @@ import org.cranst0n.dogleg.android.utils.Objects;
 import org.cranst0n.dogleg.android.utils.SnackBars;
 import org.cranst0n.dogleg.android.views.HoleScoreDialogs;
 import org.cranst0n.dogleg.android.views.RoundSettingsDialog;
+import org.cranst0n.dogleg.android.views.SimpleCheckbox;
 
 public class RoundShowFragment extends ScorecardFragment implements ObservableScrollViewCallbacks {
 
@@ -276,17 +276,17 @@ public class RoundShowFragment extends ScorecardFragment implements ObservableSc
         }
       });
 
-      holeFieldViews[holeNumber - holeStart()].fairwayHit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+      holeFieldViews[holeNumber - holeStart()].fairwayHit.setOnCheckedChangeListener(new SimpleCheckbox.OnCheckedChangeListener() {
         @Override
-        public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
+        public void onCheckedChanged(final SimpleCheckbox buttonView, final boolean isChecked) {
           round.updateScore(round.holeScore(holeNumber).fairwayHit(isChecked));
           updateScorecard();
         }
       });
 
-      holeFieldViews[holeNumber - holeStart()].gir.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+      holeFieldViews[holeNumber - holeStart()].gir.setOnCheckedChangeListener(new SimpleCheckbox.OnCheckedChangeListener() {
         @Override
-        public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
+        public void onCheckedChanged(final SimpleCheckbox buttonView, final boolean isChecked) {
           round.updateScore(round.holeScore(holeNumber).gir(isChecked));
           updateScorecard();
         }

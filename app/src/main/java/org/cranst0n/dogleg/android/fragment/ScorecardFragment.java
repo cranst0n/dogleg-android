@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -16,6 +15,7 @@ import org.cranst0n.dogleg.android.model.HoleScore;
 import org.cranst0n.dogleg.android.model.HoleSet;
 import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.RoundStats;
+import org.cranst0n.dogleg.android.views.SimpleCheckbox;
 
 public class ScorecardFragment extends BaseFragment {
 
@@ -174,8 +174,8 @@ public class ScorecardFragment extends BaseFragment {
       front9NetScoreText.setText(String.valueOf(stats.frontNetScore));
       front9PuttsText.setText(String.valueOf(stats.frontPutts));
       front9PenaltiesText.setText(String.valueOf(stats.frontPenalties));
-      front9FairwayHitText.setText(String.format("%.2f%%", stats.frontFairwayHitPercentage * 100));
-      front9GirText.setText(String.format("%.2f%%", stats.frontGirPercentage * 100));
+      front9FairwayHitText.setText(formatPercentage(stats.frontFairwayHitPercentage));
+      front9GirText.setText(formatPercentage(stats.frontGirPercentage));
     }
 
     if (holeEnd() == 18) {
@@ -185,8 +185,18 @@ public class ScorecardFragment extends BaseFragment {
       back9NetScoreText.setText(String.valueOf(stats.backNetScore));
       back9PuttsText.setText(String.valueOf(stats.backPutts));
       back9PenaltiesText.setText(String.valueOf(stats.backPenalties));
-      back9FairwayHitText.setText(String.format("%.2f%%", stats.backFairwayHitPercentage * 100));
-      back9GirText.setText(String.format("%.2f%%", stats.backGirPercentage * 100));
+      back9FairwayHitText.setText(formatPercentage(stats.backFairwayHitPercentage));
+      back9GirText.setText(formatPercentage(stats.backGirPercentage));
+    }
+  }
+
+  private String formatPercentage(final double percentage) {
+    if (percentage >= 1) {
+      return String.format("%d%%", Math.round(percentage * 100));
+    } else if (percentage > 0) {
+      return String.format("%.1f%%", percentage * 100);
+    } else {
+      return "0%";
     }
   }
 
@@ -305,8 +315,8 @@ public class ScorecardFragment extends BaseFragment {
     public final TextView netScore;
     public final TextView putts;
     public final TextView penalties;
-    public final CheckBox fairwayHit;
-    public final CheckBox gir;
+    public final SimpleCheckbox fairwayHit;
+    public final SimpleCheckbox gir;
 
     private HoleViewHolder(final int holeNumber, final View parentView) {
 
@@ -319,8 +329,8 @@ public class ScorecardFragment extends BaseFragment {
       netScore = (TextView) holeView(holeNumber, "net_score", parentView);
       putts = (TextView) holeView(holeNumber, "putts", parentView);
       penalties = (TextView) holeView(holeNumber, "penalties", parentView);
-      fairwayHit = (CheckBox) holeView(holeNumber, "fairway_hit", parentView);
-      gir = (CheckBox) holeView(holeNumber, "gir", parentView);
+      fairwayHit = (SimpleCheckbox) holeView(holeNumber, "fairway_hit", parentView);
+      gir = (SimpleCheckbox) holeView(holeNumber, "gir", parentView);
 
       fairwayHit.setEnabled(enabled);
       gir.setEnabled(enabled);
