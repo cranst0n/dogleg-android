@@ -41,6 +41,34 @@ public class CourseRating {
     this.holeRatings = holeRatings;
   }
 
+  public double rating(final HoleSet holeSet) {
+    switch (holeSet) {
+      case Front9: {
+        return frontRating;
+      }
+      case Back9: {
+        return backRating;
+      }
+      default: {
+        return rating;
+      }
+    }
+  }
+
+  public double slope(final HoleSet holeSet) {
+    switch (holeSet) {
+      case Front9: {
+        return frontSlope;
+      }
+      case Back9: {
+        return backSlope;
+      }
+      default: {
+        return slope;
+      }
+    }
+  }
+
   public HoleRating holeRating(final int holeNumber) {
     for (HoleRating holeRating : holeRatings) {
       if (holeRating.number == holeNumber) {

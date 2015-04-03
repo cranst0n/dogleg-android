@@ -46,31 +46,11 @@ public class Round {
   }
 
   public double roundRating() {
-    switch (holeSet()) {
-      case Front9: {
-        return rating.frontRating;
-      }
-      case Back9: {
-        return rating.backRating;
-      }
-      default: {
-        return rating.rating;
-      }
-    }
+    return rating.rating(holeSet());
   }
 
   public double roundSlope() {
-    switch (holeSet()) {
-      case Front9: {
-        return rating.frontSlope;
-      }
-      case Back9: {
-        return rating.backSlope;
-      }
-      default: {
-        return rating.slope;
-      }
-    }
+    return rating.slope(holeSet());
   }
 
   public HoleScore[] holeScores() {

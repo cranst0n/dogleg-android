@@ -453,7 +453,6 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
       @Override
       public void settingsUpdated(final Round round) {
         setRound(round);
-        fetchAutoHandicap(round);
       }
     }).show();
   }

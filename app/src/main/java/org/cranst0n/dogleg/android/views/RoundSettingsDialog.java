@@ -38,7 +38,6 @@ public class RoundSettingsDialog {
 
   private final Rounds rounds;
 
-  // Settings Dialog
   private Spinner ratingSpinner;
   private Spinner holeSetSpinner;
   private Button pickDateButton;
@@ -88,7 +87,17 @@ public class RoundSettingsDialog {
                 overrideHandicapSpinner.getSelectedItemPosition(), round.holeScores(),
                 selectedHoleSet);
 
-            callback.settingsUpdated(unhandicappedRound);
+            if(unhandicappedRound.isHandicapOverridden) {
+              callback.settingsUpdated(unhandicappedRound);
+            } else {
+              rounds.handicapRound(round.roundSlope(), round.numHoles(), round.time)
+                .onSuccess(new BackendResponse.BackendSuccessListener<RoundHandicapResponse>() {
+                  @Override
+                  public void onSuccess(final RoundHandicapResponse value) {
+                    callback.settingsUpdated(round.withAutoHandicap(value.handicap));
+                  }
+                });
+            }
 
           }
         }).build();
@@ -195,23 +204,8 @@ public class RoundSettingsDialog {
     HoleSet selectedHoleSet =
         HoleSet.available(round.course)[holeSetSpinner.getSelectedItemPosition()];
 
-    double slope;
-    switch (selectedHoleSet) {
-      case Front9: {
-        slope = selectedRating.frontSlope;
-        break;
-      }
-      case Back9: {
-        slope = selectedRating.backSlope;
-        break;
-      }
-      default: {
-        slope = selectedRating.slope;
-        break;
-      }
-    }
-
-    updateAutoHandicapValue(slope, selectedHoleSet.numHoles, round.time);
+    updateAutoHandicapValue(selectedRating.slope(selectedHoleSet),
+        selectedHoleSet.numHoles, round.time);
   }
 
   private void updateAutoHandicapValue(final double slope, final int numHoles, final DateTime time) {

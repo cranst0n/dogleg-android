@@ -10,7 +10,7 @@ import org.cranst0n.dogleg.android.utils.Crypto;
 
 public class Users extends BackendComponent {
 
-  private static final String AVATAR_URL = "/image/avatar/%d?width=%d&height=%d";
+  private static final String AVATAR_URL = "/users/avatar/%d?width=%d&height=%d";
   private static final String CHANGE_PASSWORD_URL = "/users/%d/password";
 
   public Users(final Context context) {
