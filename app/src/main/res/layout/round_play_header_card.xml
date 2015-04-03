@@ -15,7 +15,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/padding_eight"
+        android:paddingLeft="@dimen/padding_four"
+        android:paddingRight="@dimen/padding_four"
         android:orientation="horizontal">
 
         <GridLayout
@@ -43,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
                 android:layout_marginBottom="@dimen/margin_four"
-                android:layout_marginLeft="@dimen/margin_sixteen"
+                android:layout_marginLeft="@dimen/margin_ten"
                 android:gravity="center_vertical|right"
                 android:textSize="@dimen/text_size_sixteen"
                 android:text="0"/>
@@ -57,7 +58,7 @@
                 android:layout_gravity="center_vertical|end"
                 android:layout_marginBottom="@dimen/margin_four"
                 android:layout_marginLeft="@dimen/margin_four"
-                android:layout_marginRight="@dimen/margin_sixteen"
+                android:layout_marginRight="@dimen/margin_ten"
                 android:gravity="center_vertical|right"
                 android:textSize="@dimen/text_size_ten"
                 android:text="(E)"/>
@@ -184,7 +185,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
                 android:layout_marginBottom="@dimen/margin_four"
-                android:layout_marginLeft="@dimen/margin_sixteen"
+                android:layout_marginLeft="@dimen/margin_ten"
                 android:gravity="center_vertical|right"
                 android:textSize="@dimen/text_size_sixteen"
                 android:text="0"/>
@@ -198,7 +199,7 @@
                 android:layout_gravity="center_vertical|end"
                 android:layout_marginBottom="@dimen/margin_four"
                 android:layout_marginLeft="@dimen/margin_four"
-                android:layout_marginRight="@dimen/margin_sixteen"
+                android:layout_marginRight="@dimen/margin_ten"
                 android:gravity="center_vertical|right"
                 android:textSize="@dimen/text_size_ten"
                 android:text="(E)"/>
