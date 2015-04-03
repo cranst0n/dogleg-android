@@ -33,12 +33,11 @@ import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.activity.RoundPlayActivity;
 import org.cranst0n.dogleg.android.backend.BackendResponse;
 import org.cranst0n.dogleg.android.backend.Courses;
-import org.cranst0n.dogleg.android.utils.Photos;
-import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 import org.cranst0n.dogleg.android.model.Course;
 import org.cranst0n.dogleg.android.model.CourseRating;
 import org.cranst0n.dogleg.android.utils.Intents;
 import org.cranst0n.dogleg.android.utils.Json;
+import org.cranst0n.dogleg.android.utils.Photos;
 import org.cranst0n.dogleg.android.utils.SnackBars;
 import org.cranst0n.dogleg.android.views.PinSwitch;
 

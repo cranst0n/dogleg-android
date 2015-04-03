@@ -1,4 +1,4 @@
-package org.cranst0n.dogleg.android.activity.api;
+package org.cranst0n.dogleg.android.activity;
 
 import android.app.Activity;
 import android.content.res.TypedArray;

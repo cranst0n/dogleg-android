@@ -17,9 +17,9 @@ import com.koushikdutta.ion.Ion;
 import org.cranst0n.dogleg.android.DoglegApplication;
 import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.activity.CourseInfoActivity;
-import org.cranst0n.dogleg.android.utils.Photos;
 import org.cranst0n.dogleg.android.model.CourseSummary;
 import org.cranst0n.dogleg.android.utils.Intents;
+import org.cranst0n.dogleg.android.utils.Photos;
 import org.cranst0n.dogleg.android.utils.Units;
 
 import java.util.List;

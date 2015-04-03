@@ -7,7 +7,6 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import org.cranst0n.dogleg.android.R;
-import org.cranst0n.dogleg.android.activity.api.BaseActivity;
 import org.cranst0n.dogleg.android.fragment.CourseInfoFragment;
 import org.cranst0n.dogleg.android.fragment.RoundShowFragment;
 import org.cranst0n.dogleg.android.model.Round;

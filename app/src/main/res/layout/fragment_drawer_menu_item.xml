@@ -3,7 +3,9 @@
                 android:id="@+id/fragment_drawerMenu_comp_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/padding_sixteen"
+                android:paddingTop="@dimen/padding_sixteen"
+                android:paddingBottom="@dimen/padding_sixteen"
+                android:paddingLeft="@dimen/padding_sixteen"
                 android:background="@android:color/white"
                 tools:context=".DrawerMenuComp">
 
@@ -15,7 +17,7 @@
 
     <TextView
         android:id="@+id/fragment_drawerMenu_comp_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/drawer_text"
         android:layout_toRightOf="@id/fragment_drawerMenu_comp_icon"

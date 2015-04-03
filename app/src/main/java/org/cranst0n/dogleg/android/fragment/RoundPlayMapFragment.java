@@ -28,7 +28,6 @@ import com.squareup.otto.Bus;
 
 import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.activity.RoundPlayActivity;
-import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 import org.cranst0n.dogleg.android.model.Hole;
 import org.cranst0n.dogleg.android.model.HoleFeature;
 import org.cranst0n.dogleg.android.model.HoleRating;

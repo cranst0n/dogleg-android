@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.cranst0n.dogleg.android.R;
-import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 
 public class FeedFragment extends BaseFragment {
 

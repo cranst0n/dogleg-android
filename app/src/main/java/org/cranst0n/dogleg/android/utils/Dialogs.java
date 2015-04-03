@@ -11,8 +11,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.backend.Authentication;
-import org.cranst0n.dogleg.android.backend.BackendMessage;
-import org.cranst0n.dogleg.android.backend.BackendResponse;
 
 public class Dialogs {
 
@@ -81,17 +79,7 @@ public class Dialogs {
   private static void doLogin(final Activity activity, final String username, final String password) {
 
     new Authentication(activity).login(username, password).
-        onError(new BackendResponse.BackendErrorListener() {
-          @Override
-          public void onError(BackendMessage message) {
-            SnackBars.showSimple(activity, "Login failed: " + message.message);
-          }
-        }).
-        onException(new BackendResponse.BackendExceptionListener() {
-          @Override
-          public void onException(final Exception exception) {
-            SnackBars.showSimple(activity, "Login failed: " + exception.getMessage());
-          }
-        });
+        onError(SnackBars.showBackendError(activity, "Login failed:")).
+        onException(SnackBars.showBackendException(activity, "Login failed:"));
   }
 }

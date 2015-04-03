@@ -87,16 +87,16 @@ public class RoundSettingsDialog {
                 overrideHandicapSpinner.getSelectedItemPosition(), round.holeScores(),
                 selectedHoleSet);
 
-            if(unhandicappedRound.isHandicapOverridden) {
+            if (unhandicappedRound.isHandicapOverridden) {
               callback.settingsUpdated(unhandicappedRound);
             } else {
               rounds.handicapRound(round.roundSlope(), round.numHoles(), round.time)
-                .onSuccess(new BackendResponse.BackendSuccessListener<RoundHandicapResponse>() {
-                  @Override
-                  public void onSuccess(final RoundHandicapResponse value) {
-                    callback.settingsUpdated(round.withAutoHandicap(value.handicap));
-                  }
-                });
+                  .onSuccess(new BackendResponse.BackendSuccessListener<RoundHandicapResponse>() {
+                    @Override
+                    public void onSuccess(final RoundHandicapResponse value) {
+                      callback.settingsUpdated(round.withAutoHandicap(value.handicap));
+                    }
+                  });
             }
 
           }

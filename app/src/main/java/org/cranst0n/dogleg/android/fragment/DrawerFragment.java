@@ -24,12 +24,12 @@ import com.squareup.otto.Subscribe;
 
 import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.activity.AccountActivity;
+import org.cranst0n.dogleg.android.activity.AdminActivity;
 import org.cranst0n.dogleg.android.activity.HomeActivity;
 import org.cranst0n.dogleg.android.activity.SettingsActivity;
 import org.cranst0n.dogleg.android.adapter.DrawerMenuAdapter;
 import org.cranst0n.dogleg.android.backend.Users;
 import org.cranst0n.dogleg.android.collections.SortedList;
-import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.BusProvider;
 
@@ -66,17 +66,23 @@ public class DrawerFragment extends BaseFragment {
   private final DrawerMenuItem homeItem =
       new DrawerMenuItem(R.drawable.ic_action_home, "Home", 0, HomeActivity.class);
 
-  private final DrawerMenuItem settingsItem =
-      new DrawerMenuItem(R.drawable.ic_action_settings, "Settings", 1000, SettingsActivity.class);
-
   private final DrawerMenuItem accountItem =
       new DrawerMenuItem(R.drawable.ic_action_account_box, "Account", 500, AccountActivity.class);
+
+  private final DrawerMenuItem adminItem =
+      new DrawerMenuItem(R.drawable.ic_action_verified_user, "Admin", 550, AdminActivity.class);
+
+  private final DrawerMenuItem settingsItem =
+      new DrawerMenuItem(R.drawable.ic_action_settings, "Settings", 1000, SettingsActivity.class);
 
   public final List<DrawerMenuItem> defaultMenuItems =
       new ArrayList<>(Arrays.asList(homeItem, settingsItem));
 
   public final List<DrawerMenuItem> userMenuItems =
       new ArrayList<>(Arrays.asList(accountItem));
+
+  public final List<DrawerMenuItem> adminMenuItems =
+      new ArrayList<>(Arrays.asList(adminItem));
 
   @Override
   public void onCreate(final Bundle savedInstanceState) {
@@ -194,14 +200,21 @@ public class DrawerFragment extends BaseFragment {
 
   @Subscribe
   public void newUser(final User user) {
+
     this.currentUser = user;
 
+    drawerListItems.removeAll(userMenuItems);
+    drawerListItems.removeAll(adminMenuItems);
+
     if (user.isValid()) {
-      drawerListItems.removeAll(userMenuItems);
-      drawerListItems.addAll(userMenuItems);
+
       loadUserAvatar();
-    } else {
-      drawerListItems.removeAll(userMenuItems);
+
+      drawerListItems.addAll(userMenuItems);
+
+      if (user.admin) {
+        drawerListItems.addAll(adminMenuItems);
+      }
     }
 
     if (userInfoView != null) {

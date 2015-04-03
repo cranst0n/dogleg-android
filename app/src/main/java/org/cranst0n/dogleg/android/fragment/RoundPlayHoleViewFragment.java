@@ -23,7 +23,6 @@ import org.cranst0n.dogleg.android.activity.RoundPlayActivity;
 import org.cranst0n.dogleg.android.backend.BackendMessage;
 import org.cranst0n.dogleg.android.backend.BackendResponse;
 import org.cranst0n.dogleg.android.backend.Rounds;
-import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 import org.cranst0n.dogleg.android.model.HoleFeature;
 import org.cranst0n.dogleg.android.model.HoleRating;
 import org.cranst0n.dogleg.android.model.HoleScore;

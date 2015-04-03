@@ -3,7 +3,6 @@ package org.cranst0n.dogleg.android.activity;
 import android.os.Bundle;
 
 import org.cranst0n.dogleg.android.R;
-import org.cranst0n.dogleg.android.activity.api.BaseActivity;
 import org.cranst0n.dogleg.android.fragment.CourseInfoFragment;
 
 public class CourseInfoActivity extends BaseActivity {

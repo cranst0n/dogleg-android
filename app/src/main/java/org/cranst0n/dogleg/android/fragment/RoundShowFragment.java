@@ -22,13 +22,13 @@ import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.backend.BackendMessage;
 import org.cranst0n.dogleg.android.backend.BackendResponse;
 import org.cranst0n.dogleg.android.backend.Rounds;
-import org.cranst0n.dogleg.android.utils.Photos;
 import org.cranst0n.dogleg.android.model.HoleScore;
 import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.RoundHandicapResponse;
 import org.cranst0n.dogleg.android.utils.Dialogs;
 import org.cranst0n.dogleg.android.utils.Json;
 import org.cranst0n.dogleg.android.utils.Objects;
+import org.cranst0n.dogleg.android.utils.Photos;
 import org.cranst0n.dogleg.android.utils.SnackBars;
 import org.cranst0n.dogleg.android.views.HoleScoreDialogs;
 import org.cranst0n.dogleg.android.views.RoundSettingsDialog;
@@ -117,18 +117,8 @@ public class RoundShowFragment extends ScorecardFragment implements ObservableSc
                 setEnabled(false);
               }
             })
-            .onError(new BackendResponse.BackendErrorListener() {
-              @Override
-              public void onError(final BackendMessage message) {
-                SnackBars.showSimple(activity, message.message);
-              }
-            })
-            .onException(new BackendResponse.BackendExceptionListener() {
-              @Override
-              public void onException(final Exception exception) {
-                SnackBars.showSimple(activity, exception.getMessage());
-              }
-            })
+            .onError(SnackBars.showBackendError(activity))
+            .onException(SnackBars.showBackendException(activity))
             .onFinally(new BackendResponse.BackendFinallyListener() {
               @Override
               public void onFinally() {
@@ -166,18 +156,8 @@ public class RoundShowFragment extends ScorecardFragment implements ObservableSc
                         activity.finish();
                       }
                     })
-                    .onError(new BackendResponse.BackendErrorListener() {
-                      @Override
-                      public void onError(final BackendMessage message) {
-                        SnackBars.showSimple(activity, message.message);
-                      }
-                    })
-                    .onException(new BackendResponse.BackendExceptionListener() {
-                      @Override
-                      public void onException(final Exception exception) {
-                        SnackBars.showSimple(activity, exception.getMessage());
-                      }
-                    })
+                    .onError(SnackBars.showBackendError(activity))
+                    .onException(SnackBars.showBackendException(activity))
                     .onFinally(new BackendResponse.BackendFinallyListener() {
                       @Override
                       public void onFinally() {

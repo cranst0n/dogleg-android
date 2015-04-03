@@ -10,7 +10,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import org.cranst0n.dogleg.android.R;
-import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 import org.cranst0n.dogleg.android.model.HoleScore;
 import org.cranst0n.dogleg.android.model.HoleSet;
 import org.cranst0n.dogleg.android.model.Round;

@@ -20,7 +20,6 @@ import com.squareup.otto.Subscribe;
 
 import org.cranst0n.dogleg.android.DoglegApplication;
 import org.cranst0n.dogleg.android.R;
-import org.cranst0n.dogleg.android.activity.api.BaseActivity;
 import org.cranst0n.dogleg.android.backend.Authentication;
 import org.cranst0n.dogleg.android.backend.BackendMessage;
 import org.cranst0n.dogleg.android.backend.BackendResponse;

@@ -1,12 +1,11 @@
-package org.cranst0n.dogleg.android.fragment.api;
+package org.cranst0n.dogleg.android.fragment;
 
 import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 
-import org.cranst0n.dogleg.android.activity.api.BaseActivity;
-import org.cranst0n.dogleg.android.fragment.TitledFragment;
+import org.cranst0n.dogleg.android.activity.BaseActivity;
 
 public abstract class BaseFragment extends Fragment implements TitledFragment {
 

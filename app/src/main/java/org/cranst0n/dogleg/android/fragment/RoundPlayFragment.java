@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.activity.RoundPlayActivity;
-import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 import org.cranst0n.dogleg.android.gesture.SwipeLeftRightGestureListener;
 import org.cranst0n.dogleg.android.model.HoleRating;
 import org.cranst0n.dogleg.android.model.HoleScore;

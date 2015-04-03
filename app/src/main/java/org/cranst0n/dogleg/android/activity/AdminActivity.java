@@ -4,9 +4,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import org.cranst0n.dogleg.android.R;
-import org.cranst0n.dogleg.android.fragment.AccountFragment;
+import org.cranst0n.dogleg.android.fragment.AdminFragment;
 
-public class AccountActivity extends BaseActivity {
+public class AdminActivity extends BaseActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -15,7 +15,7 @@ public class AccountActivity extends BaseActivity {
     drawerFragment.setDrawerIndicatorEnabled(false);
 
     getSupportFragmentManager().beginTransaction().
-        add(R.id.activity_base_content_frame, new AccountFragment()).commit();
+        add(R.id.activity_base_content_frame, new AdminFragment()).commit();
   }
 
   @Override
@@ -34,7 +34,7 @@ public class AccountActivity extends BaseActivity {
 
   @Override
   protected int getTitleToolBar() {
-    return R.string.account_activity_title;
+    return R.string.admin_activity_title;
   }
 
 }

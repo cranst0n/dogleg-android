@@ -1,5 +1,19 @@
 package org.cranst0n.dogleg.android.utils;
 
+import org.passay.CharacterCharacteristicsRule;
+import org.passay.DigitCharacterRule;
+import org.passay.LengthRule;
+import org.passay.PasswordData;
+import org.passay.PasswordValidator;
+import org.passay.Rule;
+import org.passay.UppercaseCharacterRule;
+import org.passay.WhitespaceRule;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Strings {
 
   private Strings() {
@@ -47,5 +61,45 @@ public class Strings {
       default:
         return "th";
     }
+  }
+
+  public static boolean isEmailValid(final String email) {
+    String regExpn =
+        "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
+            + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+            + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+            + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+            + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
+            + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
+
+    CharSequence inputStr = email;
+
+    Pattern pattern = Pattern.compile(regExpn, Pattern.CASE_INSENSITIVE);
+    Matcher matcher = pattern.matcher(inputStr);
+
+    if (matcher.matches()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public static List<String> isPasswordStrong(final String password) {
+    LengthRule lengthRule = new LengthRule(8, 1000);
+    WhitespaceRule noWhitespaceRule = new WhitespaceRule();
+
+    CharacterCharacteristicsRule charRule = new CharacterCharacteristicsRule();
+    charRule.getRules().add(new DigitCharacterRule(1));
+    charRule.getRules().add(new UppercaseCharacterRule(1));
+
+    List<Rule> ruleList = new ArrayList<Rule>();
+    ruleList.add(lengthRule);
+    ruleList.add(noWhitespaceRule);
+    ruleList.add(charRule);
+
+    PasswordValidator validator = new PasswordValidator(ruleList);
+    PasswordData passwordData = new PasswordData(password);
+
+    return validator.getMessages(validator.validate(passwordData));
   }
 }

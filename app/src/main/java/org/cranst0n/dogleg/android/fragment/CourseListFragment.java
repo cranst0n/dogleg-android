@@ -23,7 +23,6 @@ import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.adapter.CourseListRecyclerAdapter;
 import org.cranst0n.dogleg.android.backend.BackendResponse;
 import org.cranst0n.dogleg.android.backend.Courses;
-import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 import org.cranst0n.dogleg.android.model.CourseSummary;
 import org.cranst0n.dogleg.android.model.LatLon;
 import org.cranst0n.dogleg.android.views.PinSwitch;

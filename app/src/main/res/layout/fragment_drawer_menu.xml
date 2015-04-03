@@ -11,8 +11,9 @@
         android:layout_height="175dp"
         android:layout_alignParentTop="true"
         android:orientation="vertical"
+        android:clickable="true"
         android:padding="@dimen/sixteen"
-        android:background="@color/accent">
+        android:background="@drawable/drawer_background">
 
         <LinearLayout
             android:id="@+id/user_info"
@@ -23,9 +24,10 @@
             android:visibility="gone">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/user_avatar"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
                 android:layout_weight="1"
                 android:layout_marginBottom="@dimen/margin_twenty_four"/>
 

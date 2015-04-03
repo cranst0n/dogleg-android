@@ -11,10 +11,8 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import org.cranst0n.dogleg.android.R;
-import org.cranst0n.dogleg.android.backend.BackendMessage;
 import org.cranst0n.dogleg.android.backend.BackendResponse;
 import org.cranst0n.dogleg.android.backend.Users;
-import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.BusProvider;
 import org.cranst0n.dogleg.android.utils.SnackBars;
@@ -73,18 +71,8 @@ public class AccountFragment extends BaseFragment {
                 newPasswordConfirmField.setText("");
               }
             })
-            .onError(new BackendResponse.BackendErrorListener() {
-              @Override
-              public void onError(final BackendMessage message) {
-                SnackBars.showSimple(activity, "Change failed: " + message.message);
-              }
-            })
-            .onException(new BackendResponse.BackendExceptionListener() {
-              @Override
-              public void onException(final Exception exception) {
-                SnackBars.showSimple(activity, "Change failed: " + exception.getMessage());
-              }
-            });
+            .onError(SnackBars.showBackendError(activity, "Change Failed:"))
+            .onException(SnackBars.showBackendException(activity, "Change Failed:"));
       }
     });
 

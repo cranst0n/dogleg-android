@@ -15,7 +15,6 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import org.cranst0n.dogleg.android.R;
-import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.BusProvider;

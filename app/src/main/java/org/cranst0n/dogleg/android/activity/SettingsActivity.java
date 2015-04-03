@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import org.cranst0n.dogleg.android.R;
-import org.cranst0n.dogleg.android.activity.api.BaseActivity;
 import org.cranst0n.dogleg.android.fragment.SettingsFragment;
 
 public class SettingsActivity extends BaseActivity {

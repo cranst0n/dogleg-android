@@ -8,7 +8,6 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import org.cranst0n.dogleg.android.R;
-import org.cranst0n.dogleg.android.fragment.api.BaseFragment;
 import org.cranst0n.dogleg.android.model.CourseRating;
 import org.cranst0n.dogleg.android.utils.Json;
 
