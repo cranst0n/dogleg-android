@@ -1,12 +1,10 @@
 package org.cranst0n.dogleg.android.fragment;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -44,7 +42,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class DrawerFragment extends BaseFragment {
 
   private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
-  private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
 
   private Bus bus;
   private Users users;
@@ -65,8 +62,6 @@ public class DrawerFragment extends BaseFragment {
 
   private View fragmentContainerView;
   private int currentSelectedPosition = 0;
-  private boolean fromSavedInstanceState;
-  private boolean userLearnedDrawer;
 
   private final DrawerMenuItem homeItem =
       new DrawerMenuItem(R.drawable.ic_action_home, "Home", 0, HomeActivity.class);
@@ -87,14 +82,8 @@ public class DrawerFragment extends BaseFragment {
   public void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    // Read in the flag indicating whether or not the user has demonstrated awareness of the
-    // drawer. See PREF_USER_LEARNED_DRAWER for details.
-    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-    userLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
-
     if (savedInstanceState != null) {
       currentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
-      fromSavedInstanceState = true;
     }
 
     bus = BusProvider.Instance.bus;
@@ -281,24 +270,9 @@ public class DrawerFragment extends BaseFragment {
           return;
         }
 
-        if (!userLearnedDrawer) {
-          // The user manually opened the drawer; store this flag to prevent auto-showing
-          // the navigation drawer automatically in the future.
-          userLearnedDrawer = true;
-          SharedPreferences sp = PreferenceManager
-              .getDefaultSharedPreferences(getActivity());
-          sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
-        }
-
         getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
       }
     };
-
-    // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
-    // per the navigation drawer design guidelines.
-    if (!userLearnedDrawer && !fromSavedInstanceState) {
-      this.drawerLayout.openDrawer(fragmentContainerView);
-    }
 
     // Defer code dependent on restoration of previous instance state.
     this.drawerLayout.post(new Runnable() {

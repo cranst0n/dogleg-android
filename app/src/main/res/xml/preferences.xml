@@ -11,6 +11,7 @@
             android:summary="@string/dogleg_server_url_summary"
             android:dialogTitle="@string/dogleg_server_url_title"
             android:persistent="true"
+            android:defaultValue=""
             android:layout="@layout/preference_custom"/>
 
         <com.afollestad.materialdialogs.prefs.MaterialEditTextPreference
