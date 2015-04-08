@@ -9,10 +9,7 @@ import android.widget.TextView;
 
 import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.model.HoleFeature;
-import org.cranst0n.dogleg.android.model.LatLon;
 import org.cranst0n.dogleg.android.utils.Units;
-
-import java.util.Arrays;
 
 public class HoleFeatureItem extends RelativeLayout {
 
@@ -20,7 +17,14 @@ public class HoleFeatureItem extends RelativeLayout {
 
   private ImageView iconView;
   private TextView nameView;
-  private TextView distancesView;
+
+  private TextView distanceView1Label;
+  private TextView distanceView2Label;
+  private TextView distanceView3Label;
+  private TextView distanceView1;
+  private TextView distanceView2;
+  private TextView distanceView3;
+
   private TextView elevationDifferenceView;
 
   public HoleFeatureItem(final Context context, final HoleFeature holeFeature) {
@@ -37,17 +41,21 @@ public class HoleFeatureItem extends RelativeLayout {
 
     this.iconView = (ImageView) findViewById(R.id.hole_feature_image);
     this.nameView = (TextView) findViewById(R.id.feature_name);
-    this.distancesView = (TextView) findViewById(R.id.feature_distances);
     this.elevationDifferenceView = (TextView) findViewById(R.id.feature_elevation_difference);
+
+    this.distanceView1Label = (TextView) findViewById(R.id.feature_distance_1_label);
+    this.distanceView2Label = (TextView) findViewById(R.id.feature_distance_2_label);
+    this.distanceView3Label = (TextView) findViewById(R.id.feature_distance_3_label);
+    this.distanceView1 = (TextView) findViewById(R.id.feature_distance_1);
+    this.distanceView2 = (TextView) findViewById(R.id.feature_distance_2);
+    this.distanceView3 = (TextView) findViewById(R.id.feature_distance_3);
 
     iconView.setImageResource(featureIcon(holeFeature));
     nameView.setText(holeFeature.name);
-
-    distancesView.setText("---");
   }
 
   @Override
-  public boolean onTouchEvent(MotionEvent event) {
+  public boolean onTouchEvent(final MotionEvent event) {
     return true;
   }
 
@@ -55,30 +63,29 @@ public class HoleFeatureItem extends RelativeLayout {
 
     if (location != null) {
 
-      StringBuilder sb = new StringBuilder();
-      String[] labels;
+      distanceView1Label.setVisibility(holeFeature.coordinates.length >= 1 ? VISIBLE : GONE);
+      distanceView2Label.setVisibility(holeFeature.coordinates.length >= 2 ? VISIBLE : GONE);
+      distanceView3Label.setVisibility(holeFeature.coordinates.length >= 3 ? VISIBLE : GONE);
+      distanceView1.setVisibility(distanceView1Label.getVisibility());
+      distanceView2.setVisibility(distanceView2Label.getVisibility());
+      distanceView3.setVisibility(distanceView3Label.getVisibility());
 
       if (holeFeature.coordinates.length == 1) {
-        labels = new String[]{"Reach"};
+        distanceView1Label.setText("Reach:");
+        distanceView1.setText(distanceText(location, holeFeature.coordinates[0].toLocation()));
       } else if (holeFeature.coordinates.length == 2) {
-        labels = new String[]{"Reach", "Carry"};
-      } else if (holeFeature.coordinates.length == 3) {
-        labels = new String[]{"Front", "Middle", "Back"};
-      } else {
-        labels = new String[holeFeature.coordinates.length];
-        Arrays.fill(labels, "");
+        distanceView1Label.setText("Reach:");
+        distanceView2Label.setText("Carry:");
+        distanceView1.setText(distanceText(location, holeFeature.coordinates[0].toLocation()));
+        distanceView2.setText(distanceText(location, holeFeature.coordinates[1].toLocation()));
+      } else if (holeFeature.coordinates.length >= 3) {
+        distanceView1Label.setText("Front:");
+        distanceView2Label.setText("Middle:");
+        distanceView3Label.setText("Back:");
+        distanceView1.setText(distanceText(location, holeFeature.coordinates[0].toLocation()));
+        distanceView2.setText(distanceText(location, holeFeature.coordinates[1].toLocation()));
+        distanceView3.setText(distanceText(location, holeFeature.coordinates[2].toLocation()));
       }
-
-      for (int jx = 0; jx < holeFeature.coordinates.length; jx++) {
-
-        LatLon ll = holeFeature.coordinates[jx];
-        double meters = ll.toLocation().distanceTo(location);
-        int yards = (int) Math.round(Units.metersToYards(meters));
-
-        sb.append(String.format(" %s: %d", labels[jx], yards));
-      }
-
-      distancesView.setText(sb.toString());
 
       if (location.hasAltitude()) {
 
@@ -95,6 +102,12 @@ public class HoleFeatureItem extends RelativeLayout {
         elevationDifferenceView.setText("");
       }
     }
+  }
+
+  private String distanceText(final Location fromLocation, final Location toLocation) {
+    double meters = fromLocation.distanceTo(toLocation);
+    int yards = (int) Math.round(Units.metersToYards(meters));
+    return String.valueOf(yards);
   }
 
   private int featureIcon(final HoleFeature feature) {

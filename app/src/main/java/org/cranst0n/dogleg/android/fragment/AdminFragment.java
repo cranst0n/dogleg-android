@@ -172,7 +172,7 @@ public class AdminFragment extends BaseFragment {
       resetPasswordField.setError(passwordIssues.iterator().next());
     }
 
-    if(resetUser.isValid()) {
+    if (resetUser.isValid()) {
       users.resetPassword(resetUser, password, passwordConfirm)
           .onSuccess(new BackendResponse.BackendSuccessListener<User>() {
             @Override

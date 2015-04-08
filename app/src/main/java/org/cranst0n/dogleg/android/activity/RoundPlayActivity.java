@@ -1,6 +1,7 @@
 package org.cranst0n.dogleg.android.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationProvider;
 import android.os.Bundle;
@@ -75,7 +76,9 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
     holeViewFragment = new RoundPlayHoleViewFragment();
     scorecardFragment = new RoundPlayScorecardFragment();
     mapFragment = new RoundPlayMapFragment();
-    playRoundFragment = RoundPlayFragment.instance(holeViewFragment, scorecardFragment, mapFragment);
+
+    playRoundFragment = RoundPlayFragment.instance(scorecardFragment, holeViewFragment,
+        mapFragment);
 
     if (savedInstanceState == null) {
       getSupportFragmentManager().
@@ -189,8 +192,8 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
       @Override
       public void onConnected(final Bundle bundle) {
         LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(2000);
-        locationRequest.setFastestInterval(2000);
+        locationRequest.setInterval(4000);
+        locationRequest.setFastestInterval(4000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         app.locationProviderApi().requestLocationUpdates(
@@ -217,6 +220,11 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
   @Override
   protected int getTitleToolBar() {
     return R.string.app_name;
+  }
+
+  @Override
+  protected void onNewIntent(final Intent intent) {
+    holeViewFragment.onNewIntent(intent);
   }
 
   @Override

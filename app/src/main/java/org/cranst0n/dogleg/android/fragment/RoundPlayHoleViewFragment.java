@@ -2,8 +2,12 @@ package org.cranst0n.dogleg.android.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,6 +17,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,13 +28,18 @@ import org.cranst0n.dogleg.android.activity.RoundPlayActivity;
 import org.cranst0n.dogleg.android.backend.BackendMessage;
 import org.cranst0n.dogleg.android.backend.BackendResponse;
 import org.cranst0n.dogleg.android.backend.Rounds;
+import org.cranst0n.dogleg.android.model.Club;
 import org.cranst0n.dogleg.android.model.HoleFeature;
 import org.cranst0n.dogleg.android.model.HoleRating;
 import org.cranst0n.dogleg.android.model.HoleScore;
+import org.cranst0n.dogleg.android.model.LatLon;
 import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.RoundStats;
+import org.cranst0n.dogleg.android.model.Shot;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.Dialogs;
+import org.cranst0n.dogleg.android.utils.SnackBars;
+import org.cranst0n.dogleg.android.utils.nfc.Nfc;
 import org.cranst0n.dogleg.android.views.HoleFeatureItem;
 
 import java.util.ArrayList;
@@ -42,6 +52,8 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
   private static final String Tag = RoundPlayHoleViewFragment.class.getSimpleName();
 
   private RoundPlayFragment.PlayRoundListener playRoundListener;
+
+  private NfcAdapter nfcAdapter;
 
   private View playRoundHoleView;
 
@@ -66,8 +78,12 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
   private TextView statsPar5AverageView;
 
   private TextView gpsStatusView;
-  private ListView currentHoleFeatureList;
+  private ListView holeFeatureList;
   private FeatureListAdapter featureListAdapter;
+
+  private ImageButton shotAddButton;
+  private ListView shotList;
+  private ShotListAdapter shotListAdapter;
 
   private Button submitRoundButton;
 
@@ -77,6 +93,26 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
 
     if (activity instanceof RoundPlayFragment.PlayRoundListener) {
       playRoundListener = (RoundPlayFragment.PlayRoundListener) activity;
+    }
+
+    initNfc();
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+
+    if (nfcAdapter != null) {
+      nfcAdapter.disableForegroundDispatch(activity);
+    }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+
+    if (nfcAdapter != null) {
+      Nfc.enableForegroundDispatch(nfcAdapter, activity);
     }
   }
 
@@ -92,6 +128,41 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     attachListeners();
 
     return playRoundHoleView;
+  }
+
+  private void initNfc() {
+
+    nfcAdapter = NfcAdapter.getDefaultAdapter(activity);
+
+    if (nfcAdapter == null) {
+      SnackBars.showSimple(activity, "This device doesn't seem to support NFC.");
+    } else {
+
+      if (!nfcAdapter.isEnabled()) {
+        SnackBars.showSimple(activity, "NFC is disabled!");
+      }
+    }
+  }
+
+  public void onNewIntent(final Intent intent) {
+
+    android.nfc.Tag tag = (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+
+    Log.d(Tag, "New NFC tag: [" + tag + "]");
+
+    Club club = Nfc.readClubTag(tag);
+
+    if (club != Club.Unknown) {
+      Shot newShot = new Shot(-1, currentHoleScore().shots.size() + 1, club,
+          LatLon.fromLocation(lastKnownLocation()), LatLon.fromLocation
+          (lastKnownLocation()), currentHoleScore().id);
+
+      if (playRoundListener != null) {
+        playRoundListener.updateScore(currentHoleScore().withShot(newShot));
+      }
+    } else {
+      SnackBars.showSimple(activity, "Can't add shot: unknown club type.");
+    }
   }
 
   public void locationUpdated(final Location location) {
@@ -172,6 +243,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
 
       updateStats();
       updateGpsDisplay(lastKnownLocation());
+      updateShotList();
     }
   }
 
@@ -182,6 +254,8 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
       currentHolePenaltiesView.setText(String.valueOf(holeScore.penaltyStrokes));
       currentHoleFairwayHitBox.setChecked(holeScore.fairwayHit);
       currentHoleGirBox.setChecked(holeScore.gir);
+
+      updateShotList();
     }
 
     updateStats();
@@ -226,8 +300,8 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
           }
         });
 
-        for (int ix = 0; ix < currentHoleFeatureList.getChildCount(); ix++) {
-          ((HoleFeatureItem) currentHoleFeatureList.getChildAt(ix)).updateDistances(location);
+        for (int ix = 0; ix < holeFeatureList.getChildCount(); ix++) {
+          ((HoleFeatureItem) holeFeatureList.getChildAt(ix)).updateDistances(location);
         }
 
         featureListAdapter.notifyDataSetChanged();
@@ -236,6 +310,12 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
         gpsStatusView.setText("Searching...");
       }
     }
+  }
+
+  private void updateShotList() {
+    shotListAdapter.shots.clear();
+    shotListAdapter.shots.addAll(currentHoleScore().shots);
+    shotListAdapter.notifyDataSetChanged();
   }
 
   private void findViews() {
@@ -271,10 +351,15 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
 
     gpsStatusView = (TextView) playRoundHoleView.findViewById(R.id.gps_status);
 
-    currentHoleFeatureList = (ListView) playRoundHoleView.findViewById(R.id.current_hole_feature_list);
+    holeFeatureList = (ListView) playRoundHoleView.findViewById(R.id.current_hole_feature_list);
     featureListAdapter = new FeatureListAdapter(
         context, new ArrayList<>(currentHoleScore().hole.displayableFeatures()));
-    currentHoleFeatureList.setAdapter(featureListAdapter);
+    holeFeatureList.setAdapter(featureListAdapter);
+
+    shotAddButton = (ImageButton) playRoundHoleView.findViewById(R.id.shot_add_button);
+    shotList = (ListView) playRoundHoleView.findViewById(R.id.current_hole_shot_list);
+    shotListAdapter = new ShotListAdapter(context, new ArrayList<Shot>());
+    shotList.setAdapter(shotListAdapter);
 
     submitRoundButton = (Button) playRoundHoleView.findViewById(R.id.submit_round_button);
   }
@@ -380,13 +465,52 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
       }
     });
 
-    currentHoleFeatureList.setOnTouchListener(new View.OnTouchListener() {
+    holeFeatureList.setOnTouchListener(new View.OnTouchListener() {
       // Setting on Touch Listener for handling the touch inside ScrollView
       @Override
       public boolean onTouch(View v, MotionEvent event) {
         // Disallow the touch request for parent scroll on touch of child view
         v.getParent().requestDisallowInterceptTouchEvent(true);
         return false;
+      }
+    });
+
+    shotAddButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(final View view) {
+
+        if (lastKnownLocation() != null) {
+
+          final String[] clubNames = new String[Club.values().length];
+          for (int ix = 0; ix < Club.values().length; ix++) {
+            clubNames[ix] = Club.values()[ix].name;
+          }
+
+          new MaterialDialog.Builder(activity)
+              .title("Select Club")
+              .items(clubNames)
+              .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                @Override
+                public boolean onSelection(final MaterialDialog materialDialog, final View view,
+                                           final int i, final CharSequence charSequence) {
+
+                  Club selectedClub = Club.values()[i];
+
+                  Shot newShot = new Shot(-1, currentHoleScore().shots.size() + 1, selectedClub,
+                      LatLon.fromLocation(lastKnownLocation()), LatLon.fromLocation
+                      (lastKnownLocation()), currentHoleScore().id);
+
+                  if (playRoundListener != null) {
+                    playRoundListener.updateScore(currentHoleScore().withShot(newShot));
+                  }
+
+                  return true;
+                }
+              }).show();
+        } else {
+          SnackBars.showSimple(activity, "Can't add shot without current location.");
+        }
+
       }
     });
 
@@ -527,4 +651,63 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     private final List<HoleFeature> features;
   }
 
+  class ShotListAdapter extends BaseAdapter {
+
+    public ShotListAdapter(final Context context, final List<Shot> shots) {
+      this.context = context;
+      this.shots = shots;
+    }
+
+    @Override
+    public int getCount() {
+      return shots.size();
+    }
+
+    @Override
+    public Object getItem(final int position) {
+      return shots.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+      return position;
+    }
+
+    @Override
+    public View getView(final int position, View convertView, final ViewGroup parent) {
+
+      final Shot itemShot = shots.get(position);
+
+      LayoutInflater mInflater =
+          (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+      convertView = mInflater.inflate(R.layout.item_shot, null);
+
+      ImageView iconView = (ImageView) convertView.findViewById(R.id.shot_image);
+      TextView clubNameView = (TextView) convertView.findViewById(R.id.club_name);
+      TextView distanceView = (TextView) convertView.findViewById(R.id.shot_distance);
+      ImageButton removeShotButton = (ImageButton) convertView.findViewById(R.id.remove_shot_button);
+
+      clubNameView.setText(shots.get(position).club.name);
+
+      if (itemShot.distance() > 0) {
+        distanceView.setText(String.format("%s yards", Math.round(itemShot.distance())));
+      } else {
+        distanceView.setText("");
+      }
+
+      removeShotButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(final View view) {
+          if (playRoundListener != null) {
+            playRoundListener.updateScore(currentHoleScore().removeShot(itemShot));
+          }
+        }
+      });
+
+      return convertView;
+    }
+
+    private final Context context;
+    private final List<Shot> shots;
+  }
 }

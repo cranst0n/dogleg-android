@@ -7,6 +7,7 @@
     <string name="account_activity_title">Account</string>
     <string name="admin_activity_title">Admin</string>
     <string name="settings_activity_title">Settings</string>
+    <string name="shot_caddy_setup_activity_title">Shot Caddy</string>
 
     <string name="action_login">Log In</string>
     <string name="action_logout">Log Out</string>
@@ -32,5 +33,19 @@
     <string name="intent_round_data_key">roundData</string>
 
     <string name="com.google.android.maps.v2.API_KEY">AIzaSyAyCP_wYA3fMnHtKrJRYMeefoqyxkTyAb0</string>
+
+    <string name="shot_caddy_intro">
+        Here you can assign clubs to NFC tags on your clubs so that during a round, tapping the tag
+        against your phone will record a shot with that club at your current location.
+        \n\
+        \n\
+        To assign a club to an NFC tag, select the \'Write\' mode button and select the club type
+        you want to assign. Then, tap the NFC tag against the back of your phone and you will see
+        a notification when the tag is assigned.
+        \n\
+        \n\
+        To test a club tag that\'s already been assigned, select \'Read\' mode and then tap your
+        club NFC tag against the phone. You\'ll see a notification about which club has been found.
+    </string>
 
 </resources>

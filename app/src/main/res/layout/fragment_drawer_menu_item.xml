@@ -1,6 +1,5 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/fragment_drawerMenu_comp_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/padding_sixteen"
@@ -10,17 +9,34 @@
                 tools:context=".DrawerMenuComp">
 
     <ImageView
-        android:id="@+id/fragment_drawerMenu_comp_icon"
+        android:id="@+id/drawer_menu_item_icon"
         android:layout_width="@dimen/twenty_eight"
         android:layout_height="match_parent"
-        android:layout_marginRight="@dimen/margin_eight"/>
+        android:layout_marginRight="@dimen/margin_eight"
+        android:src="@drawable/ic_action_settings"/>
 
     <TextView
-        android:id="@+id/fragment_drawerMenu_comp_title"
-        android:layout_width="match_parent"
+        android:id="@+id/drawer_menu_item_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:textColor="@color/drawer_text"
-        android:layout_toRightOf="@id/fragment_drawerMenu_comp_icon"
         tools:text="Menu"/>
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/drawer_menu_item_experimental_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginRight="@dimen/margin_eight"
+        android:paddingTop="@dimen/padding_two"
+        android:paddingBottom="@dimen/padding_two"
+        android:paddingLeft="@dimen/padding_sixteen"
+        android:paddingRight="@dimen/padding_sixteen"
+        android:background="@color/experimental"
+        android:textSize="@dimen/text_size_ten"
+        android:textColor="@android:color/white"
+        android:text="Experimental"
+        android:visibility="gone"/>
+
+</LinearLayout>

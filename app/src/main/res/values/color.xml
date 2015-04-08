@@ -11,6 +11,8 @@
     <color name="accent_dark">#ffe64a19</color>
     <color name="accent_alpha">#66ff5722</color>
 
+    <color name="experimental">#ff64b5f6</color>
+
     <color name="warn">#fffbc02d</color>
 
     <color name="text_grey">#757575</color>

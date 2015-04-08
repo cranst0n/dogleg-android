@@ -5,10 +5,6 @@
     android:id="@+id/play_round_header_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/margin_four"
-    android:layout_marginBottom="@dimen/margin_two"
-    android:layout_marginLeft="@dimen/margin_four"
-    android:layout_marginRight="@dimen/margin_four"
     android:elevation="@dimen/elevation_ten"
     card_view:cardCornerRadius="0px">
 

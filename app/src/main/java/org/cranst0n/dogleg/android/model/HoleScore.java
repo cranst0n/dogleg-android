@@ -1,5 +1,8 @@
 package org.cranst0n.dogleg.android.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HoleScore implements Comparable<HoleScore> {
 
   public final long id;
@@ -10,11 +13,12 @@ public class HoleScore implements Comparable<HoleScore> {
   public final int penaltyStrokes;
   public final boolean fairwayHit;
   public final boolean gir;
+  public final List<Shot> shots;
   public final Hole hole;
 
   public HoleScore(final long id, final long roundId, final int score, final int netScore,
                    final int putts, final int penaltyStrokes, final boolean fairwayHit,
-                   final boolean gir, final Hole hole) {
+                   final boolean gir, final List<Shot> shots, final Hole hole) {
 
     this.id = id;
     this.roundId = roundId;
@@ -24,71 +28,116 @@ public class HoleScore implements Comparable<HoleScore> {
     this.penaltyStrokes = penaltyStrokes;
     this.fairwayHit = fairwayHit;
     this.gir = gir;
+    this.shots = shots;
     this.hole = hole;
   }
 
   public static HoleScore empty() {
-    return new HoleScore(-1, -1, 0, 0, 0, 0, false, false, Hole.empty());
+    return new HoleScore(-1, -1, 0, 0, 0, 0, false, false, new ArrayList<Shot>(), Hole.empty());
   }
 
   public final HoleScore score(final int score) {
-    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gir, hole);
+    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gir,
+        shots, hole);
   }
 
   public final HoleScore netScore(final int netScore) {
-    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gir, hole);
+    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gir,
+        shots, hole);
   }
 
   public final HoleScore addStroke() {
-    return new HoleScore(id, roundId, score + 1, netScore, putts, penaltyStrokes, fairwayHit, gir, hole);
+    return new HoleScore(id, roundId, score + 1, netScore, putts, penaltyStrokes, fairwayHit,
+        gir, shots, hole);
   }
 
   public final HoleScore subtractStroke() {
     if (score > 0) {
-      return new HoleScore(id, roundId, score - 1, netScore, putts, penaltyStrokes, fairwayHit, gir, hole);
+      return new HoleScore(id, roundId, score - 1, netScore, putts, penaltyStrokes, fairwayHit,
+          gir, shots, hole);
     } else {
       return this;
     }
   }
 
   public final HoleScore putts(final int putts) {
-    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gir, hole);
+    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gir,
+        shots, hole);
   }
 
   public final HoleScore addPutt() {
-    return new HoleScore(id, roundId, score, netScore, putts + 1, penaltyStrokes, fairwayHit, gir, hole);
+    return new HoleScore(id, roundId, score, netScore, putts + 1, penaltyStrokes, fairwayHit,
+        gir, shots, hole);
   }
 
   public final HoleScore subtractPutt() {
     if (putts > 0) {
-      return new HoleScore(id, roundId, score, netScore, putts - 1, penaltyStrokes, fairwayHit, gir, hole);
+      return new HoleScore(id, roundId, score, netScore, putts - 1, penaltyStrokes, fairwayHit,
+          gir, shots, hole);
     } else {
       return this;
     }
   }
 
   public final HoleScore penaltyStrokes(final int penaltyStrokes) {
-    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gir, hole);
+    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gir,
+        shots, hole);
   }
 
   public final HoleScore addPenaltyStroke() {
-    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes + 1, fairwayHit, gir, hole);
+    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes + 1, fairwayHit,
+        gir, shots, hole);
   }
 
   public final HoleScore subtractPenaltyStroke() {
     if (penaltyStrokes > 0) {
-      return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes - 1, fairwayHit, gir, hole);
+      return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes - 1, fairwayHit,
+          gir, shots, hole);
     } else {
       return this;
     }
   }
 
   public final HoleScore fairwayHit(final boolean fh) {
-    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fh, gir, hole);
+    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fh, gir, shots, hole);
   }
 
   public final HoleScore gir(final boolean gr) {
-    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gr, hole);
+    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gr,
+        shots, hole);
+  }
+
+  public final HoleScore withShot(final Shot shot) {
+    List<Shot> newShots = new ArrayList<>(shots);
+    newShots.add(shot);
+
+    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gir,
+        validatedShots(newShots), hole);
+  }
+
+  public final HoleScore removeShot(final Shot shot) {
+    List<Shot> newShots = new ArrayList<>(shots);
+    newShots.remove(shot);
+
+    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gir,
+        validatedShots(newShots), hole);
+  }
+
+  private List<Shot> validatedShots(final List<Shot> shots) {
+    List<Shot> validated = new ArrayList<>();
+
+    for (int ix = 0; ix < shots.size(); ix++) {
+
+      Shot sequenced = shots.get(ix).sequence(ix + 1);
+
+      if (ix < shots.size() - 1) {
+        validated.add(sequenced.locationEnd(shots.get(ix + 1).locationStart));
+      } else {
+        validated.add(sequenced.locationEnd(sequenced.locationStart));
+      }
+    }
+
+    return validated;
   }
 
   @Override

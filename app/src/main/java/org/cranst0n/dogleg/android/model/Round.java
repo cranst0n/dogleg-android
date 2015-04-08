@@ -2,6 +2,7 @@ package org.cranst0n.dogleg.android.model;
 
 import org.joda.time.DateTime;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -172,10 +173,15 @@ public class Round {
     HoleScore[] newHoleScores = new HoleScore[holeSet.numHoles];
 
     if (oldHoleScores == null) {
+
+      SecureRandom sr = new SecureRandom();
+
       for (int holeNum = holeSet.holeStart; holeNum <= holeSet.holeEnd; holeNum++) {
+
         newHoleScores[holeNum - holeSet.holeStart] =
             new HoleScore(-1, -1, 0, 0, 0, 0,
-                rating.holeRating(holeNum).par > 3, true, course.holes[holeNum - 1]);
+                rating.holeRating(holeNum).par > 3, true, new ArrayList<Shot>(),
+                course.holes[holeNum - 1]);
       }
     } else {
 
@@ -193,7 +199,8 @@ public class Round {
         if (oldHoleScore == null) {
           newHoleScores[holeNum - holeSet.holeStart] =
               new HoleScore(-1, -1, 0, 0, 0, 0,
-                  rating.holeRating(holeNum).par > 3, true, course.holes[holeNum - 1]);
+                  rating.holeRating(holeNum).par > 3, true, new ArrayList<Shot>(),
+                  course.holes[holeNum - 1]);
         } else {
           newHoleScores[holeNum - holeSet.holeStart] = oldHoleScore;
         }

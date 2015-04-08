@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
 
 public class Strings {
 
+  public static final String DEGREE = "\u00b0";
+
   private Strings() {
 
   }

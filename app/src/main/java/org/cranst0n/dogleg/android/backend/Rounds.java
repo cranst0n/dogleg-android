@@ -12,6 +12,7 @@ import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 import com.koushikdutta.ion.Ion;
 
+import org.cranst0n.dogleg.android.model.Club;
 import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.RoundHandicapResponse;
 import org.cranst0n.dogleg.android.utils.Json;
@@ -46,7 +47,8 @@ public class Rounds extends BackendComponent {
   public BackendResponse<JsonObject, Round> postRound(final Round round) {
 
     Gson gson = new GsonBuilder()
-        .registerTypeAdapter(DateTime.class, new Json.DateTimeTypeConverter())
+        .registerTypeAdapter(DateTime.class, new Json.DateTimeTypeAdapter())
+        .registerTypeAdapter(Club.class, new Json.ClubTypeAdapter())
         .registerTypeAdapter(Round.class, new RoundRequestSerializer())
         .create();
 
@@ -63,7 +65,8 @@ public class Rounds extends BackendComponent {
   public BackendResponse<JsonObject, Round> updateRound(final Round round) {
 
     Gson gson = new GsonBuilder()
-        .registerTypeAdapter(DateTime.class, new Json.DateTimeTypeConverter())
+        .registerTypeAdapter(DateTime.class, new Json.DateTimeTypeAdapter())
+        .registerTypeAdapter(Club.class, new Json.ClubTypeAdapter())
         .registerTypeAdapter(Round.class, new RoundSerializer())
         .create();
 

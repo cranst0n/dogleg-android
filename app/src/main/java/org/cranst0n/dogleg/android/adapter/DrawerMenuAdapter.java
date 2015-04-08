@@ -47,12 +47,16 @@ public class DrawerMenuAdapter extends BaseAdapter {
 
     if (convertView == null) {
 
-      LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+      LayoutInflater mInflater =
+          (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
       convertView = mInflater.inflate(R.layout.fragment_drawer_menu_item, null);
 
-      ImageView iconView = (ImageView) convertView.findViewById(R.id.fragment_drawerMenu_comp_icon);
-      TextView titleView = (TextView) convertView.findViewById(R.id.fragment_drawerMenu_comp_title);
-      holder = new ViewHolder(iconView, titleView);
+      ImageView iconView = (ImageView) convertView.findViewById(R.id.drawer_menu_item_icon);
+      TextView titleView = (TextView) convertView.findViewById(R.id.drawer_menu_item_title);
+      TextView experimentalBadge = (TextView) convertView.findViewById(R.id
+          .drawer_menu_item_experimental_badge);
+
+      holder = new ViewHolder(iconView, titleView, experimentalBadge);
 
       convertView.setTag(holder);
 
@@ -62,8 +66,10 @@ public class DrawerMenuAdapter extends BaseAdapter {
 
     DrawerFragment.DrawerMenuItem item = menuItems.get(position);
 
-    holder.iconView.setImageDrawable(DoglegApplication.context().getResources().getDrawable(item.iconRes));
+    holder.iconView.setImageDrawable(
+        DoglegApplication.context().getResources().getDrawable(item.iconRes));
     holder.titleView.setText(item.title);
+    holder.experimentalBadge.setVisibility(item.experimental ? View.VISIBLE : View.GONE);
     holder.menuItem = item;
 
     return convertView;
@@ -73,12 +79,16 @@ public class DrawerMenuAdapter extends BaseAdapter {
 
     public final ImageView iconView;
     public final TextView titleView;
+    public final TextView experimentalBadge;
 
     public DrawerFragment.DrawerMenuItem menuItem;
 
-    private ViewHolder(final ImageView iconView, final TextView titleView) {
+    private ViewHolder(final ImageView iconView, final TextView titleView,
+                       final TextView experimentalBadge) {
+
       this.iconView = iconView;
       this.titleView = titleView;
+      this.experimentalBadge = experimentalBadge;
     }
   }
 

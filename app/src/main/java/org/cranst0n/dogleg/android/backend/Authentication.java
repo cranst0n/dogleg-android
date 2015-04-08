@@ -7,12 +7,13 @@ import com.koushikdutta.async.future.Future;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
 
-import org.apache.http.HttpStatus;
 import org.cranst0n.dogleg.android.DoglegApplication;
 import org.cranst0n.dogleg.android.model.AuthToken;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.Crypto;
 import org.cranst0n.dogleg.android.utils.SnackBars;
+
+import java.net.HttpURLConnection;
 
 public class Authentication extends BackendComponent {
 
@@ -89,7 +90,7 @@ public class Authentication extends BackendComponent {
     response.onError(new BackendResponse.BackendErrorListener() {
       @Override
       public void onError(final BackendMessage message) {
-        if (message.status == HttpStatus.SC_UNAUTHORIZED) {
+        if (message.status == HttpURLConnection.HTTP_UNAUTHORIZED) {
           bus.post(User.NO_USER);
 
           if (!authToken().isEmpty()) {
@@ -114,7 +115,7 @@ public class Authentication extends BackendComponent {
     response.onError(new BackendResponse.BackendErrorListener() {
       @Override
       public void onError(final BackendMessage message) {
-        if (message.status == HttpStatus.SC_UNAUTHORIZED) {
+        if (message.status == HttpURLConnection.HTTP_UNAUTHORIZED) {
           bus.post(User.NO_USER);
         }
       }

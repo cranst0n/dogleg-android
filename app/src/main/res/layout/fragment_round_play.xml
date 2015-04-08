@@ -5,6 +5,9 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:paddingTop="@dimen/padding_eight"
+              android:paddingBottom="@dimen/padding_four"
+              android:paddingLeft="@dimen/padding_four"
+              android:paddingRight="@dimen/padding_four"
               android:orientation="vertical"
               tools:context=".Fragment_Home">
 

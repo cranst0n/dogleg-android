@@ -23,6 +23,10 @@ import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.RoundStats;
 import org.cranst0n.dogleg.android.utils.Strings;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class RoundPlayFragment extends BaseFragment {
 
   private PlayRoundListener playRoundListener;
@@ -46,19 +50,13 @@ public class RoundPlayFragment extends BaseFragment {
   private ImageButton previousHoleButton;
   private ImageButton nextHoleButton;
 
-  private RoundPlayHoleViewFragment holeViewFragment;
-  private RoundPlayScorecardFragment scorecardFragment;
-  private RoundPlayMapFragment mapFragment;
+  private final List<Fragment> viewPagerFragments = new ArrayList<>();
 
-  public static RoundPlayFragment instance(final RoundPlayHoleViewFragment holeViewFragment,
-                                           final RoundPlayScorecardFragment scorecardFragment,
-                                           final RoundPlayMapFragment mapFragment) {
+  public static RoundPlayFragment instance(final Fragment... fragments) {
 
     RoundPlayFragment prf = new RoundPlayFragment();
 
-    prf.holeViewFragment = holeViewFragment;
-    prf.scorecardFragment = scorecardFragment;
-    prf.mapFragment = mapFragment;
+    prf.viewPagerFragments.addAll(Arrays.asList(fragments));
 
     return prf;
   }
@@ -87,8 +85,13 @@ public class RoundPlayFragment extends BaseFragment {
 
     viewPager = (ViewPager) playRoundView.findViewById(R.id.play_round_view_pager);
     viewPager.setAdapter(new PlayRoundPagerAdapter(getChildFragmentManager()));
-    viewPager.setOffscreenPageLimit(2);
-    viewPager.setCurrentItem(1);
+    viewPager.setOffscreenPageLimit(viewPagerFragments.size() - 1);
+
+    for (int ix = 0; ix < viewPagerFragments.size(); ix++) {
+      if (viewPagerFragments.get(ix) instanceof RoundPlayHoleViewFragment) {
+        viewPager.setCurrentItem(ix);
+      }
+    }
 
     headerCard = (CardView) playRoundView.findViewById(R.id.play_round_header_card);
     currentHoleView = (TextView) playRoundView.findViewById(R.id.current_hole);
@@ -214,21 +217,12 @@ public class RoundPlayFragment extends BaseFragment {
 
     @Override
     public Fragment getItem(int position) {
-      switch (position) {
-        case 0:
-          return scorecardFragment;
-        case 1:
-          return holeViewFragment;
-        case 2:
-          return mapFragment;
-      }
-
-      return holeViewFragment;
+      return viewPagerFragments.get(position);
     }
 
     @Override
     public int getCount() {
-      return 3;
+      return viewPagerFragments.size();
     }
   }
 }

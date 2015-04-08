@@ -87,7 +87,7 @@ public class UsernameSearchAdapter extends ArrayAdapter<User> implements Filtera
 
       @Override
       public CharSequence convertResultToString(final Object resultValue) {
-        if(resultValue instanceof User) {
+        if (resultValue instanceof User) {
           return ((User) resultValue).name;
         } else {
           return super.convertResultToString(resultValue);

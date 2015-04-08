@@ -27,6 +27,7 @@ import org.cranst0n.dogleg.android.activity.AccountActivity;
 import org.cranst0n.dogleg.android.activity.AdminActivity;
 import org.cranst0n.dogleg.android.activity.HomeActivity;
 import org.cranst0n.dogleg.android.activity.SettingsActivity;
+import org.cranst0n.dogleg.android.activity.ShotCaddySetupActivity;
 import org.cranst0n.dogleg.android.adapter.DrawerMenuAdapter;
 import org.cranst0n.dogleg.android.backend.Users;
 import org.cranst0n.dogleg.android.collections.SortedList;
@@ -66,6 +67,10 @@ public class DrawerFragment extends BaseFragment {
   private final DrawerMenuItem homeItem =
       new DrawerMenuItem(R.drawable.ic_action_home, "Home", 0, HomeActivity.class);
 
+  private final DrawerMenuItem shotCaddyItem =
+      new DrawerMenuItem(R.drawable.ic_tee, "Shot Caddy", 475, ShotCaddySetupActivity
+          .class, true);
+
   private final DrawerMenuItem accountItem =
       new DrawerMenuItem(R.drawable.ic_action_account_box, "Account", 500, AccountActivity.class);
 
@@ -79,7 +84,7 @@ public class DrawerFragment extends BaseFragment {
       new ArrayList<>(Arrays.asList(homeItem, settingsItem));
 
   public final List<DrawerMenuItem> userMenuItems =
-      new ArrayList<>(Arrays.asList(accountItem));
+      new ArrayList<>(Arrays.asList(accountItem, shotCaddyItem));
 
   public final List<DrawerMenuItem> adminMenuItems =
       new ArrayList<>(Arrays.asList(adminItem));
@@ -305,8 +310,16 @@ public class DrawerFragment extends BaseFragment {
     public final Runnable action;
     public final int priority;
 
+    public final boolean experimental;
+
     public DrawerMenuItem(final int iconRes, final String title, final int priority, final Class<?>
         activityToStart) {
+      this(iconRes, title, priority, activityToStart, false);
+    }
+
+    public DrawerMenuItem(final int iconRes, final String title, final int priority, final Class<?>
+        activityToStart, final boolean experimental) {
+
       this(iconRes, title, priority, new Runnable() {
         @Override
         public void run() {
@@ -318,16 +331,17 @@ public class DrawerFragment extends BaseFragment {
             drawerLayout.closeDrawers();
           }
         }
-      });
+      }, experimental);
     }
 
     public DrawerMenuItem(final int iconRes, final String title, final int priority, final Runnable
-        action) {
+        action, final boolean experimental) {
 
       this.iconRes = iconRes;
       this.title = title;
       this.priority = priority;
       this.action = action;
+      this.experimental = experimental;
     }
 
     @Override

@@ -24,7 +24,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
-import com.squareup.otto.Bus;
 
 import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.activity.RoundPlayActivity;
@@ -32,7 +31,6 @@ import org.cranst0n.dogleg.android.model.Hole;
 import org.cranst0n.dogleg.android.model.HoleFeature;
 import org.cranst0n.dogleg.android.model.HoleRating;
 import org.cranst0n.dogleg.android.model.LatLon;
-import org.cranst0n.dogleg.android.utils.BusProvider;
 import org.cranst0n.dogleg.android.utils.SnackBars;
 import org.cranst0n.dogleg.android.utils.Units;
 
@@ -41,8 +39,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMarkerDragListener {
-
-  private Bus bus;
 
   private View mapFragmentView;
   private ImageButton resetCameraButton;
@@ -64,14 +60,6 @@ public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMa
   private IconGenerator blueIconFactory;
   private IconGenerator sandIconFactory;
   private IconGenerator greyIconFactory;
-
-  @Override
-  public void onCreate(final Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-
-    bus = BusProvider.Instance.bus;
-    bus.register(this);
-  }
 
   @Override
   public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
@@ -176,7 +164,6 @@ public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMa
   public void onDestroy() {
     super.onDestroy();
 
-    bus.unregister(this);
     mapView.onDestroy();
   }
 

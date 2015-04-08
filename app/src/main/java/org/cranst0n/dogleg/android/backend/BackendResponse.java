@@ -11,11 +11,11 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.async.future.SimpleFuture;
 import com.koushikdutta.ion.Response;
 
-import org.apache.http.HttpStatus;
 import org.cranst0n.dogleg.android.utils.Json;
 import org.cranst0n.dogleg.android.utils.Threads;
 
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -156,40 +156,46 @@ public class BackendResponse<T extends JsonElement, U> {
     @Override
     public void onCompleted(final Exception exception, final Response<T> result) {
 
-      if (exception != null) {
-        Log.e(Tag, "Backend exception: " + exception.getMessage(), exception);
-        notifyException(exception);
-      } else if (result.getException() != null) {
-        Log.e(Tag, "Result exception: " + result.getException().getMessage(), result.getException());
-        notifyException(result.getException());
-      } else if (result.getHeaders() != null && result.getHeaders().code() == HttpStatus.SC_OK) {
+      try {
 
-        final Gson gson = Json.pimpedGson();
+        if (exception != null) {
+          Log.e(Tag, "Backend exception: " + exception.getMessage(), exception);
+          notifyException(exception);
+        } else if (result.getException() != null) {
+          Log.e(Tag, "Result exception: " + result.getException().getMessage(), result.getException());
+          notifyException(result.getException());
+        } else if (result.getHeaders() != null && result.getHeaders().code() == HttpURLConnection
+            .HTTP_OK) {
 
-        if (type != null) {
-          value = gson.fromJson(result.getResult(), type);
+          final Gson gson = Json.pimpedGson();
+
+          if (type != null) {
+            value = gson.fromJson(result.getResult(), type);
+          } else {
+            value = gson.fromJson(result.getResult(), clazz);
+          }
+
+          errorMessage = null;
+
+          notifySuccess(value);
         } else {
-          value = gson.fromJson(result.getResult(), clazz);
+
+          value = null;
+          errorMessage = Json.pimpedGson().fromJson(result.getResult(), BackendMessage.class);
+
+          if (errorMessage == null || errorMessage.isIncomplete()) {
+            errorMessage = new BackendMessage(
+                HttpURLConnection.HTTP_BAD_REQUEST, "Unknown Error", "Failed to handle server " +
+                "response.");
+          }
+
+          Log.e(Tag, "Backend errorMessage: " + errorMessage);
+          notifyError(errorMessage);
         }
 
-        errorMessage = null;
-
-        notifySuccess(value);
-      } else {
-
-        value = null;
-        errorMessage = Json.pimpedGson().fromJson(result.getResult(), BackendMessage.class);
-
-        if (errorMessage == null || errorMessage.isIncomplete()) {
-          errorMessage = new BackendMessage(
-              HttpStatus.SC_BAD_REQUEST, "Unknown Error", "Failed to handle server response.");
-        }
-
-        Log.e(Tag, "Backend errorMessage: " + errorMessage);
-        notifyError(errorMessage);
+      } finally {
+        notifyFinally();
       }
-
-      notifyFinally();
     }
   }
 
