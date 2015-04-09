@@ -169,7 +169,7 @@ public class RoundListFragment extends BaseFragment {
 
       SnackbarManager.show(
           Snackbar.with(activity)
-              .text("Unfinished round found.")
+              .text("You have an unfinished round.")
               .actionLabel("Resume")
               .actionColor(getResources().getColor(R.color.warn))
               .duration(Snackbar.SnackbarDuration.LENGTH_INDEFINITE)
@@ -296,8 +296,7 @@ public class RoundListFragment extends BaseFragment {
           @Override
           public void onClick(final View view) {
             Intent intent = new Intent(activity, RoundShowActivity.class);
-            intent.putExtra(activity.getResources().getString(R.string.intent_round_data_key),
-                Json.pimpedGson().toJson(round));
+            intent.putExtra(Round.class.getCanonicalName(), Json.pimpedGson().toJson(round));
             intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             getParentFragment().startActivityForResult(intent, 0);
           }

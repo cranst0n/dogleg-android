@@ -13,7 +13,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.gson.JsonObject;
 import com.koushikdutta.ion.Ion;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -21,19 +20,15 @@ import com.squareup.otto.Subscribe;
 import org.cranst0n.dogleg.android.DoglegApplication;
 import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.backend.Authentication;
-import org.cranst0n.dogleg.android.backend.BackendMessage;
 import org.cranst0n.dogleg.android.backend.BackendResponse;
-import org.cranst0n.dogleg.android.backend.Courses;
 import org.cranst0n.dogleg.android.backend.Rounds;
 import org.cranst0n.dogleg.android.fragment.RoundPlayFragment;
 import org.cranst0n.dogleg.android.fragment.RoundPlayHoleViewFragment;
 import org.cranst0n.dogleg.android.fragment.RoundPlayMapFragment;
 import org.cranst0n.dogleg.android.fragment.RoundPlayScorecardFragment;
-import org.cranst0n.dogleg.android.model.Course;
 import org.cranst0n.dogleg.android.model.Hole;
 import org.cranst0n.dogleg.android.model.HoleRating;
 import org.cranst0n.dogleg.android.model.HoleScore;
-import org.cranst0n.dogleg.android.model.HoleSet;
 import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.RoundHandicapResponse;
 import org.cranst0n.dogleg.android.model.User;
@@ -54,7 +49,6 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
   private User currentUser = DoglegApplication.appUser();
 
   private Rounds rounds;
-  private Courses courses;
 
   private Round round;
   private int currentHole = 1;
@@ -87,73 +81,26 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
     }
 
     rounds = new Rounds(this);
-    courses = new Courses(this);
 
     drawerFragment.setDrawerIndicatorEnabled(false);
 
-    BackendResponse<JsonObject, Course> courseResponse;
-
     if (savedInstanceState == null) {
 
-      if (getIntent().hasExtra(getResources().getString(R.string.intent_course_id_key))) {
+      try {
 
-        long courseId = (Long) getIntent().getSerializableExtra(
-            getResources().getString(R.string.intent_course_id_key));
-
-        final MaterialDialog progressDialog = Dialogs.showBusyDialog(this, "Starting round...");
-
-        courseResponse = courses.info(courseId).
-            onSuccess(new BackendResponse.BackendSuccessListener<Course>() {
-              @Override
-              public void onSuccess(final Course value) {
-                setRound(Round.create(currentUser(), value, HoleSet.available(value)[0]));
-                showRoundSettings();
-              }
-            }).
-            onError(new BackendResponse.BackendErrorListener() {
-              @Override
-              public void onError(BackendMessage message) {
-                progressDialog.dismiss();
-                new MaterialDialog.Builder(RoundPlayActivity.this).
-                    content("Error starting round: " + message.message).
-                    dismissListener(new DialogInterface.OnDismissListener() {
-                      @Override
-                      public void onDismiss(final DialogInterface dialogInterface) {
-                        finish();
-                      }
-                    }).build().show();
-              }
-            }).
-            onException(new BackendResponse.BackendExceptionListener() {
-              @Override
-              public void onException(final Exception exception) {
-                progressDialog.dismiss();
-                new MaterialDialog.Builder(RoundPlayActivity.this).
-                    content("Error starting round: " + exception.getMessage()).
-                    dismissListener(new DialogInterface.OnDismissListener() {
-                      @Override
-                      public void onDismiss(final DialogInterface dialogInterface) {
-                        finish();
-                      }
-                    }).build().show();
-              }
-            }).
-            onFinally(new BackendResponse.BackendFinallyListener() {
-              @Override
-              public void onFinally() {
-                progressDialog.dismiss();
-              }
-            });
-      } else {
-
-        Round resumeRound = Json.pimpedGson().fromJson(getIntent().getStringExtra(Round.class
+        Round initRound = Json.pimpedGson().fromJson(getIntent().getStringExtra(Round.class
             .getCanonicalName()), Round.class);
 
-        setRound(resumeRound);
+        if (initRound != null) {
+          setRound(initRound);
+          showRoundSettings();
+        } else {
+          finishWithDialog("No round to start...exiting.");
+        }
 
-        courseResponse = BackendResponse.pure(resumeRound.course);
+      } catch (final Exception exception) {
+        finishWithDialog("Error starting round: " + exception.getMessage());
       }
-
     } else {
 
       Round savedRound = Json.pimpedGson().fromJson(
@@ -162,17 +109,21 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
 
       setRound(savedRound);
       currentHole = savedCurrentHole;
-
-      courseResponse = BackendResponse.pure(savedRound.course);
     }
 
-    courseResponse.onSuccess(new BackendResponse.BackendSuccessListener<Course>() {
-      @Override
-      public void onSuccess(final Course value) {
-        getSupportActionBar().setTitle(value.name);
-        startLocationUpdates();
-      }
-    });
+    getSupportActionBar().setTitle(round().course.name);
+    startLocationUpdates();
+  }
+
+  private void finishWithDialog(final String message) {
+    new MaterialDialog.Builder(RoundPlayActivity.this).
+        content(message).
+        dismissListener(new DialogInterface.OnDismissListener() {
+          @Override
+          public void onDismiss(final DialogInterface dialogInterface) {
+            finish();
+          }
+        }).build().show();
   }
 
   @Override

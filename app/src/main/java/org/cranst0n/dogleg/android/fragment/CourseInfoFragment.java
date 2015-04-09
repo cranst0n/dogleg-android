@@ -29,12 +29,15 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.ion.Ion;
 import com.nineoldandroids.view.ViewHelper;
 
+import org.cranst0n.dogleg.android.DoglegApplication;
 import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.activity.RoundPlayActivity;
 import org.cranst0n.dogleg.android.backend.BackendResponse;
 import org.cranst0n.dogleg.android.backend.Courses;
 import org.cranst0n.dogleg.android.model.Course;
 import org.cranst0n.dogleg.android.model.CourseRating;
+import org.cranst0n.dogleg.android.model.HoleSet;
+import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.utils.Intents;
 import org.cranst0n.dogleg.android.utils.Json;
 import org.cranst0n.dogleg.android.utils.Photos;
@@ -124,7 +127,8 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
       @Override
       public void onClick(View v) {
         Intent intent = new Intent(activity, RoundPlayActivity.class);
-        intent.putExtra(getResources().getString(R.string.intent_course_id_key), course.id);
+        intent.putExtra(Round.class.getCanonicalName(), Json.pimpedGson().toJson(Round.create
+            (DoglegApplication.appUser(), course, HoleSet.available(course)[0])));
         activity.startActivity(intent);
       }
     });

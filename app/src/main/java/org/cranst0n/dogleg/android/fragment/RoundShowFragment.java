@@ -277,8 +277,7 @@ public class RoundShowFragment extends ScorecardFragment implements ObservableSc
     onScrollChanged(scrollView.getCurrentScrollY(), false, false);
 
     setRound(Json.pimpedGson().fromJson(
-        activity.getIntent().getStringExtra(getResources().getString(R.string.intent_round_data_key)),
-        Round.class));
+        activity.getIntent().getStringExtra(Round.class.getCanonicalName()), Round.class));
 
     originalRound = Objects.deepCopy(round);
 
