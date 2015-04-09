@@ -112,7 +112,7 @@ public class HomeActivity extends BaseActivity {
   public void newUser(final User user) {
 
     if (user.isValid() && !user.equals(currentUser)) {
-      SnackBars.showSimple(HomeActivity.this, "Welcome " + currentUser.name + "!");
+      SnackBars.showSimple(this, "Welcome " + user.name + "!");
     }
 
     currentUser = user;
@@ -123,7 +123,7 @@ public class HomeActivity extends BaseActivity {
   private void warnEmptyServerUrl() {
 
     SnackbarManager.show(
-        Snackbar.with(HomeActivity.this)
+        Snackbar.with(this)
             .text("No server URL set.")
             .actionLabel("Configure URL")
             .actionColor(getResources().getColor(R.color.warn))
@@ -135,7 +135,7 @@ public class HomeActivity extends BaseActivity {
                 startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
               }
             })
-        , HomeActivity.this);
+        , this);
   }
 
 }

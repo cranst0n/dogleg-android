@@ -1,5 +1,6 @@
 package org.cranst0n.dogleg.android.fragment;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -17,14 +18,21 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
+import com.melnykov.fab.FloatingActionButton;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import org.cranst0n.dogleg.android.DoglegApplication;
 import org.cranst0n.dogleg.android.R;
+import org.cranst0n.dogleg.android.activity.CourseRequestActivity;
 import org.cranst0n.dogleg.android.adapter.CourseListRecyclerAdapter;
 import org.cranst0n.dogleg.android.backend.BackendResponse;
 import org.cranst0n.dogleg.android.backend.Courses;
 import org.cranst0n.dogleg.android.model.CourseSummary;
 import org.cranst0n.dogleg.android.model.LatLon;
+import org.cranst0n.dogleg.android.model.User;
+import org.cranst0n.dogleg.android.utils.BusProvider;
+import org.cranst0n.dogleg.android.utils.SnackBars;
 import org.cranst0n.dogleg.android.views.PinSwitch;
 import org.cranst0n.dogleg.android.views.Views;
 
@@ -35,11 +43,15 @@ import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
 public class CourseListFragment extends BaseFragment implements SearchView.OnQueryTextListener {
 
+  private Bus bus;
+  private User currentUser = User.NO_USER;
+
   private Location lastLocation;
 
   private View courseListView;
   private SwipeRefreshLayout swipeRefreshLayout;
   private RecyclerView recyclerView;
+  private FloatingActionButton fab;
   private SmoothProgressBar appendInProgressBar;
   private TextView noCoursesIndicator;
 
@@ -66,6 +78,9 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
   public void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    bus = BusProvider.Instance.bus;
+    bus.register(this);
+
     setHasOptionsMenu(true);
 
     lastLocation = DoglegApplication.application().lastKnownLocation();
@@ -74,6 +89,8 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
   @Override
   public void onDestroy() {
     super.onDestroy();
+
+    bus.unregister(this);
 
     if (queryCall != null) {
       queryCall.cancel();
@@ -88,6 +105,7 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
 
     swipeRefreshLayout = (SwipeRefreshLayout) courseListView.findViewById(R.id.swipe_refresh_container);
     recyclerView = (RecyclerView) courseListView.findViewById(R.id.course_list_recycler);
+    fab = (FloatingActionButton) courseListView.findViewById(R.id.course_list_fab);
     appendInProgressBar = (SmoothProgressBar) courseListView.findViewById(R.id.append_in_progress_bar);
     noCoursesIndicator = (TextView) courseListView.findViewById(R.id.course_list_none_indicator);
 
@@ -101,6 +119,19 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
     });
 
     initRecyclerView();
+
+    fab.attachToRecyclerView(recyclerView);
+    fab.setVisibility(currentUser.isValid() ? View.VISIBLE : View.GONE);
+    fab.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(final View view) {
+        if(currentUser.isValid()) {
+          startActivity(new Intent(activity, CourseRequestActivity.class));
+        } else {
+          SnackBars.showSimple(activity, "Must be logged in to request course.");
+        }
+      }
+    });
 
     addToCourseList(false);
     setHasOptionsMenu(true);
@@ -214,6 +245,16 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
         }
       }
     });
+  }
+
+  @Subscribe
+  public void newUser(final User user) {
+
+    currentUser = user;
+
+    if(fab != null) {
+      fab.setVisibility(currentUser.isValid() ? View.VISIBLE : View.GONE);
+    }
   }
 
   private boolean searchMode() {

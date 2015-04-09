@@ -70,6 +70,11 @@
         </activity>
 
         <activity
+            android:name=".activity.CourseRequestActivity"
+            android:parentActivityName=".activity.HomeActivity">
+        </activity>
+
+        <activity
             android:name=".activity.AdminActivity"
             android:parentActivityName=".activity.HomeActivity">
         </activity>

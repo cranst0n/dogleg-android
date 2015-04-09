@@ -10,6 +10,7 @@ import com.koushikdutta.ion.Ion;
 
 import org.cranst0n.dogleg.android.DoglegApplication;
 import org.cranst0n.dogleg.android.model.Course;
+import org.cranst0n.dogleg.android.model.CourseRequest;
 import org.cranst0n.dogleg.android.model.CourseSummary;
 import org.cranst0n.dogleg.android.model.LatLon;
 import org.cranst0n.dogleg.android.utils.Files;
@@ -37,6 +38,8 @@ public class Courses extends BackendComponent {
   private static final String LIST_BY_LOCATION_URL = "/courses?lat=%.5f&lon=%.5f&num=%d&offset=%d";
   private static final String SEARCH_URL = "/courses/search?searchText=%s&num=%d&offset=%d";
 
+  private static final String COURSE_REQUEST_URL = "/courserequests";
+
   private static Map<Long, Course> pinnedCache = new HashMap<>();
   private static Map<Long, Course> courseCache = new LinkedHashMap<Long, Course>() {
     @Override
@@ -47,6 +50,15 @@ public class Courses extends BackendComponent {
 
   public Courses(final Context context) {
     super(context);
+  }
+
+  public BackendResponse<JsonObject, CourseRequest> requestCourse(final CourseRequest request) {
+    return new BackendResponse<>(Ion.with(context)
+      .load("POST", serverUrl(COURSE_REQUEST_URL))
+      .setHeader(AuthTokenHeader, authToken())
+      .setJsonObjectBody(Json.pimpedGson().toJsonTree(request).getAsJsonObject())
+      .asJsonObject()
+      .withResponse(), CourseRequest.class);
   }
 
   public BackendResponse<JsonObject, Course> info(final long id) {

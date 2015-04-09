@@ -8,6 +8,7 @@
     <string name="admin_activity_title">Admin</string>
     <string name="settings_activity_title">Settings</string>
     <string name="shot_caddy_setup_activity_title">Shot Caddy</string>
+    <string name="course_request_activity_title">Request Course</string>
 
     <string name="action_login">Log In</string>
     <string name="action_logout">Log Out</string>
