@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -81,6 +82,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
   private ListView holeFeatureList;
   private FeatureListAdapter featureListAdapter;
 
+  private ImageButton shotSettingsButton;
   private ImageButton shotAddButton;
   private ListView shotList;
   private ShotListAdapter shotListAdapter;
@@ -356,6 +358,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
         context, new ArrayList<>(currentHoleScore().hole.displayableFeatures()));
     holeFeatureList.setAdapter(featureListAdapter);
 
+    shotSettingsButton = (ImageButton) playRoundHoleView.findViewById(R.id.shot_settings_button);
     shotAddButton = (ImageButton) playRoundHoleView.findViewById(R.id.shot_add_button);
     shotList = (ListView) playRoundHoleView.findViewById(R.id.current_hole_shot_list);
     shotListAdapter = new ShotListAdapter(context, new ArrayList<Shot>());
@@ -476,6 +479,38 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
         // Disallow the touch request for parent scroll on touch of child view
         v.getParent().requestDisallowInterceptTouchEvent(true);
         return false;
+      }
+    });
+
+    shotSettingsButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(final View view) {
+
+        MaterialDialog dialog = new MaterialDialog.Builder(activity)
+            .title("Shot Caddy Settings")
+            .customView(R.layout.dialog_shot_settings, true)
+            .positiveText("Ok")
+            .negativeText(android.R.string.cancel)
+            .build();
+
+        final CheckBox keepScreenOnBox = (CheckBox) dialog.getCustomView().findViewById(R.id
+            .keep_screen_on_box);
+
+        keepScreenOnBox.setChecked((activity.getWindow().getAttributes().flags & WindowManager
+            .LayoutParams.FLAG_KEEP_SCREEN_ON) != 0);
+
+        keepScreenOnBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+          @Override
+          public void onCheckedChanged(final CompoundButton compoundButton, boolean isChecked) {
+            if(isChecked) {
+              activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            } else {
+              activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+          }
+        });
+
+        dialog.show();
       }
     });
 

@@ -110,8 +110,8 @@ public class Rounds extends BackendComponent {
   }
 
   public boolean backupRoundData(final Round round) {
-    File backupFile = new File(context.getFilesDir(), String.format("rounds/%d.json", round.id));
 
+    File backupFile = new File(context.getFilesDir(), String.format("rounds/%d.json", round.id));
     backupFile.getParentFile().mkdirs();
     FileOutputStream outputStream = null;
 
@@ -141,7 +141,9 @@ public class Rounds extends BackendComponent {
   }
 
   public Round backedUpRound() {
+
     File backupDir = new File(context.getFilesDir(), "rounds/");
+    backupDir.mkdirs();
 
     try {
       for (File f : backupDir.listFiles()) {
