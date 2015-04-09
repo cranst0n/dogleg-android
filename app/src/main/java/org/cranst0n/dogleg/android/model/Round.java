@@ -156,9 +156,10 @@ public class Round {
     return issues;
   }
 
-  public static Round create(final long id, final User user, final Course course,
-                             final HoleSet holeSet) {
-    return create(id, user, course, course.ratings[0], DateTime.now(),
+  public static Round create(final User user, final Course course, final HoleSet holeSet) {
+    int randomId = 0 - (new SecureRandom().nextInt() + 1);
+    return create(randomId, user, course, course.ratings[0], DateTime
+            .now(),
         true, 0, false, 0, null, holeSet);
   }
 

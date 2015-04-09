@@ -125,7 +125,7 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
     fab.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(final View view) {
-        if(currentUser.isValid()) {
+        if (currentUser.isValid()) {
           startActivity(new Intent(activity, CourseRequestActivity.class));
         } else {
           SnackBars.showSimple(activity, "Must be logged in to request course.");
@@ -252,7 +252,7 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
 
     currentUser = user;
 
-    if(fab != null) {
+    if (fab != null) {
       fab.setVisibility(currentUser.isValid() ? View.VISIBLE : View.GONE);
     }
   }

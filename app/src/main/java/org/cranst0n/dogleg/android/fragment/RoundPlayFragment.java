@@ -106,6 +106,10 @@ public class RoundPlayFragment extends BaseFragment {
 
     previousHoleButton = (ImageButton) playRoundView.findViewById(R.id.previous_hole_button);
     nextHoleButton = (ImageButton) playRoundView.findViewById(R.id.next_hole_button);
+
+    if (round() != null) {
+      roundUpdated(round());
+    }
   }
 
   private void attachListeners() {

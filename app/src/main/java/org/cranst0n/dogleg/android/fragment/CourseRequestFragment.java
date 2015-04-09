@@ -76,13 +76,13 @@ public class CourseRequestFragment extends BaseFragment {
 
   @Subscribe
   public void newUser(final User user) {
-    if(!user.isValid()) {
+    if (!user.isValid()) {
       activity.finish();
     }
   }
 
   private void requestCourse() {
-    if(validateForm()) {
+    if (validateForm()) {
       String courseName = requestNameView.getText().toString();
       String courseCity = requestCityView.getText().toString();
       String courseState = requestStateView.getText().toString();
@@ -106,22 +106,22 @@ public class CourseRequestFragment extends BaseFragment {
 
   private boolean validateForm() {
 
-    if(requestNameView.getText().toString().trim().isEmpty()) {
+    if (requestNameView.getText().toString().trim().isEmpty()) {
       requestNameView.setError("Course Name Required");
       return false;
     }
 
-    if(requestCityView.getText().toString().trim().isEmpty()) {
+    if (requestCityView.getText().toString().trim().isEmpty()) {
       requestCityView.setError("Course City Required");
       return false;
     }
 
-    if(requestStateView.getText().toString().trim().isEmpty()) {
+    if (requestStateView.getText().toString().trim().isEmpty()) {
       requestStateView.setError("Course State Required");
       return false;
     }
 
-    if(requestCountryView.getText().toString().trim().isEmpty()) {
+    if (requestCountryView.getText().toString().trim().isEmpty()) {
       requestCountryView.setError("Course Country Required");
       return false;
     }

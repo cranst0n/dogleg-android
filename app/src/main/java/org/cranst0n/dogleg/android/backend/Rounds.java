@@ -1,6 +1,7 @@
 package org.cranst0n.dogleg.android.backend;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,9 +16,13 @@ import com.koushikdutta.ion.Ion;
 import org.cranst0n.dogleg.android.model.Club;
 import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.RoundHandicapResponse;
+import org.cranst0n.dogleg.android.utils.Files;
 import org.cranst0n.dogleg.android.utils.Json;
 import org.joda.time.DateTime;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -102,6 +107,52 @@ public class Rounds extends BackendComponent {
         .setHeader(AuthTokenHeader, authToken())
         .asJsonObject()
         .withResponse(), RoundHandicapResponse.class);
+  }
+
+  public boolean backupRoundData(final Round round) {
+    File backupFile = new File(context.getFilesDir(), String.format("rounds/%d.json", round.id));
+
+    backupFile.getParentFile().mkdirs();
+    FileOutputStream outputStream = null;
+
+    try {
+
+      outputStream = new FileOutputStream(backupFile);
+      outputStream.write(Json.pimpedGson().toJson(round).getBytes());
+
+      return true;
+    } catch (final Exception e) {
+      Log.e(Tag, "Failed to write to output stream", e);
+      return false;
+    } finally {
+      if (outputStream != null) {
+        try {
+          outputStream.close();
+        } catch (IOException e) {
+          Log.d(Tag, "Failed to close output stream", e);
+        }
+      }
+    }
+  }
+
+  public boolean clearBackupRoundData(final long roundId) {
+    File backupFile = new File(context.getFilesDir(), String.format("rounds/%d.json", roundId));
+    return backupFile.delete();
+  }
+
+  public Round backedUpRound() {
+    File backupDir = new File(context.getFilesDir(), "rounds/");
+
+    try {
+      for (File f : backupDir.listFiles()) {
+        String jsonString = Files.getStringFromFile(f);
+        return Json.pimpedGson().fromJson(jsonString, Round.class);
+      }
+    } catch (final IOException e) {
+      Log.e(Tag, "Failed to parse round file.", e);
+    }
+
+    return null;
   }
 
   private class RoundRequestSerializer implements JsonSerializer<Round> {

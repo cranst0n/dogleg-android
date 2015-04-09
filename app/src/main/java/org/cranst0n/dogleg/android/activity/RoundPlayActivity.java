@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationProvider;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -90,60 +89,70 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
     rounds = new Rounds(this);
     courses = new Courses(this);
 
-    drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     drawerFragment.setDrawerIndicatorEnabled(false);
 
     BackendResponse<JsonObject, Course> courseResponse;
 
     if (savedInstanceState == null) {
 
-      long courseId = (Long) getIntent().getSerializableExtra(
-          getResources().getString(R.string.intent_course_id_key));
+      if (getIntent().hasExtra(getResources().getString(R.string.intent_course_id_key))) {
 
-      final MaterialDialog progressDialog = Dialogs.showBusyDialog(this, "Starting round...");
+        long courseId = (Long) getIntent().getSerializableExtra(
+            getResources().getString(R.string.intent_course_id_key));
 
-      courseResponse = courses.info(courseId).
-          onSuccess(new BackendResponse.BackendSuccessListener<Course>() {
-            @Override
-            public void onSuccess(final Course value) {
-              setRound(Round.create(-1, currentUser(), value, HoleSet.available(value)[0]));
-              showRoundSettings();
-            }
-          }).
-          onError(new BackendResponse.BackendErrorListener() {
-            @Override
-            public void onError(BackendMessage message) {
-              progressDialog.dismiss();
-              new MaterialDialog.Builder(RoundPlayActivity.this).
-                  content("Error starting round: " + message.message).
-                  dismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(final DialogInterface dialogInterface) {
-                      finish();
-                    }
-                  }).build().show();
-            }
-          }).
-          onException(new BackendResponse.BackendExceptionListener() {
-            @Override
-            public void onException(final Exception exception) {
-              progressDialog.dismiss();
-              new MaterialDialog.Builder(RoundPlayActivity.this).
-                  content("Error starting round: " + exception.getMessage()).
-                  dismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(final DialogInterface dialogInterface) {
-                      finish();
-                    }
-                  }).build().show();
-            }
-          }).
-          onFinally(new BackendResponse.BackendFinallyListener() {
-            @Override
-            public void onFinally() {
-              progressDialog.dismiss();
-            }
-          });
+        final MaterialDialog progressDialog = Dialogs.showBusyDialog(this, "Starting round...");
+
+        courseResponse = courses.info(courseId).
+            onSuccess(new BackendResponse.BackendSuccessListener<Course>() {
+              @Override
+              public void onSuccess(final Course value) {
+                setRound(Round.create(currentUser(), value, HoleSet.available(value)[0]));
+                showRoundSettings();
+              }
+            }).
+            onError(new BackendResponse.BackendErrorListener() {
+              @Override
+              public void onError(BackendMessage message) {
+                progressDialog.dismiss();
+                new MaterialDialog.Builder(RoundPlayActivity.this).
+                    content("Error starting round: " + message.message).
+                    dismissListener(new DialogInterface.OnDismissListener() {
+                      @Override
+                      public void onDismiss(final DialogInterface dialogInterface) {
+                        finish();
+                      }
+                    }).build().show();
+              }
+            }).
+            onException(new BackendResponse.BackendExceptionListener() {
+              @Override
+              public void onException(final Exception exception) {
+                progressDialog.dismiss();
+                new MaterialDialog.Builder(RoundPlayActivity.this).
+                    content("Error starting round: " + exception.getMessage()).
+                    dismissListener(new DialogInterface.OnDismissListener() {
+                      @Override
+                      public void onDismiss(final DialogInterface dialogInterface) {
+                        finish();
+                      }
+                    }).build().show();
+              }
+            }).
+            onFinally(new BackendResponse.BackendFinallyListener() {
+              @Override
+              public void onFinally() {
+                progressDialog.dismiss();
+              }
+            });
+      } else {
+
+        Round resumeRound = Json.pimpedGson().fromJson(getIntent().getStringExtra(Round.class
+            .getCanonicalName()), Round.class);
+
+        setRound(resumeRound);
+
+        courseResponse = BackendResponse.pure(resumeRound.course);
+      }
 
     } else {
 
@@ -315,7 +324,9 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
   }
 
   private void setRound(final Round round) {
+
     this.round = round;
+
     playRoundFragment.roundUpdated(round);
     scorecardFragment.setRound(round);
 
@@ -324,6 +335,8 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
     } else {
       setHole(round.holeSet().holeStart);
     }
+
+    backupRoundData(round);
   }
 
   public Round round() {
@@ -393,6 +406,8 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
       scorecardFragment.updateHole(updatedScore);
       playRoundFragment.scoreUpdated(updatedScore);
       holeViewFragment.updateHole(updatedScore);
+
+      backupRoundData(round);
     }
   }
 
@@ -448,7 +463,8 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
         .negativeText("No")
         .callback(new MaterialDialog.ButtonCallback() {
           @Override
-          public void onPositive(MaterialDialog dialog) {
+          public void onPositive(final MaterialDialog dialog) {
+            rounds.clearBackupRoundData(round.id);
             RoundPlayActivity.this.finish();
           }
         })
@@ -462,5 +478,9 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
         setRound(round);
       }
     }).show();
+  }
+
+  private void backupRoundData(final Round round) {
+    rounds.backupRoundData(round);
   }
 }

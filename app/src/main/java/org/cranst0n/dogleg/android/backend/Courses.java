@@ -54,11 +54,11 @@ public class Courses extends BackendComponent {
 
   public BackendResponse<JsonObject, CourseRequest> requestCourse(final CourseRequest request) {
     return new BackendResponse<>(Ion.with(context)
-      .load("POST", serverUrl(COURSE_REQUEST_URL))
-      .setHeader(AuthTokenHeader, authToken())
-      .setJsonObjectBody(Json.pimpedGson().toJsonTree(request).getAsJsonObject())
-      .asJsonObject()
-      .withResponse(), CourseRequest.class);
+        .load("POST", serverUrl(COURSE_REQUEST_URL))
+        .setHeader(AuthTokenHeader, authToken())
+        .setJsonObjectBody(Json.pimpedGson().toJsonTree(request).getAsJsonObject())
+        .asJsonObject()
+        .withResponse(), CourseRequest.class);
   }
 
   public BackendResponse<JsonObject, Course> info(final long id) {
@@ -187,7 +187,6 @@ public class Courses extends BackendComponent {
         return true;
       } catch (final Exception e) {
         Log.e(Tag, "Failed to write to output stream", e);
-        e.printStackTrace();
         return false;
       } finally {
         if (outputStream != null) {

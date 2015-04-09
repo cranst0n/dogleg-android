@@ -362,6 +362,10 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     shotList.setAdapter(shotListAdapter);
 
     submitRoundButton = (Button) playRoundHoleView.findViewById(R.id.submit_round_button);
+
+    if (round() != null) {
+      holeUpdated(currentHoleNumber());
+    }
   }
 
   private void attachListeners() {
@@ -534,10 +538,14 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
                     final MaterialDialog progressDialog =
                         Dialogs.showBusyDialog(activity, "Submitting round...");
 
-                    new Rounds(context).postRound(round().asUser(currentUser())).
+                    final long localRoundId = round().id;
+                    final Rounds rounds = new Rounds(context);
+
+                    rounds.postRound(round().asUser(currentUser())).
                         onSuccess(new BackendResponse.BackendSuccessListener<Round>() {
                           @Override
                           public void onSuccess(final Round value) {
+                            rounds.clearBackupRoundData(localRoundId);
                             activity.finish();
                           }
                         }).
