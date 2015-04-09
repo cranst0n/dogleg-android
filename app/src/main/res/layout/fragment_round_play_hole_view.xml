@@ -50,7 +50,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1">
 
-                <include layout="@layout/round_play_features_card" />
+                <include layout="@layout/round_play_features_card"/>
 
             </LinearLayout>
 
@@ -59,7 +59,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1">
 
-                <include layout="@layout/round_play_shots_card" />
+                <include layout="@layout/round_play_shots_card"/>
 
             </LinearLayout>
 

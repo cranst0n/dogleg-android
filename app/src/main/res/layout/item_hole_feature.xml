@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/padding_four"
-                android:paddingBottom="@dimen/padding_four"
-                android:paddingLeft="@dimen/padding_eight"
-                android:paddingRight="@dimen/padding_eight"
-                android:orientation="horizontal">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingTop="@dimen/padding_four"
+              android:paddingBottom="@dimen/padding_four"
+              android:paddingLeft="@dimen/padding_eight"
+              android:paddingRight="@dimen/padding_eight"
+              android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="wrap_content"

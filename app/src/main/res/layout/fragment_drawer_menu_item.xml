@@ -1,12 +1,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/padding_sixteen"
-                android:paddingBottom="@dimen/padding_sixteen"
-                android:paddingLeft="@dimen/padding_sixteen"
-                android:background="@android:color/white"
-                tools:context=".DrawerMenuComp">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingTop="@dimen/padding_sixteen"
+              android:paddingBottom="@dimen/padding_sixteen"
+              android:paddingLeft="@dimen/padding_sixteen"
+              android:background="@android:color/white"
+              tools:context=".DrawerMenuComp">
 
     <ImageView
         android:id="@+id/drawer_menu_item_icon"

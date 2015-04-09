@@ -1,12 +1,14 @@
 package org.cranst0n.dogleg.android.backend;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.koushikdutta.ion.Ion;
 
+import org.cranst0n.dogleg.android.model.FileUpload;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.Crypto;
 import org.cranst0n.dogleg.android.utils.Json;
@@ -17,6 +19,7 @@ public class Users extends BackendComponent {
 
   private static final String AVATAR_URL = "/users/avatar/%d?width=%d&height=%d";
   private static final String CREATE_URL = "/users";
+  private static final String CHANGE_AVATAR_URL = "/users/%d/avatar";
   private static final String CHANGE_PASSWORD_URL = "/users/%d/password";
   private static final String RESET_PASSWORD_URL = "/users/%d/passwordReset";
   private static final String SEARCH_BY_NAME_URL = "/users/named/%s";
@@ -34,6 +37,18 @@ public class Users extends BackendComponent {
         .load("POST", serverUrl(CREATE_URL))
         .setHeader(AuthTokenHeader, authToken())
         .setJsonObjectBody(Json.pimpedGson().toJsonTree(user).getAsJsonObject())
+        .asJsonObject()
+        .withResponse(), User.class);
+  }
+
+  public BackendResponse<JsonObject, User> changeAvatar(final User user, final Bitmap avatar) {
+
+    FileUpload upload = new FileUpload(avatar);
+
+    return new BackendResponse<>(Ion.with(context)
+        .load("PUT", serverUrl(String.format(CHANGE_AVATAR_URL, user.id)))
+        .setHeader(AuthTokenHeader, authToken())
+        .setJsonObjectBody(Json.pimpedGson().toJsonTree(upload).getAsJsonObject())
         .asJsonObject()
         .withResponse(), User.class);
   }

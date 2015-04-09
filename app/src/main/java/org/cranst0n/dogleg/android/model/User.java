@@ -33,4 +33,21 @@ public class User {
   public boolean isValid() {
     return !this.equals(NO_USER);
   }
+
+  @Override
+  public boolean equals(final Object obj) {
+    if (!(obj instanceof User)) {
+      return false;
+    }
+    if (obj == this) {
+      return true;
+    }
+
+    return ((User) obj).id == id;
+  }
+
+  @Override
+  public int hashCode() {
+    return 31 + new Long(id).hashCode();
+  }
 }

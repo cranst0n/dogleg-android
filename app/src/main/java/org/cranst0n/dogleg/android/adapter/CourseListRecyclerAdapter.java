@@ -76,7 +76,7 @@ public class CourseListRecyclerAdapter extends RecyclerView.Adapter<CourseListRe
       callButton.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(final View v) {
-          activity.startActivity(Intents.call(courseSummary.phoneNumber));
+          activity.startActivity(Intents.phoneCall(courseSummary.phoneNumber));
         }
       });
 

@@ -108,7 +108,7 @@ public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMa
         }
       });
 
-      // Needs to call MapsInitializer before doing any CameraUpdateFactory calls
+      // Needs to phoneCall MapsInitializer before doing any CameraUpdateFactory calls
       MapsInitializer.initialize(getActivity());
       mapInitialized = true;
 

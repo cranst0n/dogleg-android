@@ -75,8 +75,11 @@ public class HomeFragment extends BaseFragment {
 
   @Subscribe
   public void newUser(final User user) {
+
     if (user.isValid()) {
-      visibleFragments.add(roundsPage);
+      if (!visibleFragments.contains(roundsPage)) {
+        visibleFragments.add(roundsPage);
+      }
     } else {
       visibleFragments.remove(roundsPage);
     }
@@ -119,7 +122,7 @@ public class HomeFragment extends BaseFragment {
   }
 
   @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+  public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
     switch (resultCode) {
       case R.integer.round_edit_result: {
         Round r = Json.pimpedGson().fromJson(

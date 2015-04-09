@@ -116,7 +116,7 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
     callButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        startActivity(Intents.call(course.phoneNumber));
+        startActivity(Intents.phoneCall(course.phoneNumber));
       }
     });
 

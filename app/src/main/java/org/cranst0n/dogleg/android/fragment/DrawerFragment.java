@@ -235,14 +235,18 @@ public class DrawerFragment extends BaseFragment {
 
   private void loadUserAvatar() {
     if (userAvatarImage != null && currentUser.isValid()) {
-      Ion.with(this).load(users.avatarUrl(currentUser)).asBitmap().setCallback(new FutureCallback<Bitmap>() {
-        @Override
-        public void onCompleted(final Exception e, final Bitmap result) {
-          if (e == null) {
-            userAvatarImage.setImageBitmap(result);
-          }
-        }
-      });
+      Ion.with(this)
+          .load(users.avatarUrl(currentUser))
+          .noCache()
+          .asBitmap()
+          .setCallback(new FutureCallback<Bitmap>() {
+            @Override
+            public void onCompleted(final Exception e, final Bitmap result) {
+              if (e == null) {
+                userAvatarImage.setImageBitmap(result);
+              }
+            }
+          });
     }
   }
 

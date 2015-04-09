@@ -1,12 +1,21 @@
 package org.cranst0n.dogleg.android.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -15,7 +24,11 @@ import org.cranst0n.dogleg.android.backend.BackendResponse;
 import org.cranst0n.dogleg.android.backend.Users;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.BusProvider;
+import org.cranst0n.dogleg.android.utils.Intents;
 import org.cranst0n.dogleg.android.utils.SnackBars;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class AccountFragment extends BaseFragment {
 
@@ -25,13 +38,16 @@ public class AccountFragment extends BaseFragment {
 
   private View accountView;
 
+  private ImageView avatarView;
+  private Button saveAvatarButton;
+
   private EditText oldPasswordField;
   private EditText newPasswordField;
   private EditText newPasswordConfirmField;
   private Button changePasswordButton;
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
+  public void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     bus = BusProvider.Instance.bus;
@@ -51,6 +67,33 @@ public class AccountFragment extends BaseFragment {
   public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
 
     accountView = inflater.inflate(R.layout.fragment_account, container, false);
+
+    avatarView = (ImageView) accountView.findViewById(R.id.user_avatar);
+    saveAvatarButton = (Button) accountView.findViewById(R.id.change_avatar_button);
+
+    avatarView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(final View view) {
+        startActivityForResult(Intents.pickImage(), Intents.PICK_IMAGE);
+      }
+    });
+
+    saveAvatarButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(final View view) {
+        Bitmap bitmap = ((BitmapDrawable) avatarView.getDrawable()).getBitmap();
+        users.changeAvatar(currentUser, bitmap)
+            .onSuccess(new BackendResponse.BackendSuccessListener<User>() {
+              @Override
+              public void onSuccess(final User value) {
+                SnackBars.showSimple(activity, "Updated avatar.");
+                bus.post(value);
+              }
+            })
+            .onError(SnackBars.showBackendError(activity))
+            .onException(SnackBars.showBackendException(activity));
+      }
+    });
 
     oldPasswordField = (EditText) accountView.findViewById(R.id.old_password_field);
     newPasswordField = (EditText) accountView.findViewById(R.id.new_password_field);
@@ -76,6 +119,8 @@ public class AccountFragment extends BaseFragment {
       }
     });
 
+    loadUserAvatar();
+
     return accountView;
   }
 
@@ -83,8 +128,56 @@ public class AccountFragment extends BaseFragment {
   public void newUser(final User user) {
     currentUser = user;
 
+    loadUserAvatar();
+
     if (changePasswordButton != null) {
       changePasswordButton.setEnabled(currentUser.isValid());
+    }
+  }
+
+  @Override
+  public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+
+    switch (requestCode) {
+      case Intents.PICK_IMAGE: {
+        if (resultCode == Activity.RESULT_OK) {
+
+          try {
+
+            Uri imageUri = data.getData();
+
+            InputStream imageStream = activity.getContentResolver().openInputStream(imageUri);
+            Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+
+            avatarView.setImageBitmap(selectedImage);
+
+          } catch (FileNotFoundException e) {
+            SnackBars.showSimple(activity, "File not found: " + e.getMessage());
+          }
+        }
+
+        break;
+      }
+      default: {
+        super.onActivityResult(requestCode, resultCode, data);
+      }
+    }
+  }
+
+  private void loadUserAvatar() {
+    if (avatarView != null && currentUser.isValid()) {
+      Ion.with(this)
+          .load(users.avatarUrl(currentUser))
+          .noCache()
+          .asBitmap()
+          .setCallback(new FutureCallback<Bitmap>() {
+            @Override
+            public void onCompleted(final Exception e, final Bitmap result) {
+              if (e == null) {
+                avatarView.setImageBitmap(result);
+              }
+            }
+          });
     }
   }
 }

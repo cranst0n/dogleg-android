@@ -111,11 +111,11 @@ public class HomeActivity extends BaseActivity {
   @Subscribe
   public void newUser(final User user) {
 
-    currentUser = user;
-
-    if (currentUser.isValid()) {
+    if (user.isValid() && !user.equals(currentUser)) {
       SnackBars.showSimple(HomeActivity.this, "Welcome " + currentUser.name + "!");
     }
+
+    currentUser = user;
 
     invalidateOptionsMenu();
   }

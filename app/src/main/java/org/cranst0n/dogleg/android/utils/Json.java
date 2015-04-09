@@ -1,5 +1,7 @@
 package org.cranst0n.dogleg.android.utils;
 
+import android.util.Base64;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -20,6 +22,7 @@ public class Json {
 
   private static Gson pimpedGson = new GsonBuilder()
       .registerTypeAdapter(DateTime.class, new DateTimeTypeAdapter())
+      .registerTypeAdapter(byte[].class, new ByteArrayToBase64TypeAdapter())
       .registerTypeAdapter(Club.class, new ClubTypeAdapter())
       .create();
 
@@ -30,18 +33,34 @@ public class Json {
   public static class DateTimeTypeAdapter
       implements JsonSerializer<DateTime>, JsonDeserializer<DateTime> {
     @Override
-    public JsonElement serialize(DateTime src, Type srcType, JsonSerializationContext context) {
+    public JsonElement serialize(final DateTime src, final Type srcType,
+                                 final JsonSerializationContext context) {
       return new JsonPrimitive(src.getMillis());
     }
 
     @Override
-    public DateTime deserialize(JsonElement json, Type type, JsonDeserializationContext context)
+    public DateTime deserialize(final JsonElement json, final Type type,
+                                final JsonDeserializationContext
+                                    context)
         throws JsonParseException {
       try {
         return new DateTime(json.getAsLong());
       } catch (IllegalArgumentException e) {
         return new DateTime(json.getAsString());
       }
+    }
+  }
+
+  public static class ByteArrayToBase64TypeAdapter implements JsonSerializer<byte[]>,
+      JsonDeserializer<byte[]> {
+    public byte[] deserialize(final JsonElement json, final Type typeOfT,
+                              final JsonDeserializationContext context) throws JsonParseException {
+      return Base64.decode(json.getAsString(), Base64.NO_WRAP);
+    }
+
+    public JsonElement serialize(final byte[] src, final Type typeOfSrc,
+                                 final JsonSerializationContext context) {
+      return new JsonPrimitive(Base64.encodeToString(src, Base64.NO_WRAP));
     }
   }
 
