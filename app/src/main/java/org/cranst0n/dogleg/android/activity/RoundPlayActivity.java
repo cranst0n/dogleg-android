@@ -19,7 +19,6 @@ import com.squareup.otto.Subscribe;
 
 import org.cranst0n.dogleg.android.DoglegApplication;
 import org.cranst0n.dogleg.android.R;
-import org.cranst0n.dogleg.android.backend.Authentication;
 import org.cranst0n.dogleg.android.backend.BackendResponse;
 import org.cranst0n.dogleg.android.backend.Rounds;
 import org.cranst0n.dogleg.android.fragment.RoundPlayFragment;
@@ -33,7 +32,6 @@ import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.RoundHandicapResponse;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.BusProvider;
-import org.cranst0n.dogleg.android.utils.Dialogs;
 import org.cranst0n.dogleg.android.utils.Json;
 import org.cranst0n.dogleg.android.utils.Locations;
 import org.cranst0n.dogleg.android.views.HoleScoreDialogs;
@@ -189,16 +187,8 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
 
   @Override
   public boolean onCreateOptionsMenu(final Menu menu) {
-    getMenuInflater().inflate(R.menu.login_menu, menu);
     getMenuInflater().inflate(R.menu.play_round_menu, menu);
     return super.onCreateOptionsMenu(menu);
-  }
-
-  @Override
-  public boolean onPrepareOptionsMenu(final Menu menu) {
-    menu.setGroupVisible(R.id.group_logged_out, !currentUser.isValid());
-    menu.setGroupVisible(R.id.group_logged_in, currentUser.isValid());
-    return super.onPrepareOptionsMenu(menu);
   }
 
   @Override
@@ -207,14 +197,6 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
       // Respond to the action bar's Up/Home button
       case android.R.id.home: {
         backPressed();
-        return true;
-      }
-      case R.id.action_login: {
-        Dialogs.showLoginDialog(this);
-        return true;
-      }
-      case R.id.action_logout: {
-        new Authentication(this).logout();
         return true;
       }
       case R.id.action_settings: {

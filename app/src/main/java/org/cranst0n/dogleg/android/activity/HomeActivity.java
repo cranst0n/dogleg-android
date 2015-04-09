@@ -2,9 +2,6 @@ package org.cranst0n.dogleg.android.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
 import com.koushikdutta.ion.Ion;
 import com.nispok.snackbar.Snackbar;
@@ -16,12 +13,9 @@ import com.squareup.otto.Subscribe;
 import org.cranst0n.dogleg.android.DoglegApplication;
 import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.backend.Authentication;
-import org.cranst0n.dogleg.android.backend.BackendMessage;
-import org.cranst0n.dogleg.android.backend.BackendResponse;
 import org.cranst0n.dogleg.android.fragment.HomeFragment;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.BusProvider;
-import org.cranst0n.dogleg.android.utils.Dialogs;
 import org.cranst0n.dogleg.android.utils.SnackBars;
 
 public class HomeActivity extends BaseActivity {
@@ -59,43 +53,6 @@ public class HomeActivity extends BaseActivity {
     bus.unregister(this);
 
     Ion.getDefault(this).cancelAll(this);
-  }
-
-  @Override
-  public boolean onCreateOptionsMenu(final Menu menu) {
-    MenuInflater inflater = getMenuInflater();
-    inflater.inflate(R.menu.login_menu, menu);
-    return super.onCreateOptionsMenu(menu);
-  }
-
-  @Override
-  public boolean onPrepareOptionsMenu(final Menu menu) {
-
-    menu.setGroupVisible(R.id.group_logged_out, !currentUser.isValid());
-    menu.setGroupVisible(R.id.group_logged_in, currentUser.isValid());
-
-    return true;
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(final MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.action_login: {
-        Dialogs.showLoginDialog(this);
-        return true;
-      }
-      case R.id.action_logout: {
-        authentication.logout().onSuccess(new BackendResponse.BackendSuccessListener<BackendMessage>() {
-          @Override
-          public void onSuccess(final BackendMessage value) {
-            SnackBars.showSimple(HomeActivity.this, value.message);
-          }
-        });
-        return true;
-      }
-      default:
-        return super.onOptionsItemSelected(item);
-    }
   }
 
   @Override

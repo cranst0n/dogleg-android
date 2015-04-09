@@ -490,7 +490,6 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
             .title("Shot Caddy Settings")
             .customView(R.layout.dialog_shot_settings, true)
             .positiveText("Ok")
-            .negativeText(android.R.string.cancel)
             .build();
 
         final CheckBox keepScreenOnBox = (CheckBox) dialog.getCustomView().findViewById(R.id
@@ -502,7 +501,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
         keepScreenOnBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
           @Override
           public void onCheckedChanged(final CompoundButton compoundButton, boolean isChecked) {
-            if(isChecked) {
+            if (isChecked) {
               activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             } else {
               activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,10 +30,12 @@ import org.cranst0n.dogleg.android.activity.HomeActivity;
 import org.cranst0n.dogleg.android.activity.SettingsActivity;
 import org.cranst0n.dogleg.android.activity.ShotCaddySetupActivity;
 import org.cranst0n.dogleg.android.adapter.DrawerMenuAdapter;
+import org.cranst0n.dogleg.android.backend.Authentication;
 import org.cranst0n.dogleg.android.backend.Users;
 import org.cranst0n.dogleg.android.collections.SortedList;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.BusProvider;
+import org.cranst0n.dogleg.android.utils.Dialogs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,10 +59,11 @@ public class DrawerFragment extends BaseFragment {
   private DrawerMenuAdapter drawerListAdapter;
   private List<DrawerMenuItem> drawerListItems = new SortedList<>();
 
-  private View userInfoView;
   private CircleImageView userAvatarImage;
   private TextView usernameText;
   private TextView emailText;
+  private Button loginButton;
+  private Button logoutButton;
 
   private View fragmentContainerView;
   private int currentSelectedPosition = 0;
@@ -146,14 +150,34 @@ public class DrawerFragment extends BaseFragment {
     drawerListView.setAdapter(drawerListAdapter);
     drawerListView.setItemChecked(currentSelectedPosition, true);
 
-    userInfoView = drawerMainLayout.findViewById(R.id.user_info);
     userAvatarImage = (CircleImageView) drawerMainLayout.findViewById(R.id.user_avatar);
     usernameText = (TextView) drawerMainLayout.findViewById(R.id.username_text);
     emailText = (TextView) drawerMainLayout.findViewById(R.id.email_text);
+    loginButton = (Button) drawerMainLayout.findViewById(R.id.login_button);
+    logoutButton = (Button) drawerMainLayout.findViewById(R.id.logout_button);
 
-    userInfoView.setVisibility(currentUser.isValid() ? View.VISIBLE : View.GONE);
+    userAvatarImage.setVisibility(currentUser.isValid() ? View.VISIBLE : View.INVISIBLE);
+    usernameText.setVisibility(currentUser.isValid() ? View.VISIBLE : View.INVISIBLE);
+    emailText.setVisibility(currentUser.isValid() ? View.VISIBLE : View.INVISIBLE);
+    logoutButton.setVisibility(currentUser.isValid() ? View.VISIBLE : View.GONE);
+    loginButton.setVisibility(currentUser.isValid() ? View.GONE : View.VISIBLE);
+
     usernameText.setText(currentUser.name);
     emailText.setText(currentUser.email);
+
+    logoutButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(final View view) {
+        new Authentication(context).logout();
+      }
+    });
+
+    loginButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(final View view) {
+        Dialogs.showLoginDialog(activity);
+      }
+    });
 
     loadUserAvatar();
 
@@ -222,8 +246,14 @@ public class DrawerFragment extends BaseFragment {
       }
     }
 
-    if (userInfoView != null) {
-      userInfoView.setVisibility(user.isValid() ? View.VISIBLE : View.GONE);
+    if (usernameText != null) {
+
+      userAvatarImage.setVisibility(currentUser.isValid() ? View.VISIBLE : View.INVISIBLE);
+      usernameText.setVisibility(currentUser.isValid() ? View.VISIBLE : View.INVISIBLE);
+      emailText.setVisibility(currentUser.isValid() ? View.VISIBLE : View.INVISIBLE);
+      logoutButton.setVisibility(currentUser.isValid() ? View.VISIBLE : View.GONE);
+      loginButton.setVisibility(currentUser.isValid() ? View.GONE : View.VISIBLE);
+
       usernameText.setText(user.name);
       emailText.setText(user.email);
     }
