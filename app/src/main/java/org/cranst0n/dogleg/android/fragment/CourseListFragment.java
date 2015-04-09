@@ -69,6 +69,7 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
   private final List<CourseSummary> displayedCourseList = new ArrayList<>();
 
   private int previousTotal = 0;
+  private int lastKnownFirstPosition;
   private boolean loading = true;
   private boolean endOfListReached = false;
   private final int visibleThreshold = 5;
@@ -120,7 +121,6 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
 
     initRecyclerView();
 
-    fab.attachToRecyclerView(recyclerView);
     fab.setVisibility(currentUser.isValid() ? View.VISIBLE : View.GONE);
     fab.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -225,11 +225,20 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
 
       @Override
       public void onScrolled(final RecyclerView recyclerView, final int dx, final int dy) {
+
         super.onScrolled(recyclerView, dx, dy);
 
         visibleItemCount = CourseListFragment.this.recyclerView.getChildCount();
         totalItemCount = layoutManager.getItemCount();
         firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+
+        if (layoutManager.findFirstVisibleItemPosition() > lastKnownFirstPosition) {
+          fab.hide();
+        } else if (layoutManager.findFirstVisibleItemPosition() < lastKnownFirstPosition) {
+          fab.show();
+        }
+
+        lastKnownFirstPosition = layoutManager.findFirstVisibleItemPosition();
 
         if (loading) {
           if (totalItemCount > previousTotal) {
