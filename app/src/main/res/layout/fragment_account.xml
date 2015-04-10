@@ -48,7 +48,8 @@
                     android:layout_width="72dp"
                     android:layout_height="72dp"
                     android:layout_weight="1"
-                    android:layout_margin="@dimen/margin_eight"/>
+                    android:layout_margin="@dimen/margin_eight"
+                    android:src="@drawable/default_avatar"/>
 
                 <Button
                     android:id="@+id/change_avatar_button"

@@ -34,8 +34,11 @@ import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.BusProvider;
 import org.cranst0n.dogleg.android.utils.Json;
 import org.cranst0n.dogleg.android.utils.Locations;
+import org.cranst0n.dogleg.android.utils.Threads;
 import org.cranst0n.dogleg.android.views.HoleScoreDialogs;
 import org.cranst0n.dogleg.android.views.RoundSettingsDialog;
+
+import java.util.concurrent.Callable;
 
 public class RoundPlayActivity extends BaseActivity implements LocationListener,
     RoundPlayFragment.PlayRoundListener {
@@ -414,6 +417,11 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
   }
 
   private void backupRoundData(final Round round) {
-    rounds.backupRoundData(round);
+    Threads.background(new Callable<Boolean>() {
+      @Override
+      public Boolean call() throws Exception {
+        return rounds.backupRoundData(round);
+      }
+    });
   }
 }
