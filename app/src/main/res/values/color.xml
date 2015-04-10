@@ -17,6 +17,7 @@
 
     <color name="text_grey">#757575</color>
     <color name="text_light_grey">#acacac</color>
+    <color name="text_lighter_grey">#dcdcdc</color>
 
     <color name="drawer_text">@color/text_grey</color>
 

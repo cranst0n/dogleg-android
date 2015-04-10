@@ -2,8 +2,8 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:paddingTop="@dimen/padding_sixteen"
-              android:paddingBottom="@dimen/padding_sixteen"
+              android:paddingTop="@dimen/padding_twelve"
+              android:paddingBottom="@dimen/padding_twelve"
               android:paddingLeft="@dimen/padding_sixteen"
               android:background="@android:color/white"
               tools:context=".DrawerMenuComp">
@@ -12,14 +12,15 @@
         android:id="@+id/drawer_menu_item_icon"
         android:layout_width="@dimen/twenty_eight"
         android:layout_height="match_parent"
-        android:layout_marginRight="@dimen/margin_eight"
+        android:layout_marginRight="@dimen/margin_sixteen"
         android:src="@drawable/ic_action_settings"/>
 
     <TextView
         android:id="@+id/drawer_menu_item_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:gravity="center_vertical"
         android:textColor="@color/drawer_text"
         tools:text="Menu"/>
 
@@ -31,8 +32,8 @@
         android:layout_marginRight="@dimen/margin_eight"
         android:paddingTop="@dimen/padding_two"
         android:paddingBottom="@dimen/padding_two"
-        android:paddingLeft="@dimen/padding_sixteen"
-        android:paddingRight="@dimen/padding_sixteen"
+        android:paddingLeft="@dimen/padding_eight"
+        android:paddingRight="@dimen/padding_eight"
         android:background="@color/experimental"
         android:textSize="@dimen/text_size_ten"
         android:textColor="@android:color/white"

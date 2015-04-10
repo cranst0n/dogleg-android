@@ -35,7 +35,7 @@
         android:visibility="gone"
         fab:fab_colorNormal="@color/accent"
         fab:fab_colorPressed="@color/accent_dark"
-        fab:fab_colorRipple="@color/ripple" />
+        fab:fab_colorRipple="@color/ripple"/>
 
     <TextView
         android:id="@+id/course_list_none_indicator"

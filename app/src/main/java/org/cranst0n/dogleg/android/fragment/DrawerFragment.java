@@ -14,8 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.koushikdutta.async.future.FutureCallback;
@@ -32,7 +32,6 @@ import org.cranst0n.dogleg.android.activity.ShotCaddySetupActivity;
 import org.cranst0n.dogleg.android.adapter.DrawerMenuAdapter;
 import org.cranst0n.dogleg.android.backend.Authentication;
 import org.cranst0n.dogleg.android.backend.Users;
-import org.cranst0n.dogleg.android.collections.SortedList;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.BusProvider;
 import org.cranst0n.dogleg.android.utils.Dialogs;
@@ -43,7 +42,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DrawerFragment extends BaseFragment {
+public class DrawerFragment extends BaseFragment implements AdapterView.OnItemClickListener {
 
   private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
 
@@ -54,10 +53,10 @@ public class DrawerFragment extends BaseFragment {
   private ActionBarDrawerToggle drawerToggle;
   private DrawerLayout drawerLayout;
 
-  private RelativeLayout drawerMainLayout;
-  private ListView drawerListView;
-  private DrawerMenuAdapter drawerListAdapter;
-  private List<DrawerMenuItem> drawerListItems = new SortedList<>();
+  private LinearLayout drawerMainLayout;
+  private ListView drawerGeneralListView;
+  private ListView drawerUserListView;
+  private ListView drawerSettingsListView;
 
   private CircleImageView userAvatarImage;
   private TextView usernameText;
@@ -85,7 +84,10 @@ public class DrawerFragment extends BaseFragment {
       new DrawerMenuItem(R.drawable.ic_action_settings, "Settings", 1000, SettingsActivity.class);
 
   public final List<DrawerMenuItem> defaultMenuItems =
-      new ArrayList<>(Arrays.asList(homeItem, shotCaddyItem, settingsItem));
+      new ArrayList<>(Arrays.asList(homeItem, shotCaddyItem));
+
+  public final List<DrawerMenuItem> settingsMenuItems =
+      new ArrayList<>(Arrays.asList(settingsItem));
 
   public final List<DrawerMenuItem> userMenuItems =
       new ArrayList<>(Arrays.asList(accountItem));
@@ -114,41 +116,45 @@ public class DrawerFragment extends BaseFragment {
     bus.unregister(this);
   }
 
+  public void onItemClick(final AdapterView<?> parent, final View view, final int position,
+                          long id) {
+
+    currentSelectedPosition = position;
+
+    if (drawerGeneralListView != null) {
+      drawerGeneralListView.setItemChecked(position, true);
+    }
+    if (drawerLayout != null) {
+      drawerLayout.closeDrawer(fragmentContainerView);
+    }
+
+    if (view.getTag() instanceof DrawerMenuAdapter.ViewHolder) {
+      DrawerMenuItem clickedItem = ((DrawerMenuAdapter.ViewHolder) view.getTag()).menuItem;
+
+      if (clickedItem != null) {
+        new Handler().post(clickedItem.action);
+      }
+    }
+  }
+
   @Override
   public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                            final Bundle savedInstanceState) {
 
-    drawerMainLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_drawer_menu, container, false);
-    drawerListView = (ListView) drawerMainLayout.findViewById(R.id.fragment_drawerMenu_listView);
+    drawerMainLayout = (LinearLayout) inflater.inflate(R.layout.fragment_drawer_menu, container, false);
 
-    drawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-      @Override
-      public void onItemClick(final AdapterView<?> parent, final View view, final int position,
-                              long id) {
+    drawerGeneralListView = (ListView) drawerMainLayout.findViewById(R.id.drawer_general_items_list);
+    drawerUserListView = (ListView) drawerMainLayout.findViewById(R.id.drawer_user_items_list);
+    drawerSettingsListView = (ListView) drawerMainLayout.findViewById(R.id
+        .drawer_settings_items_list);
 
-        currentSelectedPosition = position;
+    drawerGeneralListView.setOnItemClickListener(this);
+    drawerUserListView.setOnItemClickListener(this);
+    drawerSettingsListView.setOnItemClickListener(this);
 
-        if (drawerListView != null) {
-          drawerListView.setItemChecked(position, true);
-        }
-        if (drawerLayout != null) {
-          drawerLayout.closeDrawer(fragmentContainerView);
-        }
-
-        if (view.getTag() instanceof DrawerMenuAdapter.ViewHolder) {
-          DrawerMenuItem clickedItem = ((DrawerMenuAdapter.ViewHolder) view.getTag()).menuItem;
-
-          if (clickedItem != null) {
-            new Handler().post(clickedItem.action);
-          }
-        }
-      }
-    });
-
-    drawerListItems.addAll(defaultMenuItems);
-    drawerListAdapter = new DrawerMenuAdapter(context, drawerListItems);
-    drawerListView.setAdapter(drawerListAdapter);
-    drawerListView.setItemChecked(currentSelectedPosition, true);
+    drawerGeneralListView.setAdapter(new DrawerMenuAdapter(context, defaultMenuItems));
+    drawerUserListView.setAdapter(new DrawerMenuAdapter(context, userMenuItems));
+    drawerSettingsListView.setAdapter(new DrawerMenuAdapter(context, settingsMenuItems));
 
     userAvatarImage = (CircleImageView) drawerMainLayout.findViewById(R.id.user_avatar);
     usernameText = (TextView) drawerMainLayout.findViewById(R.id.username_text);
@@ -234,17 +240,14 @@ public class DrawerFragment extends BaseFragment {
 
     this.currentUser = user;
 
-    drawerListItems.removeAll(userMenuItems);
-    drawerListItems.removeAll(adminMenuItems);
+    userMenuItems.removeAll(adminMenuItems);
 
     if (user.isValid()) {
 
       loadUserAvatar();
 
-      drawerListItems.addAll(userMenuItems);
-
       if (user.admin) {
-        drawerListItems.addAll(adminMenuItems);
+        userMenuItems.addAll(adminMenuItems);
       }
     }
 
@@ -260,8 +263,13 @@ public class DrawerFragment extends BaseFragment {
       emailText.setText(user.email);
     }
 
-    if (drawerListAdapter != null) {
-      drawerListAdapter.notifyDataSetChanged();
+    if (drawerGeneralListView != null) {
+
+      drawerUserListView.setVisibility(user.isValid() ? View.VISIBLE : View.GONE);
+
+      ((DrawerMenuAdapter) drawerGeneralListView.getAdapter()).notifyDataSetChanged();
+      ((DrawerMenuAdapter) drawerUserListView.getAdapter()).notifyDataSetChanged();
+      ((DrawerMenuAdapter) drawerSettingsListView.getAdapter()).notifyDataSetChanged();
     }
   }
 

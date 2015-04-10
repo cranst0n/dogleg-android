@@ -1,14 +1,16 @@
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@android:color/white">
 
     <LinearLayout
         android:id="@+id/drawer_image"
         android:layout_width="match_parent"
-        android:layout_height="175dp"
+        android:layout_height="165dp"
         android:layout_alignParentTop="true"
         android:orientation="horizontal"
         android:clickable="true"
@@ -27,8 +29,8 @@
                 android:layout_width="72dp"
                 android:layout_height="72dp"
                 android:layout_weight="1"
-                android:layout_marginBottom="@dimen/margin_twenty_four"
-                android:src="@drawable/grass"/>
+                android:layout_marginBottom="@dimen/margin_twenty"
+                android:src="@drawable/default_avatar"/>
 
             <TextView
                 android:id="@+id/username_text"
@@ -91,15 +93,61 @@
 
     </LinearLayout>
 
-    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/fragment_drawerMenu_listView"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_below="@id/drawer_image"
-              android:background="@android:color/white"
-              android:dividerHeight="0dp"
-              tools:context=".FragmentDrawerMenu"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
 
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <org.cranst0n.dogleg.android.views.FullHeightListView
+                android:id="@+id/drawer_general_items_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_eight"
+                android:layout_marginBottom="@dimen/padding_eight"
+                android:dividerHeight="0dp"
+                android:divider="@null"
+                tools:context=".FragmentDrawerMenu"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/text_lighter_grey"/>
+
+            <org.cranst0n.dogleg.android.views.FullHeightListView
+                android:id="@+id/drawer_user_items_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_eight"
+                android:layout_marginBottom="@dimen/padding_eight"
+                android:dividerHeight="0dp"
+                android:divider="@null"
+                tools:context=".FragmentDrawerMenu"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/text_lighter_grey"/>
+
+    <org.cranst0n.dogleg.android.views.FullHeightListView
+        android:id="@+id/drawer_settings_items_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_eight"
+        android:layout_marginBottom="@dimen/padding_eight"
+        android:layout_gravity="bottom"
+        android:dividerHeight="0dp"
+        android:divider="@null"
+        tools:context=".FragmentDrawerMenu"/>
+
+</LinearLayout>
 

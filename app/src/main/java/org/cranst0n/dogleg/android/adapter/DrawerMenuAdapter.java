@@ -49,7 +49,7 @@ public class DrawerMenuAdapter extends BaseAdapter {
 
       LayoutInflater mInflater =
           (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-      convertView = mInflater.inflate(R.layout.fragment_drawer_menu_item, null);
+      convertView = mInflater.inflate(R.layout.item_drawer_menu, null);
 
       ImageView iconView = (ImageView) convertView.findViewById(R.id.drawer_menu_item_icon);
       TextView titleView = (TextView) convertView.findViewById(R.id.drawer_menu_item_title);
