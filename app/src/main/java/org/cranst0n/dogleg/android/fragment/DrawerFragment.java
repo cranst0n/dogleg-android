@@ -85,10 +85,10 @@ public class DrawerFragment extends BaseFragment {
       new DrawerMenuItem(R.drawable.ic_action_settings, "Settings", 1000, SettingsActivity.class);
 
   public final List<DrawerMenuItem> defaultMenuItems =
-      new ArrayList<>(Arrays.asList(homeItem, settingsItem));
+      new ArrayList<>(Arrays.asList(homeItem, shotCaddyItem, settingsItem));
 
   public final List<DrawerMenuItem> userMenuItems =
-      new ArrayList<>(Arrays.asList(accountItem, shotCaddyItem));
+      new ArrayList<>(Arrays.asList(accountItem));
 
   public final List<DrawerMenuItem> adminMenuItems =
       new ArrayList<>(Arrays.asList(adminItem));
@@ -168,6 +168,7 @@ public class DrawerFragment extends BaseFragment {
     logoutButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(final View view) {
+        drawerLayout.closeDrawer(fragmentContainerView);
         new Authentication(context).logout();
       }
     });
@@ -175,6 +176,7 @@ public class DrawerFragment extends BaseFragment {
     loginButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(final View view) {
+        drawerLayout.closeDrawer(fragmentContainerView);
         Dialogs.showLoginDialog(activity);
       }
     });

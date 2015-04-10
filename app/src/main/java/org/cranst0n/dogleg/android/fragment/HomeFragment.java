@@ -11,10 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.nispok.snackbar.Snackbar;
+import com.nispok.snackbar.SnackbarManager;
+import com.nispok.snackbar.listeners.ActionClickListener;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import org.cranst0n.dogleg.android.R;
+import org.cranst0n.dogleg.android.activity.RoundPlayActivity;
+import org.cranst0n.dogleg.android.backend.Rounds;
 import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.BusProvider;
@@ -51,6 +56,8 @@ public class HomeFragment extends BaseFragment {
 
     loadViewComponents();
 
+    checkForUnfinishedRounds();
+
     return homeView;
   }
 
@@ -81,6 +88,11 @@ public class HomeFragment extends BaseFragment {
         visibleFragments.add(roundsPage);
       }
     } else {
+
+      if(viewPager != null) {
+        viewPager.setCurrentItem(0);
+      }
+
       visibleFragments.remove(roundsPage);
     }
 
@@ -139,6 +151,34 @@ public class HomeFragment extends BaseFragment {
       default: {
         super.onActivityResult(requestCode, resultCode, data);
       }
+    }
+  }
+
+  private void checkForUnfinishedRounds() {
+
+    final Round backedUpRound = new Rounds(context).backedUpRound();
+
+    if (backedUpRound != null) {
+
+      SnackbarManager.show(
+          Snackbar.with(activity)
+              .text("You have an unfinished round.")
+              .actionLabel("Resume")
+              .actionColor(getResources().getColor(R.color.warn))
+              .duration(Snackbar.SnackbarDuration.LENGTH_INDEFINITE)
+              .swipeToDismiss(true)
+              .actionListener(new ActionClickListener() {
+                @Override
+                public void onActionClicked(final Snackbar snackbar) {
+
+                  Intent i = new Intent(activity, RoundPlayActivity.class);
+                  i.putExtra(Round.class.getCanonicalName(), Json.pimpedGson().toJson
+                      (backedUpRound));
+
+                  startActivity(i);
+                }
+              })
+          , activity);
     }
   }
 }

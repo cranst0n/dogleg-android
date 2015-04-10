@@ -20,12 +20,8 @@ import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.koushikdutta.ion.Ion;
-import com.nispok.snackbar.Snackbar;
-import com.nispok.snackbar.SnackbarManager;
-import com.nispok.snackbar.listeners.ActionClickListener;
 
 import org.cranst0n.dogleg.android.R;
-import org.cranst0n.dogleg.android.activity.RoundPlayActivity;
 import org.cranst0n.dogleg.android.activity.RoundShowActivity;
 import org.cranst0n.dogleg.android.backend.BackendResponse;
 import org.cranst0n.dogleg.android.backend.Rounds;
@@ -87,8 +83,6 @@ public class RoundListFragment extends BaseFragment {
     initRecyclerView();
 
     addToRoundList(false);
-
-    checkForUnfinishedRounds();
 
     return roundListView;
   }
@@ -159,34 +153,6 @@ public class RoundListFragment extends BaseFragment {
         }
       }
     });
-  }
-
-  private void checkForUnfinishedRounds() {
-
-    final Round backedUpRound = rounds.backedUpRound();
-
-    if (backedUpRound != null) {
-
-      SnackbarManager.show(
-          Snackbar.with(activity)
-              .text("You have an unfinished round.")
-              .actionLabel("Resume")
-              .actionColor(getResources().getColor(R.color.warn))
-              .duration(Snackbar.SnackbarDuration.LENGTH_INDEFINITE)
-              .swipeToDismiss(true)
-              .actionListener(new ActionClickListener() {
-                @Override
-                public void onActionClicked(final Snackbar snackbar) {
-
-                  Intent i = new Intent(activity, RoundPlayActivity.class);
-                  i.putExtra(Round.class.getCanonicalName(), Json.pimpedGson().toJson
-                      (backedUpRound));
-
-                  startActivity(i);
-                }
-              })
-          , activity);
-    }
   }
 
   private void addToRoundList(final boolean append) {
