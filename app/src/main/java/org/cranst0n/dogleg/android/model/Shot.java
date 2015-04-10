@@ -23,8 +23,12 @@ public class Shot {
   }
 
   public double distance() {
-    double meters = locationStart.toLocation().distanceTo(locationEnd.toLocation());
-    return Units.metersToYards(meters);
+    if(locationStart != null && locationEnd != null) {
+      double meters = locationStart.toLocation().distanceTo(locationEnd.toLocation());
+      return Units.metersToYards(meters);
+    } else {
+      return 0;
+    }
   }
 
   public Shot sequence(final int sequence) {

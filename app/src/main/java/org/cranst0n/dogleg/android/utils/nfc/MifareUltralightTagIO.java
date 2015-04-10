@@ -13,6 +13,7 @@ public class MifareUltralightTagIO implements NfcTagIO<MifareUltralight> {
 
   private final String TAG = getClass().getSimpleName();
 
+  @Override
   public Club readClub(final Tag tag) {
 
     MifareUltralight mifare = MifareUltralight.get(tag);
@@ -20,15 +21,16 @@ public class MifareUltralightTagIO implements NfcTagIO<MifareUltralight> {
     try {
 
       mifare.connect();
+
       return Club.forId(ByteBuffer.wrap(mifare.readPages(4)).getInt());
 
-    } catch (IOException e) {
+    } catch (final IOException e) {
       Log.e(TAG, "IOException while reading MifareUltralight message.", e);
     } finally {
       if (mifare != null) {
         try {
           mifare.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
           Log.e(TAG, "Error closing tag.", e);
         }
       }
@@ -37,6 +39,7 @@ public class MifareUltralightTagIO implements NfcTagIO<MifareUltralight> {
     return Club.Unknown;
   }
 
+  @Override
   public boolean writeClubTag(final Tag tag, final Club club) {
 
     MifareUltralight ultralight = MifareUltralight.get(tag);
@@ -55,13 +58,15 @@ public class MifareUltralightTagIO implements NfcTagIO<MifareUltralight> {
 
       return true;
 
-    } catch (IOException e) {
-      Log.e(TAG, "IOException while closing MifareUltralight...", e);
+    } catch (final IOException e) {
+      Log.e(TAG, "IOException while writing to MifareUltralight.", e);
     } finally {
-      try {
-        ultralight.close();
-      } catch (IOException e) {
-        Log.e(TAG, "IOException while closing MifareUltralight...", e);
+      if(ultralight != null) {
+        try {
+          ultralight.close();
+        } catch (final IOException e) {
+          Log.e(TAG, "IOException while closing MifareUltralight.", e);
+        }
       }
     }
 

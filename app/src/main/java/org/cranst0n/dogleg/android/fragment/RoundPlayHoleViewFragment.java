@@ -38,6 +38,7 @@ import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.RoundStats;
 import org.cranst0n.dogleg.android.model.Shot;
 import org.cranst0n.dogleg.android.model.User;
+import org.cranst0n.dogleg.android.utils.Vibration;
 import org.cranst0n.dogleg.android.utils.Dialogs;
 import org.cranst0n.dogleg.android.utils.SnackBars;
 import org.cranst0n.dogleg.android.utils.nfc.Nfc;
@@ -154,16 +155,21 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
 
     Club club = Nfc.readClubTag(tag);
 
-    if (club != Club.Unknown) {
-      Shot newShot = new Shot(-1, currentHoleScore().shots.size() + 1, club,
-          LatLon.fromLocation(lastKnownLocation()), LatLon.fromLocation
-          (lastKnownLocation()), currentHoleScore().id);
+    if (lastKnownLocation() != null) {
+      if (club != Club.Unknown) {
+        Shot newShot = new Shot(-1, currentHoleScore().shots.size() + 1, club,
+            LatLon.fromLocation(lastKnownLocation()), LatLon.fromLocation
+            (lastKnownLocation()), currentHoleScore().id);
 
-      if (playRoundListener != null) {
-        playRoundListener.updateScore(currentHoleScore().withShot(newShot));
+        if (playRoundListener != null) {
+          playRoundListener.updateScore(currentHoleScore().withShot(newShot));
+          Vibration.vibrate();
+        }
+      } else {
+        SnackBars.showSimple(activity, "Can't add shot: unknown club type.");
       }
     } else {
-      SnackBars.showSimple(activity, "Can't add shot: unknown club type.");
+      SnackBars.showSimple(activity, "Can't add shot without current location.");
     }
   }
 
@@ -540,6 +546,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
 
                   if (playRoundListener != null) {
                     playRoundListener.updateScore(currentHoleScore().withShot(newShot));
+                    Vibration.vibrate();
                   }
 
                   return true;

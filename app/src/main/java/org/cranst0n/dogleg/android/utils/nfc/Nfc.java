@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.MifareUltralight;
+import android.nfc.tech.Ndef;
 import android.nfc.tech.TagTechnology;
 import android.util.Log;
 
@@ -24,6 +25,7 @@ public class Nfc {
   private static final Map<Class<? extends TagTechnology>, NfcTagIO<?>> tagIO = new HashMap<>();
 
   static {
+    tagIO.put(Ndef.class, new NdefTagIO());
     tagIO.put(MifareUltralight.class, new MifareUltralightTagIO());
   }
 

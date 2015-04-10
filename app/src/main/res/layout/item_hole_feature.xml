@@ -17,8 +17,7 @@
             android:id="@+id/hole_feature_image"
             android:layout_width="@dimen/text_size_twenty_four"
             android:layout_height="@dimen/text_size_twenty_four"
-            android:layout_margin="@dimen/margin_four"
-            android:src="@drawable/dogleg"/>
+            android:layout_margin="@dimen/margin_four"/>
 
         <TextView
             android:id="@+id/feature_elevation_difference"
@@ -30,8 +29,7 @@
             android:padding="0dp"
             android:gravity="center"
             android:textColor="@color/text_grey"
-            android:textSize="@dimen/text_size_ten"
-            android:text="+12m"/>
+            android:textSize="@dimen/text_size_ten"/>
 
     </LinearLayout>
 
@@ -49,8 +47,7 @@
             android:layout_marginLeft="@dimen/margin_six"
             android:textColor="@color/text_grey"
             android:textStyle="bold"
-            android:textSize="@dimen/text_size_ten"
-            android:text="Feature name"/>
+            android:textSize="@dimen/text_size_ten"/>
 
         <GridLayout
             android:layout_width="wrap_content"
@@ -67,8 +64,7 @@
                 android:layout_column="0"
                 android:layout_marginRight="@dimen/margin_four"
                 android:textColor="@color/text_grey"
-                android:textSize="@dimen/text_size_ten"
-                android:text="Reach"/>
+                android:textSize="@dimen/text_size_ten"/>
 
             <TextView
                 android:id="@+id/feature_distance_1"
