@@ -56,6 +56,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
   private RoundPlayFragment.PlayRoundListener playRoundListener;
 
   private NfcAdapter nfcAdapter;
+  private boolean autoManageStrokes = true;
 
   private View playRoundHoleView;
 
@@ -153,24 +154,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
 
     Log.d(Tag, "New NFC tag: [" + tag + "]");
 
-    Club club = Nfc.readClubTag(tag);
-
-    if (lastKnownLocation() != null) {
-      if (club != Club.Unknown) {
-        Shot newShot = new Shot(-1, currentHoleScore().shots.size() + 1, club,
-            LatLon.fromLocation(lastKnownLocation()), LatLon.fromLocation
-            (lastKnownLocation()), currentHoleScore().id);
-
-        if (playRoundListener != null) {
-          playRoundListener.updateScore(currentHoleScore().withShot(newShot));
-          Vibration.vibrate();
-        }
-      } else {
-        SnackBars.showSimple(activity, "Can't add shot: unknown club type.");
-      }
-    } else {
-      SnackBars.showSimple(activity, "Can't add shot without current location.");
-    }
+    addShot(Nfc.readClubTag(tag));
   }
 
   public void locationUpdated(final Location location) {
@@ -324,6 +308,43 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     shotListAdapter.shots.clear();
     shotListAdapter.shots.addAll(currentHoleScore().shots);
     shotListAdapter.notifyDataSetChanged();
+  }
+
+  private void addShot(final Club club) {
+
+    if (lastKnownLocation() != null) {
+
+      switch (club) {
+        case Unknown: {
+          SnackBars.showSimple(activity, "Can't add shot: unknown club type.");
+          break;
+        }
+        default: {
+
+          Shot newShot = new Shot(-1, currentHoleScore().shots.size() + 1, club,
+              LatLon.fromLocation(lastKnownLocation()), LatLon.fromLocation
+              (lastKnownLocation()), currentHoleScore().id);
+
+          HoleScore newScore = currentHoleScore().withShot(newShot);
+
+          if(autoManageStrokes) {
+            newScore = newScore.addStroke();
+            if (club == Club.Putter) {
+              newScore = newScore.addPutt();
+            }
+          }
+
+          if (playRoundListener != null) {
+            playRoundListener.updateScore(newScore);
+            Vibration.vibrate();
+          }
+
+          break;
+        }
+      }
+    } else {
+      SnackBars.showSimple(activity, "Can't add shot without current location.");
+    }
   }
 
   private void findViews() {
@@ -493,17 +514,27 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
       public void onClick(final View view) {
 
         MaterialDialog dialog = new MaterialDialog.Builder(activity)
-            .title("Shot Caddy Settings")
+            .title("Shot Settings")
             .customView(R.layout.dialog_shot_settings, true)
             .positiveText("Ok")
             .build();
 
+        final CheckBox autoStrokeBox = (CheckBox) dialog.getCustomView().findViewById(R.id
+            .auto_shot_box);
+
         final CheckBox keepScreenOnBox = (CheckBox) dialog.getCustomView().findViewById(R.id
             .keep_screen_on_box);
 
+        autoStrokeBox.setChecked(autoManageStrokes);
         keepScreenOnBox.setChecked((activity.getWindow().getAttributes().flags & WindowManager
             .LayoutParams.FLAG_KEEP_SCREEN_ON) != 0);
 
+        autoStrokeBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+          @Override
+          public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+            autoManageStrokes = isChecked;
+          }
+        });
         keepScreenOnBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
           @Override
           public void onCheckedChanged(final CompoundButton compoundButton, boolean isChecked) {
@@ -537,18 +568,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
                 @Override
                 public boolean onSelection(final MaterialDialog materialDialog, final View view,
                                            final int i, final CharSequence charSequence) {
-
-                  Club selectedClub = Club.values()[i];
-
-                  Shot newShot = new Shot(-1, currentHoleScore().shots.size() + 1, selectedClub,
-                      LatLon.fromLocation(lastKnownLocation()), LatLon.fromLocation
-                      (lastKnownLocation()), currentHoleScore().id);
-
-                  if (playRoundListener != null) {
-                    playRoundListener.updateScore(currentHoleScore().withShot(newShot));
-                    Vibration.vibrate();
-                  }
-
+                  addShot(Club.values()[i]);
                   return true;
                 }
               }).show();
@@ -748,7 +768,18 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
         @Override
         public void onClick(final View view) {
           if (playRoundListener != null) {
-            playRoundListener.updateScore(currentHoleScore().removeShot(itemShot));
+
+            HoleScore newScore = currentHoleScore().removeShot(itemShot);
+
+            if(autoManageStrokes) {
+              newScore = newScore.subtractStroke();
+
+              if(itemShot.club == Club.Putter) {
+                newScore = newScore.subtractPutt();
+              }
+            }
+
+            playRoundListener.updateScore(newScore);
           }
         }
       });
