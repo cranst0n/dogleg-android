@@ -35,8 +35,11 @@
     <string name="com.google.android.maps.v2.API_KEY">AIzaSyAyCP_wYA3fMnHtKrJRYMeefoqyxkTyAb0</string>
 
     <string name="shot_caddy_intro">
-        Here you can assign clubs to NFC tags on your clubs so that during a round, tapping the tag
-        against your phone will record a shot with that club at your current location.
+        Assign clubs to NFC tags on your clubs so that during a round, tapping the tag against
+        your phone will record a shot with that club at your current location. You can also
+        assign \'Finish Hole\' to a tag that will record the hole location of where you
+        (hopefully) made your last putt and will advance the app to the next hole. This tag could
+        be worn on your glove, bracelet, etc.
         \n\
         \n\
         To assign a club to an NFC tag, select the \'Write\' mode button and select the club type
