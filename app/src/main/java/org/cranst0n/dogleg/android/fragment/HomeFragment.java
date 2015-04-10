@@ -89,7 +89,7 @@ public class HomeFragment extends BaseFragment {
       }
     } else {
 
-      if(viewPager != null) {
+      if (viewPager != null) {
         viewPager.setCurrentItem(0);
       }
 

@@ -61,7 +61,7 @@ public class MifareUltralightTagIO implements NfcTagIO<MifareUltralight> {
     } catch (final IOException e) {
       Log.e(TAG, "IOException while writing to MifareUltralight.", e);
     } finally {
-      if(ultralight != null) {
+      if (ultralight != null) {
         try {
           ultralight.close();
         } catch (final IOException e) {

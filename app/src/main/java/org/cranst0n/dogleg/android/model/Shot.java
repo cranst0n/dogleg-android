@@ -22,10 +22,17 @@ public class Shot {
     this.holeScoreId = holeScoreId;
   }
 
-  public double distance() {
-    if(locationStart != null && locationEnd != null) {
-      double meters = locationStart.toLocation().distanceTo(locationEnd.toLocation());
-      return Units.metersToYards(meters);
+  public double distanceYards() {
+    return Units.metersToYards(distanceMeters());
+  }
+
+  public double distanceFeet() {
+    return Units.metersToFeet(distanceMeters());
+  }
+
+  public double distanceMeters() {
+    if (locationStart != null && locationEnd != null) {
+      return locationStart.toLocation().distanceTo(locationEnd.toLocation());
     } else {
       return 0;
     }

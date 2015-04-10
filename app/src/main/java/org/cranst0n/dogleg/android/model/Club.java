@@ -5,6 +5,7 @@ import org.cranst0n.dogleg.android.utils.Strings;
 public enum Club {
 
   Driver(0, "Driver"),
+  // Woods
   Wood2(102, "2 Wood"),
   Wood3(103, "3 Wood"),
   Wood4(104, "4 Wood"),
@@ -12,6 +13,7 @@ public enum Club {
   Wood7(107, "7 Wood"),
   Wood9(109, "9 Wood"),
   Wood11(111, "11 Wood"),
+  // Hybrids
   Hybrid2(202, "2 Hybrid"),
   Hybrid3(203, "3 Hybrid"),
   Hybrid4(204, "4 Hybrid"),
@@ -20,6 +22,7 @@ public enum Club {
   Hybrid7(207, "7 Hybrid"),
   Hybrid8(208, "8 Hybrid"),
   Hybrid9(209, "9 Hybrid"),
+  // Irons
   Iron1(301, "1 Iron"),
   Iron2(302, "2 Iron"),
   Iron3(303, "3 Iron"),
@@ -29,6 +32,7 @@ public enum Club {
   Iron7(307, "7 Iron"),
   Iron8(308, "8 Iron"),
   Iron9(309, "9 Iron"),
+  // Wedges
   Wedge50(450, String.format("50%s Wedge", Strings.DEGREE)),
   Wedge52(452, String.format("52%s Wedge", Strings.DEGREE)),
   Wedge54(454, String.format("54%s Wedge", Strings.DEGREE)),
@@ -38,7 +42,9 @@ public enum Club {
   Wedge62(462, String.format("62%s Wedge", Strings.DEGREE)),
   Wedge64(464, String.format("64%s Wedge", Strings.DEGREE)),
   Putter(500, "Putter"),
-  Unknown(1000, "Unknown");
+  Unknown(1000, "Unknown"),
+  // Other Actions
+  FinishHole(2000, "Finish Hole");
 
   private Club(final int id, final String name) {
     this.id = id;

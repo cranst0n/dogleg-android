@@ -112,7 +112,7 @@ public class HoleScore implements Comparable<HoleScore> {
     newShots.add(shot);
 
     return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gir,
-        validatedShots(newShots), hole);
+        validatedShots(newShots, false), hole);
   }
 
   public final HoleScore removeShot(final Shot shot) {
@@ -120,10 +120,10 @@ public class HoleScore implements Comparable<HoleScore> {
     newShots.remove(shot);
 
     return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gir,
-        validatedShots(newShots), hole);
+        validatedShots(newShots, true), hole);
   }
 
-  private List<Shot> validatedShots(final List<Shot> shots) {
+  private List<Shot> validatedShots(final List<Shot> shots, final boolean shotRemoved) {
     List<Shot> validated = new ArrayList<>();
 
     for (int ix = 0; ix < shots.size(); ix++) {
@@ -132,8 +132,10 @@ public class HoleScore implements Comparable<HoleScore> {
 
       if (ix < shots.size() - 1) {
         validated.add(sequenced.locationEnd(shots.get(ix + 1).locationStart));
-      } else {
+      } else if (shotRemoved) {
         validated.add(sequenced.locationEnd(sequenced.locationStart));
+      } else {
+        validated.add(sequenced);
       }
     }
 

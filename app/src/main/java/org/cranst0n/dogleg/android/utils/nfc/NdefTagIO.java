@@ -19,7 +19,7 @@ public class NdefTagIO implements NfcTagIO<Ndef> {
 
   @Override
   public Club readClub(final Tag tag) {
-    
+
     Ndef ndefTag = Ndef.get(tag);
 
     try {
@@ -27,9 +27,9 @@ public class NdefTagIO implements NfcTagIO<Ndef> {
       ndefTag.connect();
       NdefMessage ndefMessage = ndefTag.getNdefMessage();
 
-      if(ndefMessage != null) {
+      if (ndefMessage != null) {
         NdefRecord[] ndefRecords = ndefMessage.getRecords();
-        if(ndefRecords.length > 0) {
+        if (ndefRecords.length > 0) {
 
           int clubId = ByteBuffer.wrap(ndefRecords[0].getPayload()).getInt();
           return Club.forId(clubId);
@@ -46,7 +46,7 @@ public class NdefTagIO implements NfcTagIO<Ndef> {
     } catch (final FormatException e) {
       e.printStackTrace();
     } finally {
-      if(ndefTag != null) {
+      if (ndefTag != null) {
         try {
           ndefTag.close();
         } catch (IOException e) {
@@ -64,13 +64,12 @@ public class NdefTagIO implements NfcTagIO<Ndef> {
     Ndef ndefTag = Ndef.get(tag);
 
     NdefRecord ndefRecord = new NdefRecord(
-        NdefRecord.TNF_MIME_MEDIA ,
+        NdefRecord.TNF_MIME_MEDIA,
         "application/org.cranst0n.dogleg.android".getBytes(Charset.forName("US-ASCII")),
         new byte[0], ByteBuffer.allocate(4).putInt(club.id).array());
 
-    NdefMessage ndefMessage = new NdefMessage(new NdefRecord[] {
-        ndefRecord,
-        NdefRecord.createApplicationRecord("org.cranst0n.dogleg.android")
+    NdefMessage ndefMessage = new NdefMessage(new NdefRecord[]{
+        ndefRecord
     });
 
     try {
@@ -86,7 +85,7 @@ public class NdefTagIO implements NfcTagIO<Ndef> {
     } catch (final FormatException e) {
       Log.e(TAG, "FormatException while writing to Ndef tag.", e);
     } finally {
-      if(ndefTag != null) {
+      if (ndefTag != null) {
         try {
           ndefTag.close();
         } catch (IOException e) {

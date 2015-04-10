@@ -38,9 +38,9 @@ import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.RoundStats;
 import org.cranst0n.dogleg.android.model.Shot;
 import org.cranst0n.dogleg.android.model.User;
-import org.cranst0n.dogleg.android.utils.Vibration;
 import org.cranst0n.dogleg.android.utils.Dialogs;
 import org.cranst0n.dogleg.android.utils.SnackBars;
+import org.cranst0n.dogleg.android.utils.Vibration;
 import org.cranst0n.dogleg.android.utils.nfc.Nfc;
 import org.cranst0n.dogleg.android.views.HoleFeatureItem;
 
@@ -312,7 +312,27 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
 
   private void addShot(final Club club) {
 
-    if (lastKnownLocation() != null) {
+    if (club == Club.FinishHole) {
+
+      if (lastKnownLocation() != null) {
+        if (!currentHoleScore().shots.isEmpty()) {
+
+          Shot lastShot = currentHoleScore().shots.get(currentHoleScore().shots.size() - 1);
+          Shot finishedShot = lastShot.locationEnd(LatLon.fromLocation(lastKnownLocation()));
+
+          HoleScore finishedScore = currentHoleScore().removeShot(lastShot).withShot(finishedShot);
+
+          if (playRoundListener != null) {
+            playRoundListener.updateScore(finishedScore);
+          }
+        }
+      }
+
+      if (playRoundListener != null) {
+        playRoundListener.nextHole();
+      }
+
+    } else if (lastKnownLocation() != null) {
 
       switch (club) {
         case Unknown: {
@@ -327,7 +347,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
 
           HoleScore newScore = currentHoleScore().withShot(newShot);
 
-          if(autoManageStrokes) {
+          if (autoManageStrokes) {
             newScore = newScore.addStroke();
             if (club == Club.Putter) {
               newScore = newScore.addPutt();
@@ -758,8 +778,17 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
 
       clubNameView.setText(shots.get(position).club.name);
 
-      if (itemShot.distance() > 0) {
-        distanceView.setText(String.format("%s yards", Math.round(itemShot.distance())));
+      if (itemShot.distanceMeters() > 0) {
+        switch (itemShot.club) {
+          case Putter: {
+            distanceView.setText(String.format("%s feet", Math.round(itemShot.distanceFeet())));
+            break;
+          }
+          default: {
+            distanceView.setText(String.format("%s yards", Math.round(itemShot.distanceYards())));
+            break;
+          }
+        }
       } else {
         distanceView.setText("");
       }
@@ -771,10 +800,10 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
 
             HoleScore newScore = currentHoleScore().removeShot(itemShot);
 
-            if(autoManageStrokes) {
+            if (autoManageStrokes) {
               newScore = newScore.subtractStroke();
 
-              if(itemShot.club == Club.Putter) {
+              if (itemShot.club == Club.Putter) {
                 newScore = newScore.subtractPutt();
               }
             }
