@@ -178,12 +178,15 @@ public class RoundPlayFragment extends BaseFragment {
 
   public void holeUpdated(final int currentHole) {
     if (isAdded()) {
+
+      HoleRating currentHoleRating = currentHoleRating();
+
       currentHoleView.setText(String.valueOf(currentHole));
       currentHoleSuffixView.setText(
           Html.fromHtml(String.format("<sup>%s</sup>", Strings.numberSuffix(currentHole))));
-      currentHoleParView.setText(String.format("Par %d", currentHoleRating().par));
-      currentHoleYardageView.setText(String.format("%d yards", currentHoleRating().yardage));
-      currentHoleHandicapView.setText(String.format("HCP #%d", currentHoleRating().handicap));
+      currentHoleParView.setText(String.format("Par %d", currentHoleRating.par));
+      currentHoleYardageView.setText(String.format("%d yards", currentHoleRating.yardage));
+      currentHoleHandicapView.setText(String.format("HCP #%d", currentHoleRating.handicap));
     }
   }
 

@@ -213,24 +213,26 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
 
     if (isAdded()) {
 
-      currentHoleScoreView.setText(String.valueOf(currentHoleScore().score));
-      currentHolePuttsView.setText(String.valueOf(currentHoleScore().putts));
-      currentHolePenaltiesView.setText(String.valueOf(currentHoleScore().penaltyStrokes));
-      currentHoleFairwayHitBox.setChecked(currentHoleScore().fairwayHit);
-      currentHoleGirBox.setChecked(currentHoleScore().gir);
+      HoleScore currentHoleScore = currentHoleScore();
+      boolean holeIncluded = round().holeSet().includes(currentHole);
 
-      currentHoleScoreIncrementBtn.setEnabled(round().holeSet().includes(currentHole));
-      currentHoleScoreDecrementBtn.setEnabled(round().holeSet().includes(currentHole));
-      currentHolePuttsIncrementBtn.setEnabled(round().holeSet().includes(currentHole));
-      currentHolePuttsDecrementBtn.setEnabled(round().holeSet().includes(currentHole));
-      currentHolePenaltiesIncrementBtn.setEnabled(round().holeSet().includes(currentHole));
-      currentHolePenaltiesDecrementBtn.setEnabled(round().holeSet().includes(currentHole));
-      currentHoleFairwayHitBox.setEnabled(
-          round().holeSet().includes(currentHole) && currentHoleRating().par > 3);
-      currentHoleGirBox.setEnabled(round().holeSet().includes(currentHole));
+      currentHoleScoreView.setText(String.valueOf(currentHoleScore.score));
+      currentHolePuttsView.setText(String.valueOf(currentHoleScore.putts));
+      currentHolePenaltiesView.setText(String.valueOf(currentHoleScore.penaltyStrokes));
+      currentHoleFairwayHitBox.setChecked(currentHoleScore.fairwayHit);
+      currentHoleGirBox.setChecked(currentHoleScore.gir);
+
+      currentHoleScoreIncrementBtn.setEnabled(holeIncluded);
+      currentHoleScoreDecrementBtn.setEnabled(holeIncluded);
+      currentHolePuttsIncrementBtn.setEnabled(holeIncluded);
+      currentHolePuttsDecrementBtn.setEnabled(holeIncluded);
+      currentHolePenaltiesIncrementBtn.setEnabled(holeIncluded);
+      currentHolePenaltiesDecrementBtn.setEnabled(holeIncluded);
+      currentHoleFairwayHitBox.setEnabled(holeIncluded && currentHoleRating().par > 3);
+      currentHoleGirBox.setEnabled(holeIncluded);
 
       featureListAdapter.features.clear();
-      featureListAdapter.features.addAll(currentHoleScore().hole.displayableFeatures());
+      featureListAdapter.features.addAll(currentHoleScore.hole.displayableFeatures());
       featureListAdapter.notifyDataSetChanged();
 
       updateStats();
