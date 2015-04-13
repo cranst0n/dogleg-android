@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.activity.RoundPlayActivity;
 import org.cranst0n.dogleg.android.model.Round;
-import org.cranst0n.dogleg.android.views.SimpleCheckbox;
+import org.cranst0n.dogleg.android.views.TextlessCheckbox;
 
 public class RoundPlayScorecardFragment extends ScorecardFragment {
 
@@ -64,18 +64,18 @@ public class RoundPlayScorecardFragment extends ScorecardFragment {
         }
       });
 
-      holeFieldViews[holeNumber - holeStart()].fairwayHit.setOnCheckedChangeListener(new SimpleCheckbox.OnCheckedChangeListener() {
+      holeFieldViews[holeNumber - holeStart()].fairwayHit.setOnCheckedChangeListener(new TextlessCheckbox.OnCheckedChangeListener() {
         @Override
-        public void onCheckedChanged(final SimpleCheckbox buttonView, final boolean isChecked) {
+        public void onCheckedChanged(final TextlessCheckbox buttonView, final boolean isChecked) {
           if (playRoundListener != null) {
             playRoundListener.updateScore(round().holeScore(holeNumber).fairwayHit(isChecked));
           }
         }
       });
 
-      holeFieldViews[holeNumber - holeStart()].gir.setOnCheckedChangeListener(new SimpleCheckbox.OnCheckedChangeListener() {
+      holeFieldViews[holeNumber - holeStart()].gir.setOnCheckedChangeListener(new TextlessCheckbox.OnCheckedChangeListener() {
         @Override
-        public void onCheckedChanged(final SimpleCheckbox buttonView, final boolean isChecked) {
+        public void onCheckedChanged(final TextlessCheckbox buttonView, final boolean isChecked) {
           if (playRoundListener != null) {
             playRoundListener.updateScore(round().holeScore(holeNumber).gir(isChecked));
           }

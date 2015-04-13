@@ -1,90 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout
+<TableLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/margin_eight"
-    android:rowCount="6"
-    android:columnCount="2">
+    android:stretchColumns="1">
 
-    <TextView
-        android:layout_row="0"
-        android:layout_column="0"
-        android:layout_gravity="center_vertical"
-        android:layout_marginRight="@dimen/margin_sixteen"
-        android:text="Username"/>
+    <TableRow>
 
-    <EditText
-        android:id="@+id/username_field"
-        android:layout_row="0"
-        android:layout_column="1"
-        android:layout_gravity="fill"
-        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/margin_sixteen"
+            android:text="Username"/>
 
-    <TextView
-        android:layout_row="1"
-        android:layout_column="0"
-        android:layout_gravity="center_vertical"
-        android:layout_marginRight="@dimen/margin_sixteen"
-        android:text="Password"/>
+        <EditText
+            android:id="@+id/username_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="true"/>
 
-    <EditText
-        android:id="@+id/password_field"
-        android:layout_row="1"
-        android:layout_column="1"
-        android:layout_gravity="fill"
-        android:inputType="textPassword"/>
+    </TableRow>
 
-    <TextView
-        android:layout_row="2"
-        android:layout_column="0"
-        android:layout_gravity="center_vertical"
-        android:layout_marginRight="@dimen/margin_sixteen"
-        android:text="Confirm Password"/>
+    <TableRow>
 
-    <EditText
-        android:id="@+id/password_confirm_field"
-        android:layout_row="2"
-        android:layout_column="1"
-        android:layout_gravity="fill"
-        android:inputType="textPassword"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/margin_sixteen"
+            android:text="Password"/>
 
-    <TextView
-        android:layout_row="3"
-        android:layout_column="0"
-        android:layout_gravity="center_vertical"
-        android:layout_marginRight="@dimen/margin_sixteen"
-        android:text="E-mail"/>
+        <EditText
+            android:id="@+id/password_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:inputType="textPassword"/>
 
-    <EditText
-        android:id="@+id/email_field"
-        android:layout_row="3"
-        android:layout_column="1"
-        android:layout_gravity="fill"
-        android:inputType="textEmailAddress"/>
+    </TableRow>
 
-    <TextView
-        android:id="@+id/administrator_label"
-        android:layout_row="4"
-        android:layout_column="0"
-        android:layout_marginTop="@dimen/margin_eight"
-        android:layout_marginRight="@dimen/margin_sixteen"
-        android:text="Administrator"/>
+    <TableRow>
 
-    <CheckBox
-        android:id="@+id/administrator_box"
-        android:layout_row="4"
-        android:layout_column="1"
-        android:layout_marginTop="@dimen/margin_eight"
-        android:textColor="@color/text_grey"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/margin_sixteen"
+            android:text="Confirm Password"/>
 
-    <Button
-        android:id="@+id/create_account_button"
-        android:layout_row="5"
-        android:layout_column="0"
-        android:layout_columnSpan="2"
-        android:layout_marginTop="@dimen/margin_sixteen"
-        android:layout_gravity="center"
-        android:text="Create Account"/>
+        <EditText
+            android:id="@+id/password_confirm_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:inputType="textPassword"/>
 
-</GridLayout>
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/margin_sixteen"
+            android:text="E-mail"/>
+
+        <EditText
+            android:id="@+id/email_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:inputType="textEmailAddress"/>
+
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:id="@+id/administrator_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_eight"
+            android:layout_marginRight="@dimen/margin_sixteen"
+            android:text="Administrator"/>
+
+        <CheckBox
+            android:id="@+id/administrator_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_eight"
+            android:textColor="@color/text_grey"/>
+
+    </TableRow>
+
+    <TableRow>
+
+        <Button
+            android:id="@+id/create_account_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="2"
+            android:layout_marginTop="@dimen/margin_sixteen"
+            android:layout_marginBottom="@dimen/margin_sixteen"
+            android:layout_gravity="center"
+            android:text="Create Account"/>
+
+    </TableRow>
+
+</TableLayout>

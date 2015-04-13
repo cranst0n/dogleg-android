@@ -14,7 +14,7 @@ import org.cranst0n.dogleg.android.model.HoleScore;
 import org.cranst0n.dogleg.android.model.HoleSet;
 import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.model.RoundStats;
-import org.cranst0n.dogleg.android.views.SimpleCheckbox;
+import org.cranst0n.dogleg.android.views.TextlessCheckbox;
 
 public class ScorecardFragment extends BaseFragment {
 
@@ -316,8 +316,8 @@ public class ScorecardFragment extends BaseFragment {
     public final TextView netScore;
     public final TextView putts;
     public final TextView penalties;
-    public final SimpleCheckbox fairwayHit;
-    public final SimpleCheckbox gir;
+    public final TextlessCheckbox fairwayHit;
+    public final TextlessCheckbox gir;
 
     private HoleViewHolder(final int holeNumber, final View parentView) {
 
@@ -330,8 +330,8 @@ public class ScorecardFragment extends BaseFragment {
       netScore = (TextView) holeView(holeNumber, "net_score", parentView);
       putts = (TextView) holeView(holeNumber, "putts", parentView);
       penalties = (TextView) holeView(holeNumber, "penalties", parentView);
-      fairwayHit = (SimpleCheckbox) holeView(holeNumber, "fairway_hit", parentView);
-      gir = (SimpleCheckbox) holeView(holeNumber, "gir", parentView);
+      fairwayHit = (TextlessCheckbox) holeView(holeNumber, "fairway_hit", parentView);
+      gir = (TextlessCheckbox) holeView(holeNumber, "gir", parentView);
 
       fairwayHit.setEnabled(enabled);
       gir.setEnabled(enabled);

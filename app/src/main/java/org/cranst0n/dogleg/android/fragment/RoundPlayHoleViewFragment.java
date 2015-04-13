@@ -389,7 +389,8 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHolePenaltiesDecrementBtn =
         (ImageButton) playRoundHoleView.findViewById(R.id.current_hole_penalties_decrement);
 
-    currentHoleFairwayHitBox = (CheckBox) playRoundHoleView.findViewById(R.id.current_hole_fairway_hit);
+    currentHoleFairwayHitBox = (CheckBox) playRoundHoleView.findViewById(R.id
+        .current_hole_fairway_hit);
     currentHoleGirBox = (CheckBox) playRoundHoleView.findViewById(R.id.current_hole_gir);
 
     statsPuttsView = (TextView) playRoundHoleView.findViewById(R.id.round_putts_stat);
@@ -503,20 +504,20 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
       }
     });
 
-    currentHoleFairwayHitBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+    currentHoleFairwayHitBox.setOnClickListener(new View.OnClickListener() {
       @Override
-      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (playRoundListener != null) {
-          playRoundListener.updateScore(currentHoleScore().fairwayHit(isChecked));
+      public void onClick(final View view) {
+        if(playRoundListener != null) {
+          playRoundListener.updateScore(currentHoleScore().fairwayHit(((CheckBox)view).isChecked()));
         }
       }
     });
 
-    currentHoleGirBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+    currentHoleGirBox.setOnClickListener(new View.OnClickListener() {
       @Override
-      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (playRoundListener != null) {
-          playRoundListener.updateScore(currentHoleScore().gir(isChecked));
+      public void onClick(final View view) {
+        if(playRoundListener != null) {
+          playRoundListener.updateScore(currentHoleScore().gir(((CheckBox)view).isChecked()));
         }
       }
     });

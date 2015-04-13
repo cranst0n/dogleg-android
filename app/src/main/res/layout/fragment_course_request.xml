@@ -37,104 +37,137 @@
                 android:layout_marginLeft="@dimen/margin_eight"
                 android:background="@color/text_light_grey"/>
 
-            <GridLayout
+            <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_eight"
-                android:rowCount="7"
-                android:columnCount="2">
+                android:shrinkColumns="1">
 
-                <TextView
-                    android:layout_row="0"
-                    android:layout_column="0"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="@dimen/margin_sixteen"
-                    android:text="Name"/>
+                <TableRow>
 
-                <EditText
-                    android:id="@+id/course_request_name"
-                    android:layout_row="0"
-                    android:layout_column="1"
-                    android:layout_gravity="fill"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/margin_sixteen"
+                        android:text="Name"/>
 
-                <TextView
-                    android:layout_row="1"
-                    android:layout_column="0"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="@dimen/margin_sixteen"
-                    android:text="City"/>
+                    <EditText
+                        android:id="@+id/course_request_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:singleLine="true"/>
 
-                <EditText
-                    android:id="@+id/course_request_city"
-                    android:layout_row="1"
-                    android:layout_column="1"
-                    android:layout_gravity="fill"/>
+                </TableRow>
 
-                <TextView
-                    android:layout_row="2"
-                    android:layout_column="0"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="@dimen/margin_sixteen"
-                    android:text="State"/>
+                <TableRow>
 
-                <EditText
-                    android:id="@+id/course_request_state"
-                    android:layout_row="2"
-                    android:layout_column="1"
-                    android:layout_gravity="fill"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/margin_sixteen"
+                        android:text="City"/>
 
-                <TextView
-                    android:layout_row="3"
-                    android:layout_column="0"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="@dimen/margin_sixteen"
-                    android:text="Country"/>
+                    <EditText
+                        android:id="@+id/course_request_city"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:singleLine="true"/>
 
-                <EditText
-                    android:id="@+id/course_request_country"
-                    android:layout_row="3"
-                    android:layout_column="1"
-                    android:layout_gravity="fill"/>
+                </TableRow>
 
-                <TextView
-                    android:layout_row="4"
-                    android:layout_column="0"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="@dimen/margin_sixteen"
-                    android:text="Website"/>
+                <TableRow>
 
-                <EditText
-                    android:id="@+id/course_request_website"
-                    android:layout_row="4"
-                    android:layout_column="1"
-                    android:layout_gravity="fill"
-                    android:inputType="textUri"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/margin_sixteen"
+                        android:text="State"/>
 
-                <TextView
-                    android:layout_row="5"
-                    android:layout_column="0"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="@dimen/margin_sixteen"
-                    android:text="Comment"/>
+                    <EditText
+                        android:id="@+id/course_request_state"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:singleLine="true"/>
 
-                <EditText
-                    android:id="@+id/course_request_comment"
-                    android:layout_row="5"
-                    android:layout_column="1"
-                    android:layout_gravity="fill"
-                    android:inputType="textMultiLine"
-                    android:lines="2"/>
+                </TableRow>
 
-                <Button
-                    android:id="@+id/request_course_button"
-                    android:layout_row="6"
-                    android:layout_column="0"
-                    android:layout_columnSpan="2"
-                    android:layout_marginTop="@dimen/margin_sixteen"
-                    android:layout_gravity="center"
-                    android:text="Submit Request"/>
+                <TableRow>
 
-            </GridLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/margin_sixteen"
+                        android:text="Country"/>
+
+                    <EditText
+                        android:id="@+id/course_request_country"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:singleLine="true"/>
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/margin_sixteen"
+                        android:text="Website"/>
+
+                    <EditText
+                        android:id="@+id/course_request_website"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:inputType="textUri"/>
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/margin_sixteen"
+                        android:text="Comment"/>
+
+                    <EditText
+                        android:id="@+id/course_request_comment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="textMultiLine"
+                        android:lines="2"/>
+
+                </TableRow>
+
+                <TableRow>
+
+                    <Button
+                        android:id="@+id/request_course_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_span="2"
+                        android:layout_weight="1"
+                        android:layout_marginTop="@dimen/margin_sixteen"
+                        android:layout_marginBottom="@dimen/margin_sixteen"
+                        android:text="Submit Request"/>
+
+                </TableRow>
+
+            </TableLayout>
 
         </LinearLayout>
 

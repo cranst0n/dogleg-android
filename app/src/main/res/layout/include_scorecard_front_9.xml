@@ -391,39 +391,39 @@
             android:textStyle="bold"
             android:text="Fairway"/>
 
-        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+        <org.cranst0n.dogleg.android.views.TextlessCheckbox
             android:id="@+id/hole_1_fairway_hit"
             style="@style/ScorecardCheckboxStyle"/>
 
-        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+        <org.cranst0n.dogleg.android.views.TextlessCheckbox
             android:id="@+id/hole_2_fairway_hit"
             style="@style/ScorecardCheckboxStyle"/>
 
-        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+        <org.cranst0n.dogleg.android.views.TextlessCheckbox
             android:id="@+id/hole_3_fairway_hit"
             style="@style/ScorecardCheckboxStyle"/>
 
-        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+        <org.cranst0n.dogleg.android.views.TextlessCheckbox
             android:id="@+id/hole_4_fairway_hit"
             style="@style/ScorecardCheckboxStyle"/>
 
-        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+        <org.cranst0n.dogleg.android.views.TextlessCheckbox
             android:id="@+id/hole_5_fairway_hit"
             style="@style/ScorecardCheckboxStyle"/>
 
-        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+        <org.cranst0n.dogleg.android.views.TextlessCheckbox
             android:id="@+id/hole_6_fairway_hit"
             style="@style/ScorecardCheckboxStyle"/>
 
-        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+        <org.cranst0n.dogleg.android.views.TextlessCheckbox
             android:id="@+id/hole_7_fairway_hit"
             style="@style/ScorecardCheckboxStyle"/>
 
-        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+        <org.cranst0n.dogleg.android.views.TextlessCheckbox
             android:id="@+id/hole_8_fairway_hit"
             style="@style/ScorecardCheckboxStyle"/>
 
-        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+        <org.cranst0n.dogleg.android.views.TextlessCheckbox
             android:id="@+id/hole_9_fairway_hit"
             style="@style/ScorecardCheckboxStyle"/>
 
@@ -447,39 +447,39 @@
             android:textStyle="bold"
             android:text="GIR"/>
 
-        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+        <org.cranst0n.dogleg.android.views.TextlessCheckbox
             android:id="@+id/hole_1_gir"
             style="@style/ScorecardCheckboxStyle"/>
 
-        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+        <org.cranst0n.dogleg.android.views.TextlessCheckbox
             android:id="@+id/hole_2_gir"
             style="@style/ScorecardCheckboxStyle"/>
 
-        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+        <org.cranst0n.dogleg.android.views.TextlessCheckbox
             android:id="@+id/hole_3_gir"
             style="@style/ScorecardCheckboxStyle"/>
 
-        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+        <org.cranst0n.dogleg.android.views.TextlessCheckbox
             android:id="@+id/hole_4_gir"
             style="@style/ScorecardCheckboxStyle"/>
 
-        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+        <org.cranst0n.dogleg.android.views.TextlessCheckbox
             android:id="@+id/hole_5_gir"
             style="@style/ScorecardCheckboxStyle"/>
 
-        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+        <org.cranst0n.dogleg.android.views.TextlessCheckbox
             android:id="@+id/hole_6_gir"
             style="@style/ScorecardCheckboxStyle"/>
 
-        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+        <org.cranst0n.dogleg.android.views.TextlessCheckbox
             android:id="@+id/hole_7_gir"
             style="@style/ScorecardCheckboxStyle"/>
 
-        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+        <org.cranst0n.dogleg.android.views.TextlessCheckbox
             android:id="@+id/hole_8_gir"
             style="@style/ScorecardCheckboxStyle"/>
 
-        <org.cranst0n.dogleg.android.views.SimpleCheckbox
+        <org.cranst0n.dogleg.android.views.TextlessCheckbox
             android:id="@+id/hole_9_gir"
             style="@style/ScorecardCheckboxStyle"/>
 

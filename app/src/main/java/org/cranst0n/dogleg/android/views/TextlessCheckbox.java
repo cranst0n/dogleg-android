@@ -8,27 +8,27 @@ import android.widget.ImageButton;
 
 import org.cranst0n.dogleg.android.R;
 
-public class SimpleCheckbox extends ImageButton implements Checkable {
+public class TextlessCheckbox extends ImageButton implements Checkable {
 
   private boolean checked;
 
   private OnCheckedChangeListener listener;
 
   public static interface OnCheckedChangeListener {
-    void onCheckedChanged(SimpleCheckbox checkbox, boolean isChecked);
+    void onCheckedChanged(TextlessCheckbox checkbox, boolean isChecked);
   }
 
-  public SimpleCheckbox(Context context) {
+  public TextlessCheckbox(Context context) {
     super(context);
     init();
   }
 
-  public SimpleCheckbox(Context context, AttributeSet attrs) {
+  public TextlessCheckbox(Context context, AttributeSet attrs) {
     super(context, attrs);
     init();
   }
 
-  public SimpleCheckbox(Context context, AttributeSet attrs, int defStyleAttr) {
+  public TextlessCheckbox(Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
     init();
   }
