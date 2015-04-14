@@ -507,8 +507,8 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHoleFairwayHitBox.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(final View view) {
-        if(playRoundListener != null) {
-          playRoundListener.updateScore(currentHoleScore().fairwayHit(((CheckBox)view).isChecked()));
+        if (playRoundListener != null) {
+          playRoundListener.updateScore(currentHoleScore().fairwayHit(((CheckBox) view).isChecked()));
         }
       }
     });
@@ -516,8 +516,8 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHoleGirBox.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(final View view) {
-        if(playRoundListener != null) {
-          playRoundListener.updateScore(currentHoleScore().gir(((CheckBox)view).isChecked()));
+        if (playRoundListener != null) {
+          playRoundListener.updateScore(currentHoleScore().gir(((CheckBox) view).isChecked()));
         }
       }
     });

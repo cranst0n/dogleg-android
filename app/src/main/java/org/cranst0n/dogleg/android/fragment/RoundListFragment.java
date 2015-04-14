@@ -209,8 +209,10 @@ public class RoundListFragment extends BaseFragment {
 
   private class RoundListRecyclerAdapter extends RecyclerView.Adapter<RoundListRecyclerAdapter.ViewHolder> {
 
+    private Round expandedRound = null;
+
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
       return new ViewHolder(activity,
           LayoutInflater.from(parent.getContext()).inflate(R.layout.item_round_list, parent, false));
     }
@@ -218,6 +220,7 @@ public class RoundListFragment extends BaseFragment {
     @Override
     public void onBindViewHolder(final RoundListRecyclerAdapter.ViewHolder holder, final int position) {
       holder.setRound(displayedRoundList.get(position));
+      holder.setExpanded(expandedRound != null && holder.round.id == expandedRound.id);
     }
 
     @Override
@@ -268,7 +271,8 @@ public class RoundListFragment extends BaseFragment {
           }
         });
 
-        scorecardViewPager = (ViewPager) itemView.findViewById(R.id.item_round_scorecard_view_pager);
+        scorecardViewPager =
+            (ViewPager) itemView.findViewById(R.id.item_round_scorecard_view_pager);
         scorecardViewPager.setId(Views.generateViewId());
         scorecardViewPager.setAdapter(new ScorecardPagerAdapter(getChildFragmentManager()));
         scorecardViewPager.setOffscreenPageLimit(2);
@@ -291,14 +295,18 @@ public class RoundListFragment extends BaseFragment {
         expandDetailsButton.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(final View v) {
+
             if (scorecardViewPager.getVisibility() == View.VISIBLE) {
+              expandedRound = null;
               setExpanded(false);
             } else {
 
               for (int ix = 0; ix < recyclerView.getChildCount(); ix++) {
-                ((ViewHolder) recyclerView.getChildViewHolder(recyclerView.getChildAt(ix))).setExpanded(false);
+                ((ViewHolder) recyclerView.getChildViewHolder(
+                    recyclerView.getChildAt(ix))).setExpanded(false);
               }
 
+              expandedRound = round;
               setExpanded(true);
             }
           }

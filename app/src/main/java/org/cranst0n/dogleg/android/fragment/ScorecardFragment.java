@@ -157,6 +157,8 @@ public class ScorecardFragment extends BaseFragment {
       viewHolder.penalties.setText(String.valueOf(holeScore.penaltyStrokes));
       viewHolder.fairwayHit.setChecked(holeScore.fairwayHit);
       viewHolder.gir.setChecked(holeScore.gir);
+
+      viewHolder.updateScoreIndicators();
     }
 
     updateRoundStats(round);
@@ -337,10 +339,58 @@ public class ScorecardFragment extends BaseFragment {
       gir.setEnabled(enabled);
     }
 
+    public void updateScoreIndicators() {
+
+      HoleScore holeScore = round.holeScore(holeNumber);
+
+      int scoreToPar = holeScore.score - round.rating.holeRating(holeScore.hole.number).par;
+      int netScoreToPar = holeScore.netScore - round.rating.holeRating(holeScore.hole.number).par;
+
+      if (holeScore.score > 0) {
+        score.setBackgroundResource(scoreBackgroundResource(scoreToPar));
+        score.setTextColor(getResources().getColor(scoreTextColor(scoreToPar)));
+        netScore.setBackgroundResource(scoreBackgroundResource(netScoreToPar));
+        netScore.setTextColor(getResources().getColor(scoreTextColor(netScoreToPar)));
+      } else {
+        score.setBackgroundResource(scoreBackgroundResource(0));
+        score.setTextColor(getResources().getColor(scoreTextColor(0)));
+        netScore.setBackgroundResource(scoreBackgroundResource(0));
+        netScore.setTextColor(getResources().getColor(scoreTextColor(0)));
+      }
+    }
+
     private View holeView(final int holeNum, final String fieldSuffix, final View parentView) {
       String s = String.format("hole_%d_%s", holeNum, fieldSuffix);
       return parentView.findViewById(
           getResources().getIdentifier(s, "id", activity.getPackageName()));
+    }
+
+    private int scoreBackgroundResource(final int scoreToPar) {
+      if (scoreToPar <= -2) {
+        return R.drawable.score_eagle;
+      } else if (scoreToPar == -1) {
+        return R.drawable.score_birdie;
+      } else if (scoreToPar == 0) {
+        return R.drawable.score_par;
+      } else if (scoreToPar == 1) {
+        return R.drawable.score_bogey;
+      } else {
+        return R.drawable.score_double_bogey;
+      }
+    }
+
+    private int scoreTextColor(final int scoreToPar) {
+      if (scoreToPar <= -2) {
+        return R.color.text_grey;
+      } else if (scoreToPar == -1) {
+        return android.R.color.white;
+      } else if (scoreToPar == 0) {
+        return R.color.text_grey;
+      } else if (scoreToPar == 1) {
+        return android.R.color.white;
+      } else {
+        return android.R.color.white;
+      }
     }
   }
 
