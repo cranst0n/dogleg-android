@@ -1,8 +1,10 @@
 package org.cranst0n.dogleg.android.activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -146,6 +148,21 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
   }
 
   private void startLocationUpdates() {
+
+    final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+    if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+      new MaterialDialog.Builder(this)
+          .content("GPS appears to be turned off. You can turn it on via your 'Location Settings'.")
+          .negativeText(android.R.string.cancel)
+          .positiveText("Location Settings")
+          .callback(new MaterialDialog.ButtonCallback() {
+            @Override
+            public void onPositive(final MaterialDialog dialog) {
+              startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+            }
+          }).build().show();
+    }
 
     final DoglegApplication app = DoglegApplication.application();
 
