@@ -14,6 +14,7 @@ public enum Club {
   Wood9(109, "9 Wood"),
   Wood11(111, "11 Wood"),
   // Hybrids
+  Hybrid1(201, "1 Hybrid"),
   Hybrid2(202, "2 Hybrid"),
   Hybrid3(203, "3 Hybrid"),
   Hybrid4(204, "4 Hybrid"),
@@ -33,6 +34,7 @@ public enum Club {
   Iron8(308, "8 Iron"),
   Iron9(309, "9 Iron"),
   // Wedges
+  WedgeP(445, "Pitching Wedge"),
   Wedge50(450, String.format("50%s Wedge", Strings.DEGREE)),
   Wedge52(452, String.format("52%s Wedge", Strings.DEGREE)),
   Wedge54(454, String.format("54%s Wedge", Strings.DEGREE)),
