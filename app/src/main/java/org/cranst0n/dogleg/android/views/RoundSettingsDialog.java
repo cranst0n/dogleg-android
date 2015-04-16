@@ -94,7 +94,7 @@ public class RoundSettingsDialog {
                   .onSuccess(new BackendResponse.BackendSuccessListener<RoundHandicapResponse>() {
                     @Override
                     public void onSuccess(final RoundHandicapResponse value) {
-                      callback.settingsUpdated(round.withAutoHandicap(value.handicap));
+                      callback.settingsUpdated(unhandicappedRound.withAutoHandicap(value.handicap));
                     }
                   });
             }
