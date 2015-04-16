@@ -34,7 +34,7 @@ public class UsernameSearchAdapter extends ArrayAdapter<User> implements Filtera
   }
 
   @Override
-  public User getItem(int index) {
+  public User getItem(final int index) {
     return userData.get(index);
   }
 
@@ -44,8 +44,8 @@ public class UsernameSearchAdapter extends ArrayAdapter<User> implements Filtera
     final ViewHolder vh;
 
     if (convertView == null) {
-      convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1, parent,
-          false);
+      convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1,
+          parent, false);
       vh = new ViewHolder(convertView);
       convertView.setTag(vh);
     } else {
@@ -108,9 +108,9 @@ public class UsernameSearchAdapter extends ArrayAdapter<User> implements Filtera
 
   private class ViewHolder {
 
-    TextView textView;
+    private TextView textView;
 
-    private ViewHolder(View rootView) {
+    private ViewHolder(final View rootView) {
       textView = (TextView) rootView.findViewById(android.R.id.text1);
       textView.setTextColor(getContext().getResources().getColor(android.R.color.black));
     }

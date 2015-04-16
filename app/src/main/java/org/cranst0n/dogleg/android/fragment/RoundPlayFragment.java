@@ -71,7 +71,8 @@ public class RoundPlayFragment extends BaseFragment {
   }
 
   @Override
-  public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+  public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                           final Bundle savedInstanceState) {
 
     playRoundView = inflater.inflate(R.layout.fragment_round_play, container, false);
 

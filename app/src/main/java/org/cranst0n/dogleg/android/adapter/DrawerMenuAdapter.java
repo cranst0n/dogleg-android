@@ -1,6 +1,5 @@
 package org.cranst0n.dogleg.android.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,8 +46,7 @@ public class DrawerMenuAdapter extends BaseAdapter {
 
     if (convertView == null) {
 
-      LayoutInflater mInflater =
-          (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+      LayoutInflater mInflater = LayoutInflater.from(context);
       convertView = mInflater.inflate(R.layout.item_drawer_menu, null);
 
       ImageView iconView = (ImageView) convertView.findViewById(R.id.drawer_menu_item_icon);

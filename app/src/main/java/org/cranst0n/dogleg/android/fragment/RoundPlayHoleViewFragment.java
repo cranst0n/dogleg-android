@@ -40,9 +40,9 @@ import org.cranst0n.dogleg.android.model.Shot;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.Dialogs;
 import org.cranst0n.dogleg.android.utils.SnackBars;
+import org.cranst0n.dogleg.android.utils.Units;
 import org.cranst0n.dogleg.android.utils.Vibration;
 import org.cranst0n.dogleg.android.utils.nfc.Nfc;
-import org.cranst0n.dogleg.android.views.HoleFeatureItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -295,7 +295,8 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
         });
 
         for (int ix = 0; ix < holeFeatureList.getChildCount(); ix++) {
-          ((HoleFeatureItem) holeFeatureList.getChildAt(ix)).updateDistances(location);
+          ((FeatureListAdapter.ViewHolder)holeFeatureList.getChildAt(ix).getTag())
+              .updateDistances(location);
         }
 
         featureListAdapter.notifyDataSetChanged();
@@ -711,7 +712,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     }
 
     @Override
-    public boolean isEnabled(int position) {
+    public boolean isEnabled(final int position) {
       return false;
     }
 
@@ -721,29 +722,158 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     }
 
     @Override
-    public Object getItem(int position) {
+    public Object getItem(final int position) {
       return features.get(position);
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(final int position) {
       return position;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
 
-      HoleFeatureItem card = new HoleFeatureItem(context, features.get(position));
-      card.updateDistances(lastKnownLocation());
+      ViewHolder holder;
 
-      return card;
+      if(convertView == null) {
+
+        LayoutInflater mInflater = LayoutInflater.from(context);
+
+        convertView = mInflater.inflate(R.layout.item_hole_feature, null);
+        holder = new ViewHolder();
+        convertView.setTag(holder);
+
+        convertView.setOnTouchListener(new View.OnTouchListener() {
+          @Override
+          public boolean onTouch(final View view, final MotionEvent motionEvent) {
+            return true;
+          }
+        });
+
+        holder.iconView = (ImageView) convertView.findViewById(R.id.hole_feature_image);
+        holder.nameView = (TextView) convertView.findViewById(R.id.feature_name);
+        holder.elevationDifferenceView = (TextView) convertView.findViewById(R.id.feature_elevation_difference);
+
+        holder.distanceView1Label = (TextView) convertView.findViewById(R.id.feature_distance_1_label);
+        holder.distanceView2Label = (TextView) convertView.findViewById(R.id.feature_distance_2_label);
+        holder.distanceView3Label = (TextView) convertView.findViewById(R.id.feature_distance_3_label);
+        holder.distanceView1 = (TextView) convertView.findViewById(R.id.feature_distance_1);
+        holder.distanceView2 = (TextView) convertView.findViewById(R.id.feature_distance_2);
+        holder.distanceView3 = (TextView) convertView.findViewById(R.id.feature_distance_3);
+
+      } else {
+        holder = (ViewHolder) convertView.getTag();
+      }
+
+      holder.holeFeature = features.get(position);
+
+      holder.init();
+      holder.updateDistances(lastKnownLocation());
+
+      return convertView;
     }
 
     private final Context context;
     private final List<HoleFeature> features;
+
+    private class ViewHolder {
+
+      private HoleFeature holeFeature;
+
+      private ImageView iconView;
+      private TextView nameView;
+
+      private TextView distanceView1Label;
+      private TextView distanceView2Label;
+      private TextView distanceView3Label;
+      private TextView distanceView1;
+      private TextView distanceView2;
+      private TextView distanceView3;
+
+      private TextView elevationDifferenceView;
+
+      public void init() {
+        nameView.setText(holeFeature.name);
+        iconView.setImageResource(featureIcon(holeFeature));
+      }
+
+      public void updateDistances(final Location location) {
+
+        if (location != null) {
+
+          distanceView1Label.setVisibility(holeFeature.coordinates.length >= 1 ? View.VISIBLE :
+              View.GONE);
+          distanceView2Label.setVisibility(holeFeature.coordinates.length >= 2 ? View.VISIBLE : View.GONE);
+          distanceView3Label.setVisibility(holeFeature.coordinates.length >= 3 ? View.VISIBLE : View.GONE);
+          distanceView1.setVisibility(distanceView1Label.getVisibility());
+          distanceView2.setVisibility(distanceView2Label.getVisibility());
+          distanceView3.setVisibility(distanceView3Label.getVisibility());
+
+          if (holeFeature.coordinates.length == 1) {
+            distanceView1Label.setText("Reach:");
+            distanceView1.setText(distanceText(location, holeFeature.coordinates[0].toLocation()));
+          } else if (holeFeature.coordinates.length == 2) {
+            distanceView1Label.setText("Reach:");
+            distanceView2Label.setText("Carry:");
+            distanceView1.setText(distanceText(location, holeFeature.coordinates[0].toLocation()));
+            distanceView2.setText(distanceText(location, holeFeature.coordinates[1].toLocation()));
+          } else if (holeFeature.coordinates.length >= 3) {
+            distanceView1Label.setText("Front:");
+            distanceView2Label.setText("Middle:");
+            distanceView3Label.setText("Back:");
+            distanceView1.setText(distanceText(location, holeFeature.coordinates[0].toLocation()));
+            distanceView2.setText(distanceText(location, holeFeature.coordinates[1].toLocation()));
+            distanceView3.setText(distanceText(location, holeFeature.coordinates[2].toLocation()));
+          }
+
+          if (location.hasAltitude()) {
+
+            double elevationDiff = holeFeature.center().altitude - location.getAltitude();
+            int feet = (int) Math.round(Units.metersToFeet(elevationDiff));
+
+            if (feet > 0) {
+              elevationDifferenceView.setText(String.format("+%dft", feet));
+            } else {
+              elevationDifferenceView.setText(String.format("%dft", feet));
+            }
+
+          } else {
+            elevationDifferenceView.setText("");
+          }
+        }
+      }
+
+      private String distanceText(final Location fromLocation, final Location toLocation) {
+        double meters = fromLocation.distanceTo(toLocation);
+        int yards = (int) Math.round(Units.metersToYards(meters));
+        return String.valueOf(yards);
+      }
+
+      private int featureIcon(final HoleFeature feature) {
+        if (feature.name.toLowerCase().contains("waste")) {
+          return R.drawable.waste_area;
+        } else if (feature.name.toLowerCase().contains("bunker") || feature.name.toLowerCase().contains("sand") || feature.name.toLowerCase().contains("trap")) {
+          return R.drawable.sand;
+        } else if (feature.name.toLowerCase().contains("water") || feature.name.toLowerCase().contains("creek")) {
+          return R.drawable.water;
+        } else if (feature.name.toLowerCase().contains("green") || feature.name.toLowerCase().contains("fairway")) {
+          return R.drawable.grass;
+        } else if (feature.name.toLowerCase().contains("dogleg")) {
+          return R.drawable.dogleg;
+        } else if (feature.name.toLowerCase().contains("cart") && feature.name.toLowerCase().contains("path")) {
+          return R.drawable.cart_path;
+        } else {
+          return R.mipmap.ic_launcher;
+        }
+      }
+    }
   }
 
   class ShotListAdapter extends BaseAdapter {
+
+    private final Context context;
+    private final List<Shot> shots;
 
     public ShotListAdapter(final Context context, final List<Shot> shots) {
       this.context = context;
@@ -761,42 +891,59 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(final int position) {
       return position;
     }
 
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
 
+      ViewHolder holder;
+
+      if(convertView == null) {
+
+        LayoutInflater mInflater = LayoutInflater.from(context);
+
+        convertView = mInflater.inflate(R.layout.item_shot, null);
+        holder = new ViewHolder();
+        convertView.setTag(holder);
+
+        convertView.setOnTouchListener(new View.OnTouchListener() {
+          @Override
+          public boolean onTouch(final View view, final MotionEvent motionEvent) {
+            return true;
+          }
+        });
+
+        holder.clubNameView = (TextView) convertView.findViewById(R.id.club_name);
+        holder.distanceView = (TextView) convertView.findViewById(R.id.shot_distance);
+        holder.removeShotButton = (ImageButton) convertView.findViewById(R.id.remove_shot_button);
+
+      } else {
+        holder = (ViewHolder) convertView.getTag();
+      }
+
       final Shot itemShot = shots.get(position);
 
-      LayoutInflater mInflater =
-          (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-      convertView = mInflater.inflate(R.layout.item_shot, null);
-
-      ImageView iconView = (ImageView) convertView.findViewById(R.id.shot_image);
-      TextView clubNameView = (TextView) convertView.findViewById(R.id.club_name);
-      TextView distanceView = (TextView) convertView.findViewById(R.id.shot_distance);
-      ImageButton removeShotButton = (ImageButton) convertView.findViewById(R.id.remove_shot_button);
-
-      clubNameView.setText(shots.get(position).club.name);
+      holder.clubNameView.setText(itemShot.club.name);
 
       if (itemShot.distanceMeters() > 0) {
         switch (itemShot.club) {
           case Putter: {
-            distanceView.setText(String.format("%s feet", Math.round(itemShot.distanceFeet())));
+            holder.distanceView.setText(String.format("%s feet", Math.round(itemShot.distanceFeet())));
             break;
           }
           default: {
-            distanceView.setText(String.format("%s yards", Math.round(itemShot.distanceYards())));
+            holder.distanceView.setText(String.format("%s yards", Math.round(itemShot.distanceYards())));
             break;
           }
         }
+        holder.distanceView.setVisibility(View.VISIBLE);
       } else {
-        distanceView.setText("");
+        holder.distanceView.setVisibility(View.GONE);
       }
 
-      removeShotButton.setOnClickListener(new View.OnClickListener() {
+      holder.removeShotButton.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(final View view) {
           if (playRoundListener != null) {
@@ -819,7 +966,12 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
       return convertView;
     }
 
-    private final Context context;
-    private final List<Shot> shots;
+    private class ViewHolder {
+
+      private TextView clubNameView;
+      private TextView distanceView;
+      private ImageButton removeShotButton;
+
+    }
   }
 }
