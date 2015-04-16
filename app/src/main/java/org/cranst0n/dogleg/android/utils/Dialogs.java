@@ -55,7 +55,8 @@ public class Dialogs {
         .callback(new MaterialDialog.ButtonCallback() {
           @Override
           public void onPositive(final MaterialDialog dialog) {
-            doLogin(activity, usernameInput.getText().toString(), passwordInput.getText().toString());
+            doLogin(activity,
+                usernameInput.getText().toString(), passwordInput.getText().toString());
           }
 
           @Override
@@ -104,11 +105,14 @@ public class Dialogs {
           @Override
           public void onPositive(final MaterialDialog signupDialog) {
 
-            final TextView usernameField = (TextView) signupDialog.getCustomView().findViewById(R.id
-                .username_field);
-            final TextView passwordField = (TextView) signupDialog.getCustomView().findViewById(R.id.password_field);
-            final TextView passwordConfirmField = (TextView) signupDialog.getCustomView().findViewById(R.id.password_confirm_field);
-            final TextView emailField = (TextView) signupDialog.getCustomView().findViewById(R.id.email_field);
+            final TextView usernameField =
+                (TextView) signupDialog.getCustomView().findViewById(R.id.username_field);
+            final TextView passwordField =
+                (TextView) signupDialog.getCustomView().findViewById(R.id.password_field);
+            final TextView passwordConfirmField =
+                (TextView) signupDialog.getCustomView().findViewById(R.id.password_confirm_field);
+            final TextView emailField =
+                (TextView) signupDialog.getCustomView().findViewById(R.id.email_field);
 
             final String username = usernameField.getText().toString();
             String password = passwordField.getText().toString();
@@ -138,7 +142,7 @@ public class Dialogs {
             User newUser = new User(-1, username, Crypto.hashPassword(password), email, false, true,
                 DateTime.now(), UserProfile.EMPTY);
 
-            final MaterialDialog busyDialog = showBusyDialog(activity, "Creating Account");
+            final MaterialDialog busyDialog = showBusyDialog(activity, "Creating Account...");
 
             new Users(activity).create(newUser)
                 .onSuccess(new BackendResponse.BackendSuccessListener<User>() {
@@ -169,7 +173,8 @@ public class Dialogs {
 
     TextView administratorLabel = (TextView) dialog.getCustomView().findViewById(R.id
         .administrator_label);
-    CheckBox administratorBox = (CheckBox) dialog.getCustomView().findViewById(R.id.administrator_box);
+    CheckBox administratorBox =
+        (CheckBox) dialog.getCustomView().findViewById(R.id.administrator_box);
     Button createAccountButton = (Button) dialog.getCustomView().findViewById(R.id
         .create_account_button);
 
@@ -182,10 +187,19 @@ public class Dialogs {
     dialog.show();
   }
 
-  private static void doLogin(final Activity activity, final String username, final String password) {
+  private static void doLogin(final Activity activity, final String username,
+                              final String password) {
+
+    final MaterialDialog busyDialog = Dialogs.showBusyDialog(activity, "Logging in...");
 
     new Authentication(activity).login(username, password).
         onError(SnackBars.showBackendError(activity, "Login failed:")).
-        onException(SnackBars.showBackendException(activity, "Login failed:"));
+        onException(SnackBars.showBackendException(activity, "Login failed:")).
+        onFinally(new BackendResponse.BackendFinallyListener() {
+          @Override
+          public void onFinally() {
+            busyDialog.dismiss();
+          }
+        });
   }
 }

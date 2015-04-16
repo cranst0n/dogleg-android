@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -16,6 +17,7 @@ import org.cranst0n.dogleg.android.backend.Courses;
 import org.cranst0n.dogleg.android.model.CourseRequest;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.BusProvider;
+import org.cranst0n.dogleg.android.utils.Dialogs;
 import org.cranst0n.dogleg.android.utils.SnackBars;
 
 public class CourseRequestFragment extends BaseFragment {
@@ -90,6 +92,8 @@ public class CourseRequestFragment extends BaseFragment {
       String courseWebsite = requestWebsiteView.getText().toString();
       String courseComment = requestCommentView.getText().toString();
 
+      final MaterialDialog busyDialog = Dialogs.showBusyDialog(activity, "Submitting Request...");
+
       courses.requestCourse(new CourseRequest(courseName, courseCity, courseState, courseCountry,
           courseWebsite, courseComment))
           .onSuccess(new BackendResponse.BackendSuccessListener<CourseRequest>() {
@@ -100,7 +104,13 @@ public class CourseRequestFragment extends BaseFragment {
             }
           })
           .onError(SnackBars.showBackendError(activity))
-          .onException(SnackBars.showBackendException(activity));
+          .onException(SnackBars.showBackendException(activity))
+          .onFinally(new BackendResponse.BackendFinallyListener() {
+            @Override
+            public void onFinally() {
+              busyDialog.dismiss();
+            }
+          });
     }
   }
 

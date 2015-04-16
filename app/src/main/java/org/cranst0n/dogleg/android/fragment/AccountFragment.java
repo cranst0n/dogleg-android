@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.squareup.otto.Bus;
@@ -24,6 +25,7 @@ import org.cranst0n.dogleg.android.backend.BackendResponse;
 import org.cranst0n.dogleg.android.backend.Users;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.BusProvider;
+import org.cranst0n.dogleg.android.utils.Dialogs;
 import org.cranst0n.dogleg.android.utils.Intents;
 import org.cranst0n.dogleg.android.utils.SnackBars;
 
@@ -81,7 +83,11 @@ public class AccountFragment extends BaseFragment {
     saveAvatarButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(final View view) {
+
+        final MaterialDialog busyDialog = Dialogs.showBusyDialog(activity, "Changing Avatar...");
+
         Bitmap bitmap = ((BitmapDrawable) avatarView.getDrawable()).getBitmap();
+
         users.changeAvatar(currentUser, bitmap)
             .onSuccess(new BackendResponse.BackendSuccessListener<User>() {
               @Override
@@ -91,7 +97,13 @@ public class AccountFragment extends BaseFragment {
               }
             })
             .onError(SnackBars.showBackendError(activity))
-            .onException(SnackBars.showBackendException(activity));
+            .onException(SnackBars.showBackendException(activity))
+            .onFinally(new BackendResponse.BackendFinallyListener() {
+              @Override
+              public void onFinally() {
+                busyDialog.dismiss();
+              }
+            });
       }
     });
 
@@ -103,6 +115,9 @@ public class AccountFragment extends BaseFragment {
     changePasswordButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(final View view) {
+
+        final MaterialDialog busyDialog = Dialogs.showBusyDialog(activity, "Changing Password...");
+
         users.changePassword(currentUser, oldPasswordField.getText().toString(), newPasswordField
             .getText().toString(), newPasswordConfirmField.getText().toString())
             .onSuccess(new BackendResponse.BackendSuccessListener<User>() {
@@ -115,7 +130,13 @@ public class AccountFragment extends BaseFragment {
               }
             })
             .onError(SnackBars.showBackendError(activity, "Change Failed:"))
-            .onException(SnackBars.showBackendException(activity, "Change Failed:"));
+            .onException(SnackBars.showBackendException(activity, "Change Failed:"))
+            .onFinally(new BackendResponse.BackendFinallyListener() {
+              @Override
+              public void onFinally() {
+                busyDialog.dismiss();
+              }
+            });
       }
     });
 

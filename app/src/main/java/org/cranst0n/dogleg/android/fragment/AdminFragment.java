@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -21,6 +22,7 @@ import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.model.UserProfile;
 import org.cranst0n.dogleg.android.utils.BusProvider;
 import org.cranst0n.dogleg.android.utils.Crypto;
+import org.cranst0n.dogleg.android.utils.Dialogs;
 import org.cranst0n.dogleg.android.utils.SnackBars;
 import org.cranst0n.dogleg.android.utils.Strings;
 import org.joda.time.DateTime;
@@ -140,6 +142,8 @@ public class AdminFragment extends BaseFragment {
     User newUser = new User(-1, username, Crypto.hashPassword(password), email, isAdmin, true,
         DateTime.now(), UserProfile.EMPTY);
 
+    final MaterialDialog busyDialog = Dialogs.showBusyDialog(activity, "Creating Account...");
+
     users.create(newUser)
         .onSuccess(new BackendResponse.BackendSuccessListener<User>() {
           @Override
@@ -154,7 +158,13 @@ public class AdminFragment extends BaseFragment {
           }
         })
         .onError(SnackBars.showBackendError(activity))
-        .onException(SnackBars.showBackendException(activity));
+        .onException(SnackBars.showBackendException(activity))
+        .onFinally(new BackendResponse.BackendFinallyListener() {
+          @Override
+          public void onFinally() {
+            busyDialog.dismiss();
+          }
+        });
   }
 
   private void resetPassword() {
@@ -173,6 +183,9 @@ public class AdminFragment extends BaseFragment {
     }
 
     if (resetUser.isValid()) {
+
+      final MaterialDialog busyDialog = Dialogs.showBusyDialog(activity, "Resetting Password...");
+
       users.resetPassword(resetUser, password, passwordConfirm)
           .onSuccess(new BackendResponse.BackendSuccessListener<User>() {
             @Override
@@ -185,7 +198,14 @@ public class AdminFragment extends BaseFragment {
             }
           })
           .onError(SnackBars.showBackendError(activity))
-          .onException(SnackBars.showBackendException(activity));
+          .onException(SnackBars.showBackendException(activity))
+          .onFinally(new BackendResponse.BackendFinallyListener() {
+            @Override
+            public void onFinally() {
+              busyDialog.dismiss();
+            }
+          });
+
     } else {
       SnackBars.showSimple(activity, "Must select valid user to reset the password for.");
     }
