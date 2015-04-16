@@ -359,7 +359,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
 
           if (playRoundListener != null) {
             playRoundListener.updateScore(newScore);
-            Vibration.vibrate();
+            Vibration.vibrate(2000);
           }
 
           break;
@@ -427,7 +427,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHoleScoreIncrementBtn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(final View v) {
-        if (playRoundListener != null) {
+        if (playRoundListener != null && round().holeSet().includes(currentHoleNumber())) {
           playRoundListener.updateScore(currentHoleScore().addStroke());
         }
       }
@@ -436,7 +436,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHoleScoreView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(final View v) {
-        if (playRoundListener != null) {
+        if (playRoundListener != null && round().holeSet().includes(currentHoleNumber())) {
           playRoundListener.showScoreSelectionDialog(currentHoleNumber());
         }
       }
@@ -445,7 +445,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHoleScoreDecrementBtn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(final View v) {
-        if (playRoundListener != null) {
+        if (playRoundListener != null && round().holeSet().includes(currentHoleNumber())) {
           playRoundListener.updateScore(currentHoleScore().subtractStroke());
         }
       }
@@ -454,7 +454,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHolePuttsIncrementBtn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (playRoundListener != null) {
+        if (playRoundListener != null && round().holeSet().includes(currentHoleNumber())) {
           playRoundListener.updateScore(currentHoleScore().addPutt());
         }
       }
@@ -463,7 +463,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHolePuttsView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(final View v) {
-        if (playRoundListener != null) {
+        if (playRoundListener != null && round().holeSet().includes(currentHoleNumber())) {
           playRoundListener.showPuttsSelectionDialog(currentHoleNumber());
         }
       }
@@ -472,7 +472,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHolePuttsDecrementBtn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (playRoundListener != null) {
+        if (playRoundListener != null && round().holeSet().includes(currentHoleNumber())) {
           playRoundListener.updateScore(currentHoleScore().subtractPutt());
         }
       }
@@ -481,7 +481,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHolePenaltiesIncrementBtn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (playRoundListener != null) {
+        if (playRoundListener != null && round().holeSet().includes(currentHoleNumber())) {
           playRoundListener.updateScore(currentHoleScore().addPenaltyStroke());
         }
       }
@@ -490,7 +490,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHolePenaltiesView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(final View v) {
-        if (playRoundListener != null) {
+        if (playRoundListener != null && round().holeSet().includes(currentHoleNumber())) {
           playRoundListener.showPenaltiesSelectionDialog(currentHoleNumber());
         }
       }
@@ -499,7 +499,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHolePenaltiesDecrementBtn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (playRoundListener != null) {
+        if (playRoundListener != null && round().holeSet().includes(currentHoleNumber())) {
           playRoundListener.updateScore(currentHoleScore().subtractPenaltyStroke());
         }
       }

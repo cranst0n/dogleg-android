@@ -279,7 +279,9 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
 
     private final List<CourseRating> ratings;
 
-    public RatingsPagerAdapter(final List<CourseRating> ratings, final FragmentManager childFragmentManager) {
+    public RatingsPagerAdapter(final List<CourseRating> ratings,
+                               final FragmentManager childFragmentManager) {
+
       super(childFragmentManager);
       this.ratings = ratings;
     }

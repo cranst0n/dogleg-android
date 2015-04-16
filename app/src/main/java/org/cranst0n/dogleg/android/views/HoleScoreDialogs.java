@@ -39,7 +39,10 @@ public class HoleScoreDialogs {
                                   final int which, final CharSequence text) {
 
             int score = which + scoreStart;
-            callback.holeScoreUpdated(round.holeScore(holeNumber).score(score));
+
+            if (round.holeSet().includes(holeNumber)) {
+              callback.holeScoreUpdated(round.holeScore(holeNumber).score(score));
+            }
 
           }
         }).show();
@@ -62,7 +65,9 @@ public class HoleScoreDialogs {
           @Override
           public void onSelection(final MaterialDialog dialog, final View view,
                                   final int which, final CharSequence text) {
-            callback.holeScoreUpdated(round.holeScore(holeNumber).putts(which));
+            if (round.holeSet().includes(holeNumber)) {
+              callback.holeScoreUpdated(round.holeScore(holeNumber).putts(which));
+            }
           }
         }).show();
   }
@@ -84,7 +89,9 @@ public class HoleScoreDialogs {
           @Override
           public void onSelection(final MaterialDialog dialog, final View view,
                                   final int which, final CharSequence text) {
-            callback.holeScoreUpdated(round.holeScore(holeNumber).penaltyStrokes(which));
+            if (round.holeSet().includes(holeNumber)) {
+              callback.holeScoreUpdated(round.holeScore(holeNumber).penaltyStrokes(which));
+            }
           }
         }).show();
   }
