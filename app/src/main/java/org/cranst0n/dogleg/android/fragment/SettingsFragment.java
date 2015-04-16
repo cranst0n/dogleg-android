@@ -33,11 +33,19 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     try {
+
       String appVersion = getActivity().getPackageManager().
           getPackageInfo(getActivity().getPackageName(), 0).versionName;
+
       if (BuildConfig.DEBUG) {
-        appVersion += "-SNAPSHOT";
+        try {
+          double doubleVersion = Double.parseDouble(appVersion + "-M1");
+          appVersion = String.valueOf(doubleVersion + 0.1) + "-SNAPSHOT";
+        } catch (NumberFormatException e) {
+          appVersion += "+-SNAPSHOT";
+        }
       }
+
       findPreference("version").setSummary(appVersion);
     } catch (PackageManager.NameNotFoundException e) {
       findPreference("version").setSummary("Unknown");

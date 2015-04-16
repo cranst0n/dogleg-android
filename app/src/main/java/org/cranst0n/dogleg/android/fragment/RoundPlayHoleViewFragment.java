@@ -295,7 +295,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
         });
 
         for (int ix = 0; ix < holeFeatureList.getChildCount(); ix++) {
-          ((FeatureListAdapter.ViewHolder)holeFeatureList.getChildAt(ix).getTag())
+          ((FeatureListAdapter.ViewHolder) holeFeatureList.getChildAt(ix).getTag())
               .updateDistances(location);
         }
 
@@ -736,7 +736,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
 
       ViewHolder holder;
 
-      if(convertView == null) {
+      if (convertView == null) {
 
         LayoutInflater mInflater = LayoutInflater.from(context);
 
@@ -900,7 +900,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
 
       ViewHolder holder;
 
-      if(convertView == null) {
+      if (convertView == null) {
 
         LayoutInflater mInflater = LayoutInflater.from(context);
 

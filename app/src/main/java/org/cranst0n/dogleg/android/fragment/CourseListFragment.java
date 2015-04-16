@@ -1,7 +1,6 @@
 package org.cranst0n.dogleg.android.fragment;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.JsonArray;
 import com.melnykov.fab.FloatingActionButton;
 import com.squareup.otto.Bus;
@@ -41,12 +42,12 @@ import java.util.List;
 
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
-public class CourseListFragment extends BaseFragment implements SearchView.OnQueryTextListener {
+public class CourseListFragment extends BaseFragment implements
+    GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+    SearchView.OnQueryTextListener {
 
   private Bus bus;
   private User currentUser = User.NO_USER;
-
-  private Location lastLocation;
 
   private View courseListView;
   private SwipeRefreshLayout swipeRefreshLayout;
@@ -83,8 +84,6 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
     bus.register(this);
 
     setHasOptionsMenu(true);
-
-    lastLocation = DoglegApplication.application().lastKnownLocation();
   }
 
   @Override
@@ -133,8 +132,12 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
       }
     });
 
-    addToCourseList(false);
     setHasOptionsMenu(true);
+
+    // Wait for the client to connect or fail so we can send our location (if possible) to get
+    // courses closest to current location
+    DoglegApplication.googleApiClient().registerConnectionCallbacks(this);
+    DoglegApplication.googleApiClient().registerConnectionFailedListener(this);
 
     return courseListView;
   }
@@ -300,12 +303,16 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
           courses.searchPinned(courseSearchView.getQuery().toString(), 20, displayedCourseList.size());
     } else if (pinMode) {
       queryCall =
-          courses.listPinned(LatLon.fromLocation(lastLocation), 20, displayedCourseList.size());
+          courses.listPinned(
+              LatLon.fromLocation(DoglegApplication.application().lastKnownLocation()), 20,
+              displayedCourseList.size());
     } else if (searchMode()) {
       queryCall =
           courses.search(courseSearchView.getQuery().toString(), 20, displayedCourseList.size());
     } else {
-      queryCall = courses.list(LatLon.fromLocation(lastLocation), 20, displayedCourseList.size());
+      queryCall = courses.list(
+          LatLon.fromLocation(DoglegApplication.application().lastKnownLocation()), 20,
+          displayedCourseList.size());
     }
 
     queryCall.
@@ -332,4 +339,26 @@ public class CourseListFragment extends BaseFragment implements SearchView.OnQue
         });
   }
 
+  // These methods are only used for the initial list population since we want to wait for the
+  // GoogleApiClient to connect/fail before making our list request
+
+  @Override
+  public void onConnected(final Bundle bundle) {
+    addToCourseList(false);
+    DoglegApplication.googleApiClient().unregisterConnectionCallbacks(this);
+    DoglegApplication.googleApiClient().unregisterConnectionFailedListener(this);
+  }
+
+  @Override
+  public void onConnectionSuspended(final int i) {
+    DoglegApplication.googleApiClient().unregisterConnectionCallbacks(this);
+    DoglegApplication.googleApiClient().unregisterConnectionFailedListener(this);
+  }
+
+  @Override
+  public void onConnectionFailed(final ConnectionResult connectionResult) {
+    addToCourseList(false);
+    DoglegApplication.googleApiClient().unregisterConnectionCallbacks(this);
+    DoglegApplication.googleApiClient().unregisterConnectionFailedListener(this);
+  }
 }
