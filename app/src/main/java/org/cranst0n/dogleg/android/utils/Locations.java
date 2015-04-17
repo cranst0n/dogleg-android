@@ -36,7 +36,7 @@ public class Locations {
     int accuracyDelta = (int) (newLocation.getAccuracy() - currentLocation.getAccuracy());
     boolean isLessAccurate = accuracyDelta > 0;
     boolean isMoreAccurate = accuracyDelta < 0;
-    boolean isSignificantlyLessAccurate = accuracyDelta > 200;
+    boolean isSignificantlyLessAccurate = accuracyDelta > 10;
 
     // Check if the old and new location are from the same provider
     boolean isFromSameProvider = isSameProvider(newLocation.getProvider(),
