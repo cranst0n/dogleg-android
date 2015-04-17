@@ -332,6 +332,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
       }
 
       if (playRoundListener != null) {
+        Vibration.vibrate(2000);
         playRoundListener.nextHole();
       }
 
@@ -358,8 +359,8 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
           }
 
           if (playRoundListener != null) {
-            playRoundListener.updateScore(newScore);
             Vibration.vibrate(2000);
+            playRoundListener.updateScore(newScore);
           }
 
           break;
