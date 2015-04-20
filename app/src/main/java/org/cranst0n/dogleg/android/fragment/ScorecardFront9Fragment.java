@@ -1,6 +1,7 @@
 package org.cranst0n.dogleg.android.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,7 @@ import org.cranst0n.dogleg.android.model.Round;
 
 public class ScorecardFront9Fragment extends ScorecardFragment {
 
-  public static ScorecardFront9Fragment instance(final Round round) {
+  public static ScorecardFront9Fragment instance(@NonNull final Round round) {
     ScorecardFront9Fragment fragment = new ScorecardFront9Fragment();
     fragment.setRound(round);
     return fragment;
@@ -21,7 +22,8 @@ public class ScorecardFront9Fragment extends ScorecardFragment {
   }
 
   @Override
-  public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+  public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                           final Bundle savedInstanceState) {
 
     scorecardView = inflater.inflate(R.layout.include_scorecard_front_9, container, false);
 

@@ -20,7 +20,7 @@ import java.lang.reflect.Type;
 
 public class Json {
 
-  private static Gson pimpedGson = new GsonBuilder()
+  private static final Gson pimpedGson = new GsonBuilder()
       .registerTypeAdapter(DateTime.class, new DateTimeTypeAdapter())
       .registerTypeAdapter(byte[].class, new ByteArrayToBase64TypeAdapter())
       .registerTypeAdapter(Club.class, new ClubTypeAdapter())

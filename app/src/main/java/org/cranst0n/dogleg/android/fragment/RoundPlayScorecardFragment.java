@@ -2,18 +2,19 @@ package org.cranst0n.dogleg.android.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.activity.RoundPlayActivity;
+import org.cranst0n.dogleg.android.model.HoleScore;
 import org.cranst0n.dogleg.android.model.Round;
 import org.cranst0n.dogleg.android.views.TextlessCheckbox;
 
 public class RoundPlayScorecardFragment extends ScorecardFragment {
-
-  private View roundScorecardView;
 
   private RoundPlayFragment.PlayRoundListener playRoundListener;
 
@@ -30,7 +31,8 @@ public class RoundPlayScorecardFragment extends ScorecardFragment {
   public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                            final Bundle savedInstanceState) {
 
-    roundScorecardView = inflater.inflate(R.layout.fragment_round_play_scorecard, container, false);
+    View roundScorecardView =
+        inflater.inflate(R.layout.fragment_round_play_scorecard, container, false);
     findViews(roundScorecardView);
 
     for (int holeIx = 0; holeIx < numHoles(); holeIx++) {
@@ -66,18 +68,30 @@ public class RoundPlayScorecardFragment extends ScorecardFragment {
 
       holeFieldViews[holeNumber - holeStart()].fairwayHit.setOnCheckedChangeListener(new TextlessCheckbox.OnCheckedChangeListener() {
         @Override
-        public void onCheckedChanged(final TextlessCheckbox buttonView, final boolean isChecked) {
+        public void onCheckedChanged(@NonNull final TextlessCheckbox buttonView, final boolean isChecked) {
           if (playRoundListener != null) {
-            playRoundListener.updateScore(round().holeScore(holeNumber).fairwayHit(isChecked));
+            Round round = round();
+            if (round != null) {
+              HoleScore holeScore = round.holeScore(holeNumber);
+              if (holeScore != null) {
+                playRoundListener.updateScore(holeScore.fairwayHit(isChecked));
+              }
+            }
           }
         }
       });
 
       holeFieldViews[holeNumber - holeStart()].gir.setOnCheckedChangeListener(new TextlessCheckbox.OnCheckedChangeListener() {
         @Override
-        public void onCheckedChanged(final TextlessCheckbox buttonView, final boolean isChecked) {
+        public void onCheckedChanged(@NonNull final TextlessCheckbox buttonView, final boolean isChecked) {
           if (playRoundListener != null) {
-            playRoundListener.updateScore(round().holeScore(holeNumber).gir(isChecked));
+            Round round = round();
+            if (round != null) {
+              HoleScore holeScore = round.holeScore(holeNumber);
+              if (holeScore != null) {
+                playRoundListener.updateScore(holeScore.gir(isChecked));
+              }
+            }
           }
         }
       });
@@ -86,6 +100,7 @@ public class RoundPlayScorecardFragment extends ScorecardFragment {
     return roundScorecardView;
   }
 
+  @Nullable
   private Round round() {
     if (activity instanceof RoundPlayActivity) {
       return ((RoundPlayActivity) activity).round();

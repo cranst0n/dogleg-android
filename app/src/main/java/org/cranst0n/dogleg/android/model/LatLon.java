@@ -1,6 +1,8 @@
 package org.cranst0n.dogleg.android.model;
 
 import android.location.Location;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -20,15 +22,15 @@ public class LatLon {
     this.altitude = altitude;
   }
 
-  public float distanceTo(final LatLon latLon) {
+  public float distanceTo(@NonNull final LatLon latLon) {
     return toLocation().distanceTo(latLon.toLocation()); // meters
   }
 
-  public float distanceTo(final Location location) {
+  public float distanceTo(@NonNull final Location location) {
     return toLocation().distanceTo(location);
   }
 
-  public float distanceTo(final LatLng latLng) {
+  public float distanceTo(@Nullable final LatLng latLng) {
     if (latLng == null) {
       return Float.MAX_VALUE;
     } else {
@@ -36,6 +38,7 @@ public class LatLon {
     }
   }
 
+  @NonNull
   public Location toLocation() {
     Location l = new Location("dogleg");
 
@@ -46,11 +49,13 @@ public class LatLon {
     return l;
   }
 
+  @NonNull
   public LatLng toLatLng() {
     return new LatLng(latitude, longitude);
   }
 
-  public static LatLon fromLatLng(final LatLng latLng) {
+  @Nullable
+  public static LatLon fromLatLng(@Nullable final LatLng latLng) {
     if (latLng == null) {
       return null;
     } else {
@@ -58,7 +63,8 @@ public class LatLon {
     }
   }
 
-  public static LatLon fromLocation(final Location location) {
+  @Nullable
+  public static LatLon fromLocation(@Nullable final Location location) {
     if (location == null) {
       return null;
     } else {

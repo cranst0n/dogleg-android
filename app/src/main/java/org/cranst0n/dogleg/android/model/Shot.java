@@ -1,18 +1,24 @@
 package org.cranst0n.dogleg.android.model;
 
+import android.support.annotation.NonNull;
+
 import org.cranst0n.dogleg.android.utils.Units;
 
 public class Shot {
 
   public final long id;
   public final int sequence;
+  @NonNull
   public final Club club;
+  @NonNull
   public final LatLon locationStart;
+  @NonNull
   public final LatLon locationEnd;
   public final long holeScoreId;
 
-  public Shot(final long id, final int sequence, final Club club, final LatLon locationStart,
-              final LatLon locationEnd, final long holeScoreId) {
+  public Shot(final long id, final int sequence, @NonNull final Club club,
+              @NonNull final LatLon locationStart, @NonNull final LatLon locationEnd,
+              final long holeScoreId) {
 
     this.id = id;
     this.sequence = sequence;
@@ -38,11 +44,13 @@ public class Shot {
     }
   }
 
+  @NonNull
   public Shot sequence(final int sequence) {
     return new Shot(id, sequence, club, locationStart, locationEnd, holeScoreId);
   }
 
-  public Shot locationEnd(final LatLon locationEnd) {
+  @NonNull
+  public Shot locationEnd(@NonNull final LatLon locationEnd) {
     return new Shot(id, sequence, club, locationStart, locationEnd, holeScoreId);
   }
 }

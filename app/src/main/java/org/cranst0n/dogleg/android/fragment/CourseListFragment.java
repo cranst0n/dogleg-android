@@ -2,6 +2,7 @@ package org.cranst0n.dogleg.android.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -49,7 +50,6 @@ public class CourseListFragment extends BaseFragment implements
   private Bus bus;
   private User currentUser = User.NO_USER;
 
-  private View courseListView;
   private SwipeRefreshLayout swipeRefreshLayout;
   private RecyclerView recyclerView;
   private FloatingActionButton fab;
@@ -59,8 +59,6 @@ public class CourseListFragment extends BaseFragment implements
   private BackendResponse<JsonArray, List<CourseSummary>> queryCall;
 
   private boolean pinMode = false;
-  private MenuItem pinnedMenuItem;
-  private PinSwitch pinnedCoursesSwitch;
   private MenuItem courseSearchMenuItem;
   private SearchView courseSearchView;
   private boolean refreshOnSearchClose = false;
@@ -98,10 +96,11 @@ public class CourseListFragment extends BaseFragment implements
   }
 
   @Override
-  public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+  public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                           final Bundle savedInstanceState) {
 
     courses = new Courses(context);
-    courseListView = inflater.inflate(R.layout.fragment_course_list, container, false);
+    View courseListView = inflater.inflate(R.layout.fragment_course_list, container, false);
 
     swipeRefreshLayout = (SwipeRefreshLayout) courseListView.findViewById(R.id.swipe_refresh_container);
     recyclerView = (RecyclerView) courseListView.findViewById(R.id.course_list_recycler);
@@ -136,8 +135,8 @@ public class CourseListFragment extends BaseFragment implements
 
     // Wait for the client to connect or fail so we can send our location (if possible) to get
     // courses closest to current location
-    DoglegApplication.googleApiClient().registerConnectionCallbacks(this);
-    DoglegApplication.googleApiClient().registerConnectionFailedListener(this);
+    app.googleApiClient().registerConnectionCallbacks(this);
+    app.googleApiClient().registerConnectionFailedListener(this);
 
     return courseListView;
   }
@@ -152,8 +151,8 @@ public class CourseListFragment extends BaseFragment implements
 
     Views.colorizeSearchView(courseSearchView, android.R.color.white, context);
 
-    pinnedMenuItem = menu.findItem(R.id.pinned_switch);
-    pinnedCoursesSwitch = (PinSwitch) MenuItemCompat.getActionView(pinnedMenuItem);
+    MenuItem pinnedMenuItem = menu.findItem(R.id.pinned_switch);
+    PinSwitch pinnedCoursesSwitch = (PinSwitch) MenuItemCompat.getActionView(pinnedMenuItem);
     pinnedCoursesSwitch.setChecked(pinMode);
     pinnedCoursesSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       @Override
@@ -213,6 +212,7 @@ public class CourseListFragment extends BaseFragment implements
   }
 
   @Override
+  @NonNull
   public String getTitle() {
     return "Courses";
   }
@@ -318,7 +318,7 @@ public class CourseListFragment extends BaseFragment implements
     queryCall.
         onSuccess(new BackendResponse.BackendSuccessListener<List<CourseSummary>>() {
           @Override
-          public void onSuccess(final List<CourseSummary> value) {
+          public void onSuccess(@NonNull final List<CourseSummary> value) {
             endOfListReached = value.isEmpty();
             displayedCourseList.addAll(value);
           }
@@ -345,20 +345,21 @@ public class CourseListFragment extends BaseFragment implements
   @Override
   public void onConnected(final Bundle bundle) {
     addToCourseList(false);
-    DoglegApplication.googleApiClient().unregisterConnectionCallbacks(this);
-    DoglegApplication.googleApiClient().unregisterConnectionFailedListener(this);
+    app.googleApiClient().unregisterConnectionCallbacks(this);
+    app.googleApiClient().unregisterConnectionFailedListener(this);
   }
 
   @Override
   public void onConnectionSuspended(final int i) {
-    DoglegApplication.googleApiClient().unregisterConnectionCallbacks(this);
-    DoglegApplication.googleApiClient().unregisterConnectionFailedListener(this);
+    app.googleApiClient().unregisterConnectionCallbacks(this);
+    app.googleApiClient().unregisterConnectionFailedListener(this);
   }
 
   @Override
   public void onConnectionFailed(final ConnectionResult connectionResult) {
     addToCourseList(false);
-    DoglegApplication.googleApiClient().unregisterConnectionCallbacks(this);
-    DoglegApplication.googleApiClient().unregisterConnectionFailedListener(this);
+    app.googleApiClient().unregisterConnectionCallbacks(this);
+    app.googleApiClient().unregisterConnectionFailedListener(this);
   }
+
 }

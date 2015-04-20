@@ -1,6 +1,8 @@
 package org.cranst0n.dogleg.android.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +18,14 @@ import java.util.List;
 
 public class DrawerMenuAdapter extends BaseAdapter {
 
+  @NonNull
   private final Context context;
+  @NonNull
   private final List<DrawerFragment.DrawerMenuItem> menuItems;
 
-  public DrawerMenuAdapter(final Context context, final List<DrawerFragment.DrawerMenuItem> listItems) {
+  public DrawerMenuAdapter(@NonNull final Context context,
+                           @NonNull final List<DrawerFragment.DrawerMenuItem> listItems) {
+
     this.context = context;
     this.menuItems = listItems;
   }
@@ -40,7 +46,7 @@ public class DrawerMenuAdapter extends BaseAdapter {
   }
 
   @Override
-  public View getView(final int position, View convertView, final ViewGroup parent) {
+  public View getView(final int position, @Nullable View convertView, final ViewGroup parent) {
 
     ViewHolder holder;
 
@@ -65,7 +71,7 @@ public class DrawerMenuAdapter extends BaseAdapter {
     DrawerFragment.DrawerMenuItem item = menuItems.get(position);
 
     holder.iconView.setImageDrawable(
-        DoglegApplication.context().getResources().getDrawable(item.iconRes));
+        DoglegApplication.application().context().getResources().getDrawable(item.iconRes));
     holder.titleView.setText(item.title);
     holder.experimentalBadge.setVisibility(item.experimental ? View.VISIBLE : View.GONE);
     holder.menuItem = item;

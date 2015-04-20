@@ -2,6 +2,7 @@ package org.cranst0n.dogleg.android.utils;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import org.cranst0n.dogleg.android.model.LatLon;
 
@@ -13,17 +14,17 @@ public class Intents {
 
   }
 
-  public static final Intent navigationTo(final LatLon location) {
+  public static Intent navigationTo(@NonNull final LatLon location) {
     return new Intent(android.content.Intent.ACTION_VIEW,
         Uri.parse(String.format(
             "http://maps.google.com/maps?daddr=%.5f,%.5f", location.latitude, location.longitude)));
   }
 
-  public static final Intent phoneCall(final String phoneNumber) {
+  public static Intent phoneCall(@NonNull final String phoneNumber) {
     return new Intent(Intent.ACTION_DIAL, Uri.parse(String.format("tel:%s", phoneNumber)));
   }
 
-  public static final Intent pickImage() {
+  public static Intent pickImage() {
     Intent intent = new Intent(Intent.ACTION_PICK);
     intent.setType("image/*");
     return intent;

@@ -4,10 +4,15 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorRes;
+import android.support.annotation.NonNull;
 
 public class Colors {
 
-  public static Drawable colorize(final Drawable drawable, final int colorRes, final Context context) {
+  public static Drawable colorize(@NonNull final Drawable drawable,
+                                  @ColorRes final int colorRes,
+                                  @NonNull final Context context) {
+
     drawable.setColorFilter(context.getResources().getColor(colorRes), PorterDuff.Mode.SRC_ATOP);
     return drawable;
   }

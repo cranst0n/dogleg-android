@@ -9,7 +9,7 @@ import org.cranst0n.dogleg.android.fragment.AccountFragment;
 public class AccountActivity extends BaseActivity {
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  protected void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     drawerFragment.setDrawerIndicatorEnabled(false);
@@ -33,7 +33,7 @@ public class AccountActivity extends BaseActivity {
   }
 
   @Override
-  protected int getTitleToolBar() {
+  protected int getToolbarTitle() {
     return R.string.account_activity_title;
   }
 

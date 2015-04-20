@@ -1,6 +1,8 @@
 package org.cranst0n.dogleg.android.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +20,13 @@ import java.util.List;
 
 public class UsernameSearchAdapter extends ArrayAdapter<User> implements Filterable {
 
-  private final ArrayList<User> userData = new ArrayList<User>();
+  @NonNull
+  private final ArrayList<User> userData = new ArrayList<>();
 
-  private Users users;
+  @NonNull
+  private final Users users;
 
-  public UsernameSearchAdapter(final Context context) {
+  public UsernameSearchAdapter(@NonNull final Context context) {
     super(context, 0);
 
     users = new Users(context);
@@ -39,7 +43,7 @@ public class UsernameSearchAdapter extends ArrayAdapter<User> implements Filtera
   }
 
   @Override
-  public View getView(final int position, View convertView, final ViewGroup parent) {
+  public View getView(final int position, @Nullable View convertView, final ViewGroup parent) {
 
     final ViewHolder vh;
 
@@ -60,7 +64,7 @@ public class UsernameSearchAdapter extends ArrayAdapter<User> implements Filtera
   @Override
   public Filter getFilter() {
 
-    Filter myFilter = new Filter() {
+    return new Filter() {
       @Override
       protected FilterResults performFiltering(final CharSequence constraint) {
 
@@ -71,7 +75,7 @@ public class UsernameSearchAdapter extends ArrayAdapter<User> implements Filtera
           users.searchByName(constraint.toString())
               .onSuccess(new BackendResponse.BackendSuccessListener<List<User>>() {
                 @Override
-                public void onSuccess(final List<User> value) {
+                public void onSuccess(@NonNull final List<User> value) {
                   userData.clear();
                   userData.addAll(value);
                 }
@@ -103,12 +107,11 @@ public class UsernameSearchAdapter extends ArrayAdapter<User> implements Filtera
         }
       }
     };
-    return myFilter;
   }
 
   private class ViewHolder {
 
-    private TextView textView;
+    private final TextView textView;
 
     private ViewHolder(final View rootView) {
       textView = (TextView) rootView.findViewById(android.R.id.text1);

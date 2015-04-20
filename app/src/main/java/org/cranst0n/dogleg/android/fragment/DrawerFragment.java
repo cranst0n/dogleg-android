@@ -5,6 +5,8 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -116,8 +118,9 @@ public class DrawerFragment extends BaseFragment implements AdapterView.OnItemCl
     bus.unregister(this);
   }
 
+  @Override
   public void onItemClick(final AdapterView<?> parent, final View view, final int position,
-                          long id) {
+                          final long id) {
 
     currentSelectedPosition = position;
 
@@ -141,7 +144,8 @@ public class DrawerFragment extends BaseFragment implements AdapterView.OnItemCl
   public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                            final Bundle savedInstanceState) {
 
-    drawerMainLayout = (LinearLayout) inflater.inflate(R.layout.fragment_drawer_menu, container, false);
+    drawerMainLayout =
+        (LinearLayout) inflater.inflate(R.layout.fragment_drawer_menu, container, false);
 
     drawerGeneralListView = (ListView) drawerMainLayout.findViewById(R.id.drawer_general_items_list);
     drawerUserListView = (ListView) drawerMainLayout.findViewById(R.id.drawer_user_items_list);
@@ -196,11 +200,6 @@ public class DrawerFragment extends BaseFragment implements AdapterView.OnItemCl
   public void onActivityCreated(final Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     setHasOptionsMenu(true);
-  }
-
-  @Override
-  public void onDetach() {
-    super.onDetach();
   }
 
   @Override
@@ -356,13 +355,14 @@ public class DrawerFragment extends BaseFragment implements AdapterView.OnItemCl
 
     public final boolean experimental;
 
-    public DrawerMenuItem(final int iconRes, final String title, final int priority, final Class<?>
-        activityToStart) {
+    public DrawerMenuItem(@DrawableRes final int iconRes, @NonNull final String title,
+                          final int priority, @NonNull final Class<?> activityToStart) {
       this(iconRes, title, priority, activityToStart, false);
     }
 
-    public DrawerMenuItem(final int iconRes, final String title, final int priority, final Class<?>
-        activityToStart, final boolean experimental) {
+    public DrawerMenuItem(@DrawableRes final int iconRes, @NonNull final String title,
+                          final int priority, @NonNull final Class<?> activityToStart,
+                          final boolean experimental) {
 
       this(iconRes, title, priority, new Runnable() {
         @Override
@@ -378,8 +378,9 @@ public class DrawerFragment extends BaseFragment implements AdapterView.OnItemCl
       }, experimental);
     }
 
-    public DrawerMenuItem(final int iconRes, final String title, final int priority, final Runnable
-        action, final boolean experimental) {
+    public DrawerMenuItem(@DrawableRes final int iconRes, @NonNull final String title,
+                          final int priority, @NonNull final Runnable action,
+                          final boolean experimental) {
 
       this.iconRes = iconRes;
       this.title = title;
@@ -389,7 +390,7 @@ public class DrawerFragment extends BaseFragment implements AdapterView.OnItemCl
     }
 
     @Override
-    public int compareTo(final DrawerMenuItem drawerMenuItem) {
+    public int compareTo(@NonNull final DrawerMenuItem drawerMenuItem) {
       return this.priority - drawerMenuItem.priority;
     }
   }

@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,10 +39,7 @@ public class AccountFragment extends BaseFragment {
   private Users users;
   private User currentUser;
 
-  private View accountView;
-
   private ImageView avatarView;
-  private Button saveAvatarButton;
 
   private EditText oldPasswordField;
   private EditText newPasswordField;
@@ -66,12 +64,13 @@ public class AccountFragment extends BaseFragment {
   }
 
   @Override
-  public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+  public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                           final Bundle savedInstanceState) {
 
-    accountView = inflater.inflate(R.layout.fragment_account, container, false);
+    View accountView = inflater.inflate(R.layout.fragment_account, container, false);
 
     avatarView = (ImageView) accountView.findViewById(R.id.user_avatar);
-    saveAvatarButton = (Button) accountView.findViewById(R.id.change_avatar_button);
+    Button saveAvatarButton = (Button) accountView.findViewById(R.id.change_avatar_button);
 
     avatarView.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -91,7 +90,7 @@ public class AccountFragment extends BaseFragment {
         users.changeAvatar(currentUser, bitmap)
             .onSuccess(new BackendResponse.BackendSuccessListener<User>() {
               @Override
-              public void onSuccess(final User value) {
+              public void onSuccess(@NonNull final User value) {
                 SnackBars.showSimple(activity, "Updated avatar.");
                 bus.post(value);
               }
@@ -122,7 +121,7 @@ public class AccountFragment extends BaseFragment {
             .getText().toString(), newPasswordConfirmField.getText().toString())
             .onSuccess(new BackendResponse.BackendSuccessListener<User>() {
               @Override
-              public void onSuccess(final User value) {
+              public void onSuccess(@NonNull final User value) {
                 SnackBars.showSimple(activity, "Password changed.");
                 oldPasswordField.setText("");
                 newPasswordField.setText("");

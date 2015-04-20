@@ -2,6 +2,8 @@ package org.cranst0n.dogleg.android.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -52,7 +54,7 @@ public class RoundPlayFragment extends BaseFragment {
 
   private final List<Fragment> viewPagerFragments = new ArrayList<>();
 
-  public static RoundPlayFragment instance(final Fragment... fragments) {
+  public static RoundPlayFragment instance(@NonNull final Fragment... fragments) {
 
     RoundPlayFragment prf = new RoundPlayFragment();
 
@@ -108,8 +110,10 @@ public class RoundPlayFragment extends BaseFragment {
     previousHoleButton = (ImageButton) playRoundView.findViewById(R.id.previous_hole_button);
     nextHoleButton = (ImageButton) playRoundView.findViewById(R.id.next_hole_button);
 
-    if (round() != null) {
-      roundUpdated(round());
+    Round round = round();
+
+    if (round != null) {
+      roundUpdated(round);
     }
   }
 
@@ -149,6 +153,7 @@ public class RoundPlayFragment extends BaseFragment {
     });
   }
 
+  @Nullable
   private Round round() {
     if (activity instanceof RoundPlayActivity) {
       return ((RoundPlayActivity) activity).round();
@@ -157,14 +162,7 @@ public class RoundPlayFragment extends BaseFragment {
     return null;
   }
 
-  private HoleScore currentHoleScore() {
-    if (activity instanceof RoundPlayActivity) {
-      return ((RoundPlayActivity) activity).currentHoleScore();
-    }
-
-    return null;
-  }
-
+  @Nullable
   private HoleRating currentHoleRating() {
     if (activity instanceof RoundPlayActivity) {
       return ((RoundPlayActivity) activity).currentHoleRating();
@@ -173,8 +171,8 @@ public class RoundPlayFragment extends BaseFragment {
     return null;
   }
 
-  public void roundUpdated(final Round round) {
-    scoreUpdated(currentHoleScore());
+  public void roundUpdated(@NonNull final Round round) {
+    scoreUpdated(round);
   }
 
   public void holeUpdated(final int currentHole) {
@@ -182,18 +180,20 @@ public class RoundPlayFragment extends BaseFragment {
 
       HoleRating currentHoleRating = currentHoleRating();
 
-      currentHoleView.setText(String.valueOf(currentHole));
-      currentHoleSuffixView.setText(
-          Html.fromHtml(String.format("<sup>%s</sup>", Strings.numberSuffix(currentHole))));
-      currentHoleParView.setText(String.format("Par %d", currentHoleRating.par));
-      currentHoleYardageView.setText(String.format("%d yards", currentHoleRating.yardage));
-      currentHoleHandicapView.setText(String.format("HCP #%d", currentHoleRating.handicap));
+      if (currentHoleRating != null) {
+        currentHoleView.setText(String.valueOf(currentHole));
+        currentHoleSuffixView.setText(
+            Html.fromHtml(String.format("<sup>%s</sup>", Strings.numberSuffix(currentHole))));
+        currentHoleParView.setText(String.format("Par %d", currentHoleRating.par));
+        currentHoleYardageView.setText(String.format("%d yards", currentHoleRating.yardage));
+        currentHoleHandicapView.setText(String.format("HCP #%d", currentHoleRating.handicap));
+      }
     }
   }
 
-  public void scoreUpdated(final HoleScore holeScore) {
-    if (round() != null) {
-      RoundStats stats = round().stats();
+  public void scoreUpdated(@NonNull final Round round) {
+    if (isAdded()) {
+      RoundStats stats = round.stats();
       roundGrossScoreView.setText(String.valueOf(stats.score));
       roundGrossScoreToParView.setText(String.format("(%s)", stats.grossScoreToParString()));
       netScoreView.setText(String.valueOf(stats.netScore));
@@ -208,7 +208,7 @@ public class RoundPlayFragment extends BaseFragment {
 
     void gotoHole(final int holeNumber);
 
-    void updateScore(final HoleScore holeScore);
+    void updateScore(@NonNull final HoleScore holeScore);
 
     void showScoreSelectionDialog(final int holeNumber);
 

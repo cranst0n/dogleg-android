@@ -34,7 +34,7 @@ public class SettingsActivity extends BaseActivity {
   }
 
   @Override
-  protected int getTitleToolBar() {
+  protected int getToolbarTitle() {
     return R.string.settings_activity_title;
   }
 }

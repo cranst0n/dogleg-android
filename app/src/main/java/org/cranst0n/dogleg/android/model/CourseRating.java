@@ -1,10 +1,14 @@
 package org.cranst0n.dogleg.android.model;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.util.Arrays;
 
 public class CourseRating {
 
   public final long id;
+  @NonNull
   public final String teeName;
   public final double rating;
   public final double slope;
@@ -13,7 +17,9 @@ public class CourseRating {
   public final double backRating;
   public final double backSlope;
   public final double bogeyRating;
+  @NonNull
   public final Gender gender;
+  @NonNull
   private final HoleRating[] holeRatings;
 
   private int par;
@@ -23,10 +29,10 @@ public class CourseRating {
   private int backPar;
   private int backYardage;
 
-  public CourseRating(final long id, final String teeName, final double rating, final double slope,
-                      final double frontRating, final double frontSlope, final double backRating,
-                      final double backSlope, final double bogeyRating, final Gender gender,
-                      final HoleRating[] holeRatings) {
+  public CourseRating(final long id, @NonNull final String teeName, final double rating,
+                      final double slope, final double frontRating, final double frontSlope,
+                      final double backRating, final double backSlope, final double bogeyRating,
+                      @NonNull final Gender gender, @NonNull final HoleRating[] holeRatings) {
 
     this.id = id;
     this.teeName = teeName;
@@ -41,7 +47,7 @@ public class CourseRating {
     this.holeRatings = holeRatings;
   }
 
-  public double rating(final HoleSet holeSet) {
+  public double rating(@NonNull final HoleSet holeSet) {
     switch (holeSet) {
       case Front9: {
         return frontRating;
@@ -55,7 +61,7 @@ public class CourseRating {
     }
   }
 
-  public double slope(final HoleSet holeSet) {
+  public double slope(@NonNull final HoleSet holeSet) {
     switch (holeSet) {
       case Front9: {
         return frontSlope;
@@ -69,6 +75,7 @@ public class CourseRating {
     }
   }
 
+  @Nullable
   public HoleRating holeRating(final int holeNumber) {
     for (HoleRating holeRating : holeRatings) {
       if (holeRating.number == holeNumber) {
@@ -79,6 +86,7 @@ public class CourseRating {
     return null;
   }
 
+  @NonNull
   public HoleRating[] holeRatings() {
     return Arrays.copyOf(holeRatings, holeRatings.length);
   }

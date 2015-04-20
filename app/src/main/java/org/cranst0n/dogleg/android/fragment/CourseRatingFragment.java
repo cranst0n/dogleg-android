@@ -1,6 +1,7 @@
 package org.cranst0n.dogleg.android.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.model.CourseRating;
+import org.cranst0n.dogleg.android.model.HoleRating;
 import org.cranst0n.dogleg.android.utils.Json;
 
 public class CourseRatingFragment extends BaseFragment {
@@ -89,7 +91,7 @@ public class CourseRatingFragment extends BaseFragment {
     outState.putString(CourseRating.class.getCanonicalName(), Json.pimpedGson().toJson(rating));
   }
 
-  public void setRating(final CourseRating rating) {
+  public void setRating(@NonNull final CourseRating rating) {
     this.rating = rating;
   }
 
@@ -112,9 +114,12 @@ public class CourseRatingFragment extends BaseFragment {
       }
 
       for (int ix = 0; ix < rating.holeRatings().length; ix++) {
-        holeFieldViews[ix].par.setText("" + rating.holeRating(ix + 1).par);
-        holeFieldViews[ix].yardage.setText("" + rating.holeRating(ix + 1).yardage);
-        holeFieldViews[ix].handicap.setText("" + rating.holeRating(ix + 1).handicap);
+        HoleRating holeRating = rating.holeRating(ix + 1);
+        if (holeRating != null) {
+          holeFieldViews[ix].par.setText(String.valueOf(holeRating.par));
+          holeFieldViews[ix].yardage.setText(String.valueOf(holeRating.yardage));
+          holeFieldViews[ix].handicap.setText(String.valueOf(holeRating.handicap));
+        }
       }
 
       front9ParText.setText(String.valueOf(rating.frontPar()));
@@ -141,7 +146,7 @@ public class CourseRatingFragment extends BaseFragment {
       divider = holeView(holeNumber, "divider");
     }
 
-    private View holeView(final int holeNum, final String fieldSuffix) {
+    private View holeView(final int holeNum, @NonNull final String fieldSuffix) {
       String s = String.format("hole_%d_%s", holeNum, fieldSuffix);
       return ratingView.findViewById(
           getResources().getIdentifier(s, "id", activity.getPackageName()));

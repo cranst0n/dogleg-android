@@ -3,6 +3,7 @@ package org.cranst0n.dogleg.android.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,10 +27,13 @@ import java.util.List;
 
 public class CourseListRecyclerAdapter extends RecyclerView.Adapter<CourseListRecyclerAdapter.ViewHolder> {
 
+  @NonNull
   private final Activity activity;
+  @NonNull
   private final List<CourseSummary> courseList;
 
-  public CourseListRecyclerAdapter(final Activity activity, final List<CourseSummary> courseList) {
+  public CourseListRecyclerAdapter(@NonNull final Activity activity,
+                                   @NonNull final List<CourseSummary> courseList) {
     this.activity = activity;
     this.courseList = courseList;
   }
@@ -47,7 +51,7 @@ public class CourseListRecyclerAdapter extends RecyclerView.Adapter<CourseListRe
 
   @Override
   public int getItemCount() {
-    return courseList != null ? courseList.size() : 0;
+    return courseList.size();
   }
 
   public class ViewHolder extends RecyclerView.ViewHolder {
@@ -62,7 +66,8 @@ public class CourseListRecyclerAdapter extends RecyclerView.Adapter<CourseListRe
     public final ImageButton callButton;
     public final Button navigationButton;
 
-    public ViewHolder(final Activity activity, final View itemView) {
+    public ViewHolder(@NonNull final Activity activity, @NonNull final View itemView) {
+
       super(itemView);
 
       courseImageView = (ImageView) itemView.findViewById(R.id.course_image);
@@ -99,7 +104,7 @@ public class CourseListRecyclerAdapter extends RecyclerView.Adapter<CourseListRe
       });
     }
 
-    public void setCourseSummary(final CourseSummary courseSummary) {
+    public void setCourseSummary(@NonNull final CourseSummary courseSummary) {
       this.courseSummary = courseSummary;
 
       Ion.with(courseImageView)

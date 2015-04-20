@@ -10,7 +10,6 @@ import com.nispok.snackbar.listeners.ActionClickListener;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
-import org.cranst0n.dogleg.android.DoglegApplication;
 import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.backend.Authentication;
 import org.cranst0n.dogleg.android.fragment.HomeFragment;
@@ -20,12 +19,10 @@ import org.cranst0n.dogleg.android.utils.SnackBars;
 
 public class HomeActivity extends BaseActivity {
 
-  private final String Tag = getClass().getSimpleName();
-
   private Authentication authentication;
   private Bus bus;
 
-  private User currentUser = DoglegApplication.appUser();
+  private User currentUser = app.user();
 
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
@@ -61,7 +58,7 @@ public class HomeActivity extends BaseActivity {
   }
 
   @Override
-  protected int getTitleToolBar() {
+  protected int getToolbarTitle() {
     return R.string.app_name;
   }
 

@@ -12,7 +12,9 @@ public class Vibration {
   }
 
   public static void vibrate(final long duration) {
-    Vibrator v = (Vibrator) DoglegApplication.context().getSystemService(Context.VIBRATOR_SERVICE);
-    v.vibrate(300);
+    Vibrator v = (Vibrator) DoglegApplication.application().context()
+        .getSystemService(Context.VIBRATOR_SERVICE);
+
+    v.vibrate(duration);
   }
 }

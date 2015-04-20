@@ -1,5 +1,7 @@
 package org.cranst0n.dogleg.android.model;
 
+import android.support.annotation.NonNull;
+
 import org.cranst0n.dogleg.android.utils.Strings;
 
 public enum Club {
@@ -48,14 +50,16 @@ public enum Club {
   // Other Actions
   FinishHole(2000, "Finish Hole");
 
-  private Club(final int id, final String name) {
+  Club(final int id, @NonNull final String name) {
     this.id = id;
     this.name = name;
   }
 
   public final int id;
+  @NonNull
   public final String name;
 
+  @NonNull
   public static Club forId(final int id) {
     for (Club club : values()) {
       if (club.id == id) {
@@ -66,7 +70,8 @@ public enum Club {
     return Club.Unknown;
   }
 
-  public static Club forName(final String name) {
+  @NonNull
+  public static Club forName(@NonNull final String name) {
     for (Club club : values()) {
       if (club.name.equalsIgnoreCase(name)) {
         return club;

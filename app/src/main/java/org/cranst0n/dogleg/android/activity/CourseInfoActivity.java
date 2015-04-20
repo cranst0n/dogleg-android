@@ -29,6 +29,7 @@ public class CourseInfoActivity extends BaseActivity {
   @Override
   protected void onSaveInstanceState(final Bundle outState) {
     super.onSaveInstanceState(outState);
+
     getSupportFragmentManager().putFragment(
         outState, CourseInfoFragment.class.getCanonicalName(), courseInfoFragment);
   }
@@ -39,7 +40,7 @@ public class CourseInfoActivity extends BaseActivity {
   }
 
   @Override
-  protected int getTitleToolBar() {
+  protected int getToolbarTitle() {
     return R.string.app_name;
   }
 

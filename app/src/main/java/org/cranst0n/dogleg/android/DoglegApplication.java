@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.support.annotation.Nullable;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderApi;
@@ -28,15 +29,17 @@ import java.util.concurrent.atomic.AtomicReference;
 public class DoglegApplication extends Application {
 
   private static DoglegApplication doglegApplication;
-  private static final AtomicReference<Activity> currentActivity = new AtomicReference<>(null);
-  private static User appUser;
 
-  private static GoogleApiClient googleApiClient;
+  private final AtomicReference<Activity> currentActivity = new AtomicReference<>(null);
+  private User appUser;
+
+  private GoogleApiClient googleApiClient;
 
   @Override
   public void onCreate() {
 
     doglegApplication = this;
+
     googleApiClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API).build();
     googleApiClient.connect();
 
@@ -48,7 +51,7 @@ public class DoglegApplication extends Application {
 
     String userJson = PreferencesEditor.getStringPreference(this, R.string.app_user_key, "");
 
-    if (!userJson.isEmpty()) {
+    if (userJson != null && !userJson.isEmpty()) {
       appUser = Json.pimpedGson().fromJson(userJson, User.class);
 
       // Make sure auth token is still valid
@@ -71,19 +74,20 @@ public class DoglegApplication extends Application {
     return doglegApplication;
   }
 
-  public static Activity currentActivity() {
+  @Nullable
+  public Activity currentActivity() {
     return currentActivity.get();
   }
 
-  public static void setCurrentActivity(final Activity activity) {
+  public void setCurrentActivity(@Nullable final Activity activity) {
     currentActivity.set(activity);
   }
 
-  public static Context context() {
+  public Context context() {
     return doglegApplication.getApplicationContext();
   }
 
-  public static GoogleApiClient googleApiClient() {
+  public GoogleApiClient googleApiClient() {
     return googleApiClient;
   }
 
@@ -96,7 +100,7 @@ public class DoglegApplication extends Application {
   }
 
   @Produce
-  public static User appUser() {
+  public User user() {
     return appUser;
   }
 
@@ -117,14 +121,15 @@ public class DoglegApplication extends Application {
 
     initARCAHandler();
 
-    PreferencesEditor.getSharedPreferences().registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
-      @Override
-      public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
-        if (key.equals(R.string.dogleg_server_url_key)) {
-          initARCAHandler();
-        }
-      }
-    });
+    PreferencesEditor.getSharedPreferences()
+        .registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+          @Override
+          public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
+            if (key.equals(getResources().getString(R.string.dogleg_server_url_key))) {
+              initARCAHandler();
+            }
+          }
+        });
   }
 
   private void initARCAHandler() {

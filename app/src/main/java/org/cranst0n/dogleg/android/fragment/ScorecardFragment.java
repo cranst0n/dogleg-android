@@ -1,6 +1,10 @@
 package org.cranst0n.dogleg.android.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +14,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import org.cranst0n.dogleg.android.R;
+import org.cranst0n.dogleg.android.model.HoleRating;
 import org.cranst0n.dogleg.android.model.HoleScore;
 import org.cranst0n.dogleg.android.model.HoleSet;
 import org.cranst0n.dogleg.android.model.Round;
@@ -18,6 +23,7 @@ import org.cranst0n.dogleg.android.views.TextlessCheckbox;
 
 public class ScorecardFragment extends BaseFragment {
 
+  @Nullable
   protected Round round;
 
   protected boolean enabled = true;
@@ -65,7 +71,7 @@ public class ScorecardFragment extends BaseFragment {
 
   protected HoleViewHolder[] holeFieldViews;
 
-  public static ScorecardFragment instance(final Round round) {
+  public static ScorecardFragment instance(@NonNull final Round round) {
     ScorecardFragment fragment = new ScorecardFragment();
     fragment.setRound(round);
     return fragment;
@@ -76,7 +82,8 @@ public class ScorecardFragment extends BaseFragment {
   }
 
   @Override
-  public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+  public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                           final Bundle savedInstanceState) {
 
     scorecardView = inflater.inflate(R.layout.include_scorecard, container, false);
 
@@ -86,11 +93,12 @@ public class ScorecardFragment extends BaseFragment {
     return scorecardView;
   }
 
+  @Nullable
   public Round getRound() {
     return round;
   }
 
-  public void setRound(final Round round) {
+  public void setRound(@NonNull final Round round) {
     this.round = round;
     updateScorecard();
   }
@@ -105,11 +113,18 @@ public class ScorecardFragment extends BaseFragment {
         if (holeSet.includes(holeNum)) {
 
           int ix = holeNum - holeStart();
+          HoleRating holeRating = round.rating.holeRating(holeNum);
+          HoleScore holeScore = round.holeScore(holeNum);
 
-          holeFieldViews[ix].par.setText(String.valueOf(round.rating.holeRating(holeNum).par));
-          holeFieldViews[ix].yardage.setText(String.valueOf(round.rating.holeRating(holeNum).yardage));
-          holeFieldViews[ix].fairwayHit.setEnabled(enabled && round.rating.holeRating(holeNum).par > 3);
-          updateHole(round.holeScore(holeNum));
+          if (holeRating != null) {
+            holeFieldViews[ix].par.setText(String.valueOf(holeRating.par));
+            holeFieldViews[ix].yardage.setText(String.valueOf(holeRating.yardage));
+            holeFieldViews[ix].fairwayHit.setEnabled(enabled && holeRating.par > 3);
+          }
+
+          if (holeScore != null) {
+            updateHole(holeScore);
+          }
         }
       }
 
@@ -144,7 +159,7 @@ public class ScorecardFragment extends BaseFragment {
     return holeNumber >= holeStart() && holeNumber <= holeEnd();
   }
 
-  public void updateHole(final HoleScore holeScore) {
+  public void updateHole(@NonNull final HoleScore holeScore) {
 
     if (includesHole(holeScore.hole.number) && holeFieldViews != null) {
 
@@ -161,10 +176,12 @@ public class ScorecardFragment extends BaseFragment {
       viewHolder.updateScoreIndicators();
     }
 
-    updateRoundStats(round);
+    if (round != null) {
+      updateRoundStats(round);
+    }
   }
 
-  protected void updateRoundStats(final Round round) {
+  protected void updateRoundStats(@NonNull final Round round) {
 
     if (isAdded()) {
       RoundStats stats = round.stats();
@@ -193,6 +210,7 @@ public class ScorecardFragment extends BaseFragment {
     }
   }
 
+  @NonNull
   private String formatPercentage(final double percentage) {
     if (percentage >= 1) {
       return String.format("%d%%", Math.round(percentage * 100));
@@ -255,7 +273,7 @@ public class ScorecardFragment extends BaseFragment {
     return this;
   }
 
-  protected void findViews(final View parentView) {
+  protected void findViews(@NonNull final View parentView) {
 
     scorecardTable = (TableLayout) parentView.findViewById(R.id.scorecard_table);
 
@@ -303,7 +321,10 @@ public class ScorecardFragment extends BaseFragment {
       holeFieldViews[ix - holeStart()] = new HoleViewHolder(ix, parentView);
     }
 
-    setRound(round);
+    if (round != null) {
+      setRound(round);
+    }
+
     setEnabled(enabled);
   }
 
@@ -321,7 +342,7 @@ public class ScorecardFragment extends BaseFragment {
     public final TextlessCheckbox fairwayHit;
     public final TextlessCheckbox gir;
 
-    private HoleViewHolder(final int holeNumber, final View parentView) {
+    private HoleViewHolder(final int holeNumber, @NonNull final View parentView) {
 
       this.holeNumber = holeNumber;
 
@@ -341,30 +362,44 @@ public class ScorecardFragment extends BaseFragment {
 
     public void updateScoreIndicators() {
 
-      HoleScore holeScore = round.holeScore(holeNumber);
+      if (round != null) {
 
-      int scoreToPar = holeScore.score - round.rating.holeRating(holeScore.hole.number).par;
-      int netScoreToPar = holeScore.netScore - round.rating.holeRating(holeScore.hole.number).par;
+        HoleScore holeScore = round.holeScore(holeNumber);
 
-      if (holeScore.score > 0) {
-        score.setBackgroundResource(scoreBackgroundResource(scoreToPar));
-        score.setTextColor(getResources().getColor(scoreTextColor(scoreToPar)));
-        netScore.setBackgroundResource(scoreBackgroundResource(netScoreToPar));
-        netScore.setTextColor(getResources().getColor(scoreTextColor(netScoreToPar)));
-      } else {
-        score.setBackgroundResource(scoreBackgroundResource(0));
-        score.setTextColor(getResources().getColor(scoreTextColor(0)));
-        netScore.setBackgroundResource(scoreBackgroundResource(0));
-        netScore.setTextColor(getResources().getColor(scoreTextColor(0)));
+        if (holeScore != null) {
+          HoleRating holeRating = round.rating.holeRating(holeScore.hole.number);
+
+          if (holeRating != null) {
+
+            int scoreToPar = holeScore.score - holeRating.par;
+            int netScoreToPar = holeScore.netScore - holeRating.par;
+
+            if (holeScore.score > 0) {
+              score.setBackgroundResource(scoreBackgroundResource(scoreToPar));
+              score.setTextColor(getResources().getColor(scoreTextColor(scoreToPar)));
+              netScore.setBackgroundResource(scoreBackgroundResource(netScoreToPar));
+              netScore.setTextColor(getResources().getColor(scoreTextColor(netScoreToPar)));
+            } else {
+              score.setBackgroundResource(scoreBackgroundResource(0));
+              score.setTextColor(getResources().getColor(scoreTextColor(0)));
+              netScore.setBackgroundResource(scoreBackgroundResource(0));
+              netScore.setTextColor(getResources().getColor(scoreTextColor(0)));
+            }
+          }
+        }
       }
     }
 
-    private View holeView(final int holeNum, final String fieldSuffix, final View parentView) {
+    private View holeView(final int holeNum,
+                          @NonNull final String fieldSuffix,
+                          final View parentView) {
+
       String s = String.format("hole_%d_%s", holeNum, fieldSuffix);
       return parentView.findViewById(
           getResources().getIdentifier(s, "id", activity.getPackageName()));
     }
 
+    @DrawableRes
     private int scoreBackgroundResource(final int scoreToPar) {
       if (scoreToPar <= -2) {
         return R.drawable.score_eagle;
@@ -379,6 +414,7 @@ public class ScorecardFragment extends BaseFragment {
       }
     }
 
+    @ColorRes
     private int scoreTextColor(final int scoreToPar) {
       if (scoreToPar <= -2) {
         return R.color.text_grey;

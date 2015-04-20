@@ -24,8 +24,6 @@ public class ShotCaddySetupFragment extends BaseFragment {
 
   private NfcAdapter nfcAdapter;
 
-  private View setupView;
-
   private RadioButton readModeButton;
   private RadioButton writeModeButton;
   private Button clubSelectionButton;
@@ -43,10 +41,10 @@ public class ShotCaddySetupFragment extends BaseFragment {
   }
 
   @Override
-  public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle
-      savedInstanceState) {
+  public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                           final Bundle savedInstanceState) {
 
-    setupView = inflater.inflate(R.layout.fragment_shot_caddy_setup, container, false);
+    View setupView = inflater.inflate(R.layout.fragment_shot_caddy_setup, container, false);
 
     readModeButton = (RadioButton) setupView.findViewById(R.id.nfc_read_mode_button);
     writeModeButton = (RadioButton) setupView.findViewById(R.id.nfc_write_mode_button);
@@ -134,7 +132,7 @@ public class ShotCaddySetupFragment extends BaseFragment {
 
   public void onNewIntent(final Intent intent) {
 
-    Tag tag = (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+    Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
     Log.d(TAG, "New NFC tag: [" + tag + "]");
 

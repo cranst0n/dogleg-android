@@ -3,6 +3,9 @@ package org.cranst0n.dogleg.android.activity;
 import android.app.Activity;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.StringRes;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,13 +18,17 @@ import org.cranst0n.dogleg.android.fragment.DrawerFragment;
 
 public abstract class BaseActivity extends ActionBarActivity {
 
+  protected final DoglegApplication app = DoglegApplication.application();
+
   protected Toolbar toolbar;
   protected DrawerLayout drawerLayout;
   protected DrawerFragment drawerFragment;
 
+  @LayoutRes
   protected abstract int getLayoutResourceIdentifier();
 
-  protected abstract int getTitleToolBar();
+  @StringRes
+  protected abstract int getToolbarTitle();
 
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
@@ -42,7 +49,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
 
     setSupportActionBar(toolbar);
-    getSupportActionBar().setTitle(getTitleToolBar());
+    getSupportActionBar().setTitle(getToolbarTitle());
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setElevation(0);
 
@@ -50,7 +57,7 @@ public abstract class BaseActivity extends ActionBarActivity {
 
   protected void onResume() {
     super.onResume();
-    DoglegApplication.setCurrentActivity(this);
+    app.setCurrentActivity(this);
   }
 
   protected void onPause() {
@@ -64,13 +71,13 @@ public abstract class BaseActivity extends ActionBarActivity {
   }
 
   private void clearReferences() {
-    Activity currActivity = DoglegApplication.currentActivity();
+    Activity currActivity = app.currentActivity();
     if (currActivity != null && currActivity.equals(this)) {
-      DoglegApplication.setCurrentActivity(null);
+      app.setCurrentActivity(null);
     }
   }
 
-  public void setToolbarBackground(final int color) {
+  public void setToolbarBackground(@ColorRes final int color) {
     toolbar.setBackgroundColor(color);
   }
 

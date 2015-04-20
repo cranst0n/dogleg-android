@@ -1,5 +1,7 @@
 package org.cranst0n.dogleg.android.utils;
 
+import android.support.annotation.NonNull;
+
 import org.passay.CharacterCharacteristicsRule;
 import org.passay.DigitCharacterRule;
 import org.passay.LengthRule;
@@ -22,7 +24,7 @@ public class Strings {
 
   }
 
-  public static int levensteinDistance(final String x, final String y) {
+  public static int levensteinDistance(@NonNull final String x, @NonNull final String y) {
 
     String a = x.toLowerCase();
     String b = y.toLowerCase();
@@ -65,7 +67,8 @@ public class Strings {
     }
   }
 
-  public static boolean isEmailValid(final String email) {
+  public static boolean isEmailValid(@NonNull final String email) {
+
     String regExpn =
         "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
             + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
@@ -74,19 +77,13 @@ public class Strings {
             + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
             + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
 
-    CharSequence inputStr = email;
-
     Pattern pattern = Pattern.compile(regExpn, Pattern.CASE_INSENSITIVE);
-    Matcher matcher = pattern.matcher(inputStr);
+    Matcher matcher = pattern.matcher(email);
 
-    if (matcher.matches()) {
-      return true;
-    } else {
-      return false;
-    }
+    return matcher.matches();
   }
 
-  public static List<String> isPasswordStrong(final String password) {
+  public static List<String> isPasswordStrong(@NonNull final String password) {
     LengthRule lengthRule = new LengthRule(8, 1000);
     WhitespaceRule noWhitespaceRule = new WhitespaceRule();
 
@@ -94,7 +91,7 @@ public class Strings {
     charRule.getRules().add(new DigitCharacterRule(1));
     charRule.getRules().add(new UppercaseCharacterRule(1));
 
-    List<Rule> ruleList = new ArrayList<Rule>();
+    List<Rule> ruleList = new ArrayList<>();
     ruleList.add(lengthRule);
     ruleList.add(noWhitespaceRule);
     ruleList.add(charRule);
@@ -104,4 +101,5 @@ public class Strings {
 
     return validator.getMessages(validator.validate(passwordData));
   }
+
 }

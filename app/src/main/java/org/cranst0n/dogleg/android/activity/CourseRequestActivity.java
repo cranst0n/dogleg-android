@@ -9,7 +9,7 @@ import org.cranst0n.dogleg.android.fragment.CourseRequestFragment;
 public class CourseRequestActivity extends BaseActivity {
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  protected void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     drawerFragment.setDrawerIndicatorEnabled(false);
@@ -33,7 +33,7 @@ public class CourseRequestActivity extends BaseActivity {
   }
 
   @Override
-  protected int getTitleToolBar() {
+  protected int getToolbarTitle() {
     return R.string.course_request_activity_title;
   }
 }

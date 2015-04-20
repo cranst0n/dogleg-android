@@ -1,15 +1,19 @@
 package org.cranst0n.dogleg.android.model;
 
+import android.support.annotation.NonNull;
+
 public class HoleFeature {
 
   public final long id;
+  @NonNull
   public final String name;
+  @NonNull
   public final LatLon[] coordinates;
   public final long holeId;
 
   private LatLon center;
 
-  public HoleFeature(final long id, final String name, final LatLon[] coordinates,
+  public HoleFeature(final long id, @NonNull final String name, @NonNull final LatLon[] coordinates,
                      final long holeId) {
 
     this.id = id;
@@ -18,6 +22,7 @@ public class HoleFeature {
     this.holeId = holeId;
   }
 
+  @NonNull
   public synchronized LatLon center() {
     if (center == null) {
       if (coordinates.length == 0) {

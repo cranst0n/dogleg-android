@@ -15,7 +15,7 @@ class AnimationController {
   private static final int DEFAULT_VELOCITY = 7;
   private static final int DEFAULT_FRAME_DURATION = 1000 / 60;
 
-  private AnimationHandler mHandler;
+  private final AnimationHandler mHandler;
   private OnAnimateListener mOnAnimateListener;
 
   private boolean isAnimating = false;
@@ -102,6 +102,7 @@ class AnimationController {
    * @author kyleduo
    */
   class RequireNextFrame implements Runnable {
+
     @Override
     public void run() {
       if (!isAnimating) {
@@ -114,7 +115,6 @@ class AnimationController {
       } else {
         stopAnimation();
         mOnAnimateListener.onAnimateComplete();
-        return;
       }
     }
 

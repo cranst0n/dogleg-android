@@ -3,6 +3,7 @@ package org.cranst0n.dogleg.android.fragment;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import org.cranst0n.dogleg.android.BuildConfig;
 import org.cranst0n.dogleg.android.R;
 
 public class SettingsFragment extends PreferenceFragment {
+
   @Override
   public void onCreate(final Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

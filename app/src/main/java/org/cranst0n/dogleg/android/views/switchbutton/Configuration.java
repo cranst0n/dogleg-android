@@ -30,7 +30,7 @@ public class Configuration implements Cloneable {
   }
 
   static class Limit {
-    static int MIN_THUMB_SIZE = 24;
+    static final int MIN_THUMB_SIZE = 24;
   }
 
   /**

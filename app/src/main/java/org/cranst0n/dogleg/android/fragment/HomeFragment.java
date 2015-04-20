@@ -2,6 +2,7 @@ package org.cranst0n.dogleg.android.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -30,8 +31,6 @@ import java.util.List;
 
 public class HomeFragment extends BaseFragment {
 
-  private static final String TAG = HomeFragment.class.getSimpleName();
-
   private Bus bus;
 
   private View homeView;
@@ -45,7 +44,8 @@ public class HomeFragment extends BaseFragment {
   private final RoundListFragment roundsPage = new RoundListFragment();
 
   @Override
-  public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+  public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                           final Bundle savedInstanceState) {
 
     homeView = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -104,9 +104,10 @@ public class HomeFragment extends BaseFragment {
 
   private class HomePagerAdapter extends FragmentStatePagerAdapter {
 
+    @NonNull
     private final List<Fragment> fragments;
 
-    public HomePagerAdapter(final FragmentManager fm, final List<Fragment> fragments) {
+    public HomePagerAdapter(final FragmentManager fm, @NonNull final List<Fragment> fragments) {
       super(fm);
 
       this.fragments = fragments;
@@ -119,8 +120,7 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public CharSequence getPageTitle(int position) {
-      if (fragments != null && position < fragments.size() &&
-          fragments.get(position) instanceof TitledFragment) {
+      if (position < fragments.size() && fragments.get(position) instanceof TitledFragment) {
         return ((TitledFragment) fragments.get(position)).getTitle();
       } else {
         return String.format("Tab %d", position);
@@ -129,7 +129,7 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public int getCount() {
-      return fragments != null ? fragments.size() : 0;
+      return fragments.size();
     }
   }
 

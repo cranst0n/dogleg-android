@@ -1,6 +1,8 @@
 package org.cranst0n.dogleg.android.backend;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
@@ -40,19 +42,22 @@ public class Courses extends BackendComponent {
 
   private static final String COURSE_REQUEST_URL = "/courserequests";
 
-  private static Map<Long, Course> pinnedCache = new HashMap<>();
-  private static Map<Long, Course> courseCache = new LinkedHashMap<Long, Course>() {
+  private static final Map<Long, Course> pinnedCache = initPinCache();
+  private static final Map<Long, Course> courseCache = new LinkedHashMap<Long, Course>() {
     @Override
     protected boolean removeEldestEntry(final Entry<Long, Course> eldest) {
       return courseCache.size() > 10;
     }
   };
 
-  public Courses(final Context context) {
+  public Courses(@NonNull final Context context) {
     super(context);
   }
 
-  public BackendResponse<JsonObject, CourseRequest> requestCourse(final CourseRequest request) {
+  @NonNull
+  public BackendResponse<JsonObject, CourseRequest> requestCourse(
+      @NonNull final CourseRequest request) {
+
     return new BackendResponse<>(Ion.with(context)
         .load("POST", serverUrl(COURSE_REQUEST_URL))
         .setHeader(AuthTokenHeader, authToken())
@@ -61,12 +66,14 @@ public class Courses extends BackendComponent {
         .withResponse(), CourseRequest.class);
   }
 
+  @NonNull
   public BackendResponse<JsonObject, Course> info(final long id) {
     if (courseCache.containsKey(id)) {
       return BackendResponse.pure(courseCache.get(id));
     } else if (isPinned(id)) {
       return BackendResponse.fromCallable(new Callable<Course>() {
         @Override
+        @Nullable
         public Course call() throws Exception {
           return loadFile(pinFile(id));
         }
@@ -76,6 +83,7 @@ public class Courses extends BackendComponent {
     }
   }
 
+  @NonNull
   private BackendResponse<JsonObject, Course> backendCourseInfo(final long id) {
     return new BackendResponse<>(Ion.with(context)
         .load(serverUrl(String.format(INFO_URL, id)))
@@ -83,13 +91,16 @@ public class Courses extends BackendComponent {
         .withResponse(), Course.class).
         onSuccess(new BackendResponse.BackendSuccessListener<Course>() {
           @Override
-          public void onSuccess(final Course value) {
+          public void onSuccess(@NonNull final Course value) {
             courseCache.put(value.id, value);
           }
         });
   }
 
-  public BackendResponse<JsonArray, List<CourseSummary>> list(final LatLon location, final int num, final int offset) {
+  @NonNull
+  public BackendResponse<JsonArray, List<CourseSummary>> list(@Nullable final LatLon location,
+                                                              final int num, final int offset) {
+
     String url = serverUrl(
         location == null ?
             String.format(LIST_URL, num, offset) :
@@ -97,11 +108,16 @@ public class Courses extends BackendComponent {
     );
 
     return new BackendResponse<>(Ion.with(context)
-        .load(url).asJsonArray().withResponse(), new TypeToken<List<CourseSummary>>() {
+        .load(url)
+        .asJsonArray()
+        .withResponse(), new TypeToken<List<CourseSummary>>() {
     }.getType());
   }
 
-  public BackendResponse<JsonArray, List<CourseSummary>> listPinned(final LatLon location, final int num, final int offset) {
+  @NonNull
+  public BackendResponse<JsonArray, List<CourseSummary>> listPinned(@Nullable final LatLon location,
+                                                                    final int num,
+                                                                    final int offset) {
 
     return BackendResponse.fromCallable(new Callable<List<CourseSummary>>() {
       @Override
@@ -110,7 +126,7 @@ public class Courses extends BackendComponent {
         List<CourseSummary> pinned = pinnedSummaries();
 
         if (pinned.size() < offset) {
-          return new ArrayList<CourseSummary>();
+          return new ArrayList<>();
         } else {
 
           List<CourseSummary> summaries =
@@ -133,7 +149,11 @@ public class Courses extends BackendComponent {
     });
   }
 
-  public BackendResponse<JsonArray, List<CourseSummary>> search(final String query, final int num, final int offset) {
+  @NonNull
+  public BackendResponse<JsonArray, List<CourseSummary>> search(@NonNull final String query,
+                                                                final int num,
+                                                                final int offset) {
+
     return new BackendResponse<>(Ion.with(context)
         .load(serverUrl() + String.format(SEARCH_URL, query, num, offset))
         .asJsonArray()
@@ -141,7 +161,10 @@ public class Courses extends BackendComponent {
     }.getType());
   }
 
-  public BackendResponse<JsonArray, List<CourseSummary>> searchPinned(final String query, final int num, final int offset) {
+  @NonNull
+  public BackendResponse<JsonArray, List<CourseSummary>> searchPinned(@NonNull final String query,
+                                                                      final int num,
+                                                                      final int offset) {
 
     return BackendResponse.fromCallable(new Callable<List<CourseSummary>>() {
       @Override
@@ -150,7 +173,7 @@ public class Courses extends BackendComponent {
         List<CourseSummary> pinned = pinnedSummaries();
 
         if (pinned.size() < offset) {
-          return new ArrayList<CourseSummary>();
+          return new ArrayList<>();
         } else {
 
           List<CourseSummary> summaries =
@@ -170,7 +193,7 @@ public class Courses extends BackendComponent {
     });
   }
 
-  public static boolean pin(final Course course) {
+  public boolean pin(@NonNull final Course course) {
     if (!isPinned(course)) {
 
       pinnedCache.put(course.id, course);
@@ -192,7 +215,7 @@ public class Courses extends BackendComponent {
         if (outputStream != null) {
           try {
             outputStream.close();
-          } catch (IOException e) {
+          } catch (final IOException e) {
             Log.d(Tag, "Failed to close output stream", e);
           }
         }
@@ -202,68 +225,67 @@ public class Courses extends BackendComponent {
     return true;
   }
 
-  public static boolean unpin(final Course course) {
+  public boolean unpin(@NonNull final Course course) {
     if (isPinned(course)) {
-      pinnedCache = null;
+      pinnedCache.remove(course.id);
       return pinFile(course.id).delete();
     }
 
     return true;
   }
 
-  private static Context context() {
-    return DoglegApplication.context();
+  private File pinFile(final long id) {
+    return new File(context.getFilesDir(), pinPath(id));
   }
 
-  private static File pinFile(final long id) {
-    return new File(context().getFilesDir(), pinPath(id));
-  }
-
-  private static String pinPath(final long id) {
+  private String pinPath(final long id) {
     return String.format("courses/%d.json", id);
   }
 
-  public static boolean isPinned(final Course course) {
+  public boolean isPinned(@NonNull final Course course) {
     return isPinned(course.id);
   }
 
-  public static boolean isPinned(final long id) {
+  public boolean isPinned(final long id) {
     return pinFile(id).exists();
   }
 
-  private static List<CourseSummary> pinnedSummaries() {
+  @NonNull
+  private List<CourseSummary> pinnedSummaries() {
 
     List<CourseSummary> summaries = new ArrayList<>();
 
-    for (Course course : pinned().values()) {
+    for (Course course : pinnedCache.values()) {
       summaries.add(course.summary());
     }
 
     return summaries;
   }
 
-  private static synchronized Map<Long, Course> pinned() {
-    if (pinnedCache == null) {
+  @NonNull
+  private static Map<Long, Course> initPinCache() {
 
-      File pinnedDir = new File(DoglegApplication.context().getFilesDir(), "courses/");
-      pinnedDir.mkdirs();
+    Map<Long, Course> cache = new HashMap<>();
 
-      File[] courseFiles = pinnedDir.listFiles();
+    File pinnedDir = new File(DoglegApplication.application().context().getFilesDir(), "courses/");
+    pinnedDir.mkdirs();
 
-      for (final File f : courseFiles) {
+    File[] courseFiles = pinnedDir.listFiles();
 
-        Course c = loadFile(f);
+    for (final File f : courseFiles) {
 
-        if (c != null) {
-          pinnedCache.put(c.id, c);
-        }
+      Course c = loadFile(f);
+
+      if (c != null) {
+        cache.put(c.id, c);
       }
     }
 
-    return pinnedCache;
+    return cache;
   }
 
-  private static Course loadFile(final File f) {
+  @Nullable
+  private static Course loadFile(@NonNull final File f) {
 
     try {
 

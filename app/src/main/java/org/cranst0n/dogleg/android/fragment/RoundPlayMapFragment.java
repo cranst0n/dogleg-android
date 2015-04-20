@@ -4,6 +4,10 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -150,7 +154,9 @@ public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMa
     return mapFragmentView;
   }
 
-  private IconGenerator createTextIconFactory(final LayoutInflater inflater, int backgroundResource) {
+  private IconGenerator createTextIconFactory(final LayoutInflater inflater,
+                                              @DrawableRes final int backgroundResource) {
+
     View greenMapMarker = inflater.inflate(R.layout.map_text_marker, null);
     greenMapMarker.setBackgroundResource(backgroundResource);
     IconGenerator greenIG = new IconGenerator(context);
@@ -200,6 +206,7 @@ public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMa
 
   }
 
+  @Nullable
   private Hole currentHole() {
     if (activity instanceof RoundPlayActivity) {
       return ((RoundPlayActivity) activity).currentHole();
@@ -208,6 +215,7 @@ public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMa
     return null;
   }
 
+  @Nullable
   private HoleRating currentHoleRating() {
     if (activity instanceof RoundPlayActivity) {
       return ((RoundPlayActivity) activity).currentHoleRating();
@@ -216,6 +224,7 @@ public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMa
     return null;
   }
 
+  @Nullable
   private Location lastKnownLocation() {
     if (activity instanceof RoundPlayActivity) {
       return ((RoundPlayActivity) activity).lastKnownLocation();
@@ -224,12 +233,24 @@ public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMa
     return null;
   }
 
+  @Nullable
   private Location referenceLocation() {
-    return lastKnownLocation() == null ?
-        currentHole().teeFeature().center().toLocation() : lastKnownLocation();
+    Location lastKnownLocation = lastKnownLocation();
+    Location teeLocation = null;
+
+    Hole currentHole = currentHole();
+    if (currentHole != null) {
+      HoleFeature teeFeature = currentHole.teeFeature();
+      if (teeFeature != null) {
+        teeLocation = teeFeature.center().toLocation();
+      }
+    }
+
+
+    return lastKnownLocation == null ? teeLocation : lastKnownLocation;
   }
 
-  public void locationUpdated(final Location location) {
+  public void locationUpdated(@NonNull final Location location) {
     updateFeatureDistanceMarkers(location);
     updateUserDistanceMarker(location);
   }
@@ -240,7 +261,7 @@ public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMa
 
       final Hole hole = currentHole();
 
-      if (hole.hasFlybyPath()) {
+      if (hole != null && hole.hasFlybyPath()) {
         holeFlyByButton.setImageResource(R.drawable.ic_device_airplanemode_on);
       } else {
         holeFlyByButton.setImageResource(R.drawable.ic_device_airplanemode_off);
@@ -259,45 +280,54 @@ public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMa
     final Hole hole = currentHole();
     final HoleRating holeRating = currentHoleRating();
 
-    if (initial) {
-      map.clear();
-    }
+    if (hole != null && holeRating != null) {
 
-    LatLngBounds.Builder b = LatLngBounds.builder();
+      HoleFeature teeFeature = hole.teeFeature();
+      HoleFeature greenFeature = hole.greenFeature();
 
-    for (HoleFeature f : hole.features) {
-      for (LatLon fl : f.coordinates) {
-        b.include(fl.toLatLng());
-      }
-    }
+      if(teeFeature != null && greenFeature != null) {
 
-    double bearing = hole.teeFeature().center().toLocation().
-        bearingTo(hole.greenFeature().center().toLocation());
-    float zoom = overviewZoomLevel(hole);
-
-    CameraPosition cp = new CameraPosition.Builder()
-        .target(b.build().getCenter())
-        .zoom(zoom)
-        .bearing((float) bearing)
-        .tilt(0)
-        .build();
-
-    map.animateCamera(CameraUpdateFactory.newCameraPosition(cp), new GoogleMap.CancelableCallback() {
-      @Override
-      public void onFinish() {
         if (initial) {
-          addHoleMarkers(hole, holeRating, referenceLocation());
+          map.clear();
         }
-      }
 
-      @Override
-      public void onCancel() {
+        LatLngBounds.Builder b = LatLngBounds.builder();
 
+        for (HoleFeature f : hole.features) {
+          for (LatLon fl : f.coordinates) {
+            b.include(fl.toLatLng());
+          }
+        }
+
+        double bearing =
+            teeFeature.center().toLocation().bearingTo(greenFeature.center().toLocation());
+        float zoom = overviewZoomLevel(hole);
+
+        CameraPosition cp = new CameraPosition.Builder()
+            .target(b.build().getCenter())
+            .zoom(zoom)
+            .bearing((float) bearing)
+            .tilt(0)
+            .build();
+
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(cp), new GoogleMap.CancelableCallback() {
+          @Override
+          public void onFinish() {
+            if (initial) {
+              addHoleMarkers(hole, holeRating, referenceLocation());
+            }
+          }
+
+          @Override
+          public void onCancel() {
+
+          }
+        });
       }
-    });
+    }
   }
 
-  private float overviewZoomLevel(final Hole hole) {
+  private float overviewZoomLevel(@NonNull final Hole hole) {
 
     LatLngBounds.Builder b = LatLngBounds.builder();
 
@@ -315,17 +345,18 @@ public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMa
   }
 
   private void holeFlyby() {
+
     final Hole hole = currentHole();
 
-    if (hole.hasFlybyPath()) {
-      if (hole.flybyPathFeature().coordinates.length > 1) {
-        HoleFeature flybyFeature = hole.flybyPathFeature();
+    if (hole != null) {
+      final HoleFeature flybyFeature = hole.flybyPathFeature();
+      if (flybyFeature != null && flybyFeature.coordinates.length > 1) {
         flybyStep(Arrays.asList(flybyFeature.coordinates), 0);
       }
     }
   }
 
-  private void flybyStep(final List<LatLon> flybyPath, final int step) {
+  private void flybyStep(@NonNull final List<LatLon> flybyPath, final int step) {
 
     if (step < flybyPath.size()) {
 
@@ -413,8 +444,9 @@ public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMa
     }
   }
 
-  private void addHoleMarkers(final Hole hole, final HoleRating holeRating,
-                              final Location reference) {
+  private void addHoleMarkers(@NonNull final Hole hole,
+                              @NonNull final HoleRating holeRating,
+                              @Nullable final Location reference) {
 
     if (reference != null) {
 
@@ -422,13 +454,17 @@ public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMa
         userDistanceMarker.remove();
       }
 
-      userDistanceMarker =
-          map.addMarker(new MarkerOptions().
-              icon(BitmapDescriptorFactory.fromBitmap(orangeIconFactory.makeIcon("Drag"))).
-              position(hole.teeFeature().center().toLatLng()).
-              draggable(true).
-              visible(false).
-              anchor(0.5f, 1f));
+      HoleFeature teeFeature = hole.teeFeature();
+
+      if (teeFeature != null) {
+        userDistanceMarker =
+            map.addMarker(new MarkerOptions().
+                icon(BitmapDescriptorFactory.fromBitmap(orangeIconFactory.makeIcon("Drag"))).
+                position(teeFeature.center().toLatLng()).
+                draggable(true).
+                visible(false).
+                anchor(0.5f, 1f));
+      }
 
       for (HoleFeature feature : hole.displayableFeatures()) {
 
@@ -449,9 +485,12 @@ public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMa
         }
       }
 
-      if (holeRating.par > 3) {
+      HoleFeature greenFeature = hole.greenFeature();
+
+      if (greenFeature != null && holeRating.par > 3) {
+
         LatLng greenCenter =
-            new LatLng(hole.greenFeature().center().latitude, hole.greenFeature().center().longitude);
+            new LatLng(greenFeature.center().latitude, greenFeature.center().longitude);
 
         standardDistanceCircles.add(map.addCircle(createYardageCircle(greenCenter, 100, Color.RED)));
         standardDistanceCircles.add(map.addCircle(createYardageCircle(greenCenter, 150, Color.WHITE)));
@@ -460,7 +499,9 @@ public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMa
     }
   }
 
-  private CircleOptions createYardageCircle(final LatLng center, final int yards, final int color) {
+  private CircleOptions createYardageCircle(@NonNull final LatLng center,
+                                            final int yards,
+                                            @ColorRes final int color) {
     return new CircleOptions()
         .center(center)
         .radius(Units.yardsToMeters(yards))
@@ -469,32 +510,38 @@ public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMa
         .strokeWidth(3);
   }
 
-  private void updateFeatureDistanceMarkers(final Location location) {
+  private void updateFeatureDistanceMarkers(@Nullable final Location location) {
     for (Marker featureMarker : featureDistanceMarkers) {
       updateDistanceMarker(featureMarker, location, iconFactoryForName(featureMarker.getTitle().toLowerCase()));
     }
   }
 
-  private void updateUserDistanceMarker(final Location location) {
+  private void updateUserDistanceMarker(@Nullable final Location location) {
     if (userDistanceMarker != null) {
       updateDistanceMarker(userDistanceMarker, location, orangeIconFactory);
     }
   }
 
-  private void updateDistanceMarker(final Marker marker, final Location toLocation, final IconGenerator iconGenerator) {
-    Location markerLocation = markerLocation(marker);
-    int distance =
-        (int) Math.round(Units.metersToYards(toLocation.distanceTo(markerLocation)));
+  private void updateDistanceMarker(@NonNull final Marker marker,
+                                    @Nullable final Location toLocation,
+                                    @NonNull final IconGenerator iconGenerator) {
 
-    try {
-      marker.setIcon(
-          BitmapDescriptorFactory.fromBitmap(iconGenerator.makeIcon(String.valueOf(distance))));
-    } catch (Exception ex) {
-      Log.e(getClass().getSimpleName(), "Marker ex: " + ex.getMessage(), ex);
+    if (toLocation != null) {
+      Location markerLocation = markerLocation(marker);
+
+      int distance =
+          (int) Math.round(Units.metersToYards(toLocation.distanceTo(markerLocation)));
+
+      try {
+        marker.setIcon(
+            BitmapDescriptorFactory.fromBitmap(iconGenerator.makeIcon(String.valueOf(distance))));
+      } catch (Exception ex) {
+        Log.e(getClass().getSimpleName(), "Marker ex: " + ex.getMessage(), ex);
+      }
     }
   }
 
-  private Location markerLocation(final Marker marker) {
+  private Location markerLocation(@NonNull final Marker marker) {
     Location markerLocation = new Location("userMarker");
     markerLocation.setLatitude(marker.getPosition().latitude);
     markerLocation.setLongitude(marker.getPosition().longitude);
@@ -502,11 +549,12 @@ public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMa
     return markerLocation;
   }
 
-  private IconGenerator iconFactoryForFeature(final HoleFeature holeFeature) {
+  private IconGenerator iconFactoryForFeature(@NonNull final HoleFeature holeFeature) {
     return iconFactoryForName(holeFeature.name.toLowerCase());
   }
 
-  private IconGenerator iconFactoryForName(final String name) {
+  @NonNull
+  private IconGenerator iconFactoryForName(@Nullable final String name) {
 
     if (name == null) {
       return greenIconFactory;

@@ -5,8 +5,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,11 +50,11 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
   private Bus bus;
 
   private Location lastKnownLocation;
-  private int locationStatus = LocationProvider.TEMPORARILY_UNAVAILABLE;
-  private User currentUser = DoglegApplication.appUser();
+  private User currentUser = app.user();
 
   private Rounds rounds;
 
+  @Nullable
   private Round round;
   private int currentHole = 1;
 
@@ -102,6 +104,7 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
         }
 
       } catch (final Exception exception) {
+        Log.e(getClass().getSimpleName(), "Erros starting round.", exception);
         finishWithDialog("Error starting round: " + exception.getMessage());
       }
     } else {
@@ -114,11 +117,15 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
       currentHole = savedCurrentHole;
     }
 
-    getSupportActionBar().setTitle(round().course.name);
+    if (round != null) {
+      getSupportActionBar().setTitle(round.course.name);
+    }
+
+
     startLocationUpdates();
   }
 
-  private void finishWithDialog(final String message) {
+  private void finishWithDialog(@NonNull final String message) {
     new MaterialDialog.Builder(RoundPlayActivity.this).
         content(message).
         dismissListener(new DialogInterface.OnDismissListener() {
@@ -140,7 +147,7 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
   }
 
   @Override
-  protected void onSaveInstanceState(Bundle outState) {
+  protected void onSaveInstanceState(final Bundle outState) {
     super.onSaveInstanceState(outState);
 
     outState.putString(Round.class.getCanonicalName(), Json.pimpedGson().toJson(round));
@@ -196,7 +203,7 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
   }
 
   @Override
-  protected int getTitleToolBar() {
+  protected int getToolbarTitle() {
     return R.string.app_name;
   }
 
@@ -241,28 +248,25 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
   }
 
   @Override
-  public void onLocationChanged(final Location location) {
+  public void onLocationChanged(@NonNull final Location location) {
     locationUpdated(location);
   }
 
-  private void locationUpdated(final Location location) {
-    if (Locations.isBetterLocation(location, lastKnownLocation)) {
+  private void locationUpdated(@NonNull final Location location) {
+    if (Locations.isBetterLocation(location, lastKnownLocation, Locations.Precision.HIGH)) {
       lastKnownLocation = location;
       holeViewFragment.locationUpdated(location);
       mapFragment.locationUpdated(location);
     }
   }
 
+  @Nullable
   public Location lastKnownLocation() {
     return lastKnownLocation;
   }
 
-  public int locationStatus() {
-    return locationStatus;
-  }
-
   @Subscribe
-  public void newUser(final User user) {
+  public void newUser(@NonNull final User user) {
     currentUser = user;
 
     invalidateOptionsMenu();
@@ -272,11 +276,12 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
     }
   }
 
+  @NonNull
   public User currentUser() {
     return currentUser;
   }
 
-  private void setRound(final Round round) {
+  private void setRound(@NonNull final Round round) {
 
     this.round = round;
 
@@ -292,6 +297,7 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
     backupRoundData(round);
   }
 
+  @Nullable
   public Round round() {
     return round;
   }
@@ -300,6 +306,7 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
     return currentHole;
   }
 
+  @NonNull
   public Hole currentHole() {
     if (round != null) {
       return round.course.holes[currentHole - 1];
@@ -312,14 +319,14 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
   public void previousHole() {
     if (currentHole > 1) {
       setHole(currentHole - 1);
-    } else {
+    } else if (round != null) {
       setHole(round.course.numHoles);
     }
   }
 
   @Override
   public void nextHole() {
-    if (currentHoleNumber() < round().course.numHoles) {
+    if (round != null && currentHoleNumber() < round.course.numHoles) {
       setHole(currentHoleNumber() + 1);
     } else {
       setHole(1);
@@ -334,42 +341,51 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
   }
 
   private void setHole(final int hole) {
-    this.currentHole = hole;
-    playRoundFragment.holeUpdated(currentHole);
-    holeViewFragment.holeUpdated(currentHole);
-    mapFragment.holeUpdated(currentHole);
+    if (round != null) {
+      this.currentHole = Math.max(1, Math.min(hole, round.course.numHoles));
+      playRoundFragment.holeUpdated(currentHole);
+      holeViewFragment.holeUpdated(currentHole);
+      mapFragment.holeUpdated(currentHole);
+    }
   }
 
+  @Nullable
   public HoleRating currentHoleRating() {
-    return round.rating.holeRating(currentHole);
+    if (round != null) {
+      return round.rating.holeRating(currentHole);
+    }
+
+    return null;
   }
 
+  @NonNull
   public HoleScore currentHoleScore() {
     if (round != null && round.holeSet().includes(currentHole)) {
-      return round.holeScore(currentHole);
+      HoleScore hs = round.holeScore(currentHole);
+      return hs == null ? HoleScore.empty() : hs;
     } else {
       return HoleScore.empty();
     }
   }
 
   @Override
-  public void updateScore(final HoleScore holeScore) {
+  public void updateScore(@NonNull final HoleScore holeScore) {
     if (round != null && round.holeSet().includes((holeScore.hole.number))) {
       HoleScore updatedScore = round.updateScore(holeScore);
       scorecardFragment.updateHole(updatedScore);
-      playRoundFragment.scoreUpdated(updatedScore);
+      playRoundFragment.scoreUpdated(round);
       holeViewFragment.updateHole(updatedScore);
 
       backupRoundData(round);
     }
   }
 
-  private void fetchAutoHandicap(final Round round) {
+  private void fetchAutoHandicap(@NonNull final Round round) {
     // Try to get handicap from server side //
     rounds.handicapRound(round.roundSlope(), round.holeSet().numHoles, round.time).
         onSuccess(new BackendResponse.BackendSuccessListener<RoundHandicapResponse>() {
           @Override
-          public void onSuccess(final RoundHandicapResponse value) {
+          public void onSuccess(@NonNull final RoundHandicapResponse value) {
             setRound(round.withAutoHandicap(value.handicap));
           }
         });
@@ -377,32 +393,38 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
 
   @Override
   public void showScoreSelectionDialog(final int holeNumber) {
-    HoleScoreDialogs.showScoreSelectionDialog(this, round(), holeNumber, new HoleScoreDialogs.HoleScoreDialogCallback() {
-      @Override
-      public void holeScoreUpdated(final HoleScore holeScore) {
-        updateScore(holeScore);
-      }
-    });
+    if (round != null) {
+      HoleScoreDialogs.showScoreSelectionDialog(this, round, holeNumber, new HoleScoreDialogs.HoleScoreDialogCallback() {
+        @Override
+        public void holeScoreUpdated(final HoleScore holeScore) {
+          updateScore(holeScore);
+        }
+      });
+    }
   }
 
   @Override
   public void showPuttsSelectionDialog(final int holeNumber) {
-    HoleScoreDialogs.showPuttsSelectionDialog(this, round(), holeNumber, new HoleScoreDialogs.HoleScoreDialogCallback() {
-      @Override
-      public void holeScoreUpdated(final HoleScore holeScore) {
-        updateScore(holeScore);
-      }
-    });
+    if (round != null) {
+      HoleScoreDialogs.showPuttsSelectionDialog(this, round, holeNumber, new HoleScoreDialogs.HoleScoreDialogCallback() {
+        @Override
+        public void holeScoreUpdated(final HoleScore holeScore) {
+          updateScore(holeScore);
+        }
+      });
+    }
   }
 
   @Override
   public void showPenaltiesSelectionDialog(final int holeNumber) {
-    HoleScoreDialogs.showPenaltiesSelectionDialog(this, round(), holeNumber, new HoleScoreDialogs.HoleScoreDialogCallback() {
-      @Override
-      public void holeScoreUpdated(final HoleScore holeScore) {
-        updateScore(holeScore);
-      }
-    });
+    if (round != null) {
+      HoleScoreDialogs.showPenaltiesSelectionDialog(this, round, holeNumber, new HoleScoreDialogs.HoleScoreDialogCallback() {
+        @Override
+        public void holeScoreUpdated(final HoleScore holeScore) {
+          updateScore(holeScore);
+        }
+      });
+    }
   }
 
   private void backPressed() {
@@ -417,7 +439,11 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
         .callback(new MaterialDialog.ButtonCallback() {
           @Override
           public void onPositive(final MaterialDialog dialog) {
-            rounds.clearBackupRoundData(round.id);
+
+            if (round != null) {
+              rounds.clearBackupRoundData(round.id);
+            }
+
             RoundPlayActivity.this.finish();
           }
         })
@@ -425,15 +451,17 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
   }
 
   private void showRoundSettings() {
-    new RoundSettingsDialog(round, this, new RoundSettingsDialog.RoundSettingsCallback() {
-      @Override
-      public void settingsUpdated(final Round round) {
-        setRound(round);
-      }
-    }).show();
+    if (round != null) {
+      new RoundSettingsDialog(round, this, new RoundSettingsDialog.RoundSettingsCallback() {
+        @Override
+        public void settingsUpdated(@NonNull final Round round) {
+          setRound(round);
+        }
+      }).show();
+    }
   }
 
-  private void backupRoundData(final Round round) {
+  private void backupRoundData(@NonNull final Round round) {
     Threads.background(new Callable<Boolean>() {
       @Override
       public Boolean call() throws Exception {

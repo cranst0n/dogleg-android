@@ -5,8 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.nfc.NfcAdapter;
-import android.nfc.Tag;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -86,7 +87,6 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
 
   private ImageButton shotSettingsButton;
   private ImageButton shotAddButton;
-  private ListView shotList;
   private ShotListAdapter shotListAdapter;
 
   private Button submitRoundButton;
@@ -141,7 +141,6 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     if (nfcAdapter == null) {
       SnackBars.showSimple(activity, "This device doesn't seem to support NFC.");
     } else {
-
       if (!nfcAdapter.isEnabled()) {
         SnackBars.showSimple(activity, "NFC is disabled!");
       }
@@ -150,14 +149,14 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
 
   public void onNewIntent(final Intent intent) {
 
-    android.nfc.Tag tag = (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+    android.nfc.Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
     Log.d(Tag, "New NFC tag: [" + tag + "]");
 
     addShot(Nfc.readClubTag(tag));
   }
 
-  public void locationUpdated(final Location location) {
+  public void locationUpdated(@NonNull final Location location) {
     updateGpsDisplay(location);
   }
 
@@ -169,6 +168,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     return User.NO_USER;
   }
 
+  @Nullable
   private Location lastKnownLocation() {
     if (activity instanceof RoundPlayActivity) {
       return ((RoundPlayActivity) activity).lastKnownLocation();
@@ -177,6 +177,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     return null;
   }
 
+  @Nullable
   private Round round() {
     if (activity instanceof RoundPlayActivity) {
       return ((RoundPlayActivity) activity).round();
@@ -193,6 +194,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     return 1;
   }
 
+  @Nullable
   private HoleRating currentHoleRating() {
     if (activity instanceof RoundPlayActivity) {
       return ((RoundPlayActivity) activity).currentHoleRating();
@@ -201,6 +203,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     return null;
   }
 
+  @Nullable
   private HoleScore currentHoleScore() {
     if (activity instanceof RoundPlayActivity) {
       return ((RoundPlayActivity) activity).currentHoleScore();
@@ -213,31 +216,37 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
 
     if (isAdded()) {
 
+      Round round = round();
       HoleScore currentHoleScore = currentHoleScore();
-      boolean holeIncluded = round().holeSet().includes(currentHole);
+      HoleRating currentHoleRating = currentHoleRating();
 
-      currentHoleScoreView.setText(String.valueOf(currentHoleScore.score));
-      currentHolePuttsView.setText(String.valueOf(currentHoleScore.putts));
-      currentHolePenaltiesView.setText(String.valueOf(currentHoleScore.penaltyStrokes));
-      currentHoleFairwayHitBox.setChecked(currentHoleScore.fairwayHit);
-      currentHoleGirBox.setChecked(currentHoleScore.gir);
+      if (round != null && currentHoleScore != null && currentHoleRating != null) {
 
-      currentHoleScoreIncrementBtn.setEnabled(holeIncluded);
-      currentHoleScoreDecrementBtn.setEnabled(holeIncluded);
-      currentHolePuttsIncrementBtn.setEnabled(holeIncluded);
-      currentHolePuttsDecrementBtn.setEnabled(holeIncluded);
-      currentHolePenaltiesIncrementBtn.setEnabled(holeIncluded);
-      currentHolePenaltiesDecrementBtn.setEnabled(holeIncluded);
-      currentHoleFairwayHitBox.setEnabled(holeIncluded && currentHoleRating().par > 3);
-      currentHoleGirBox.setEnabled(holeIncluded);
+        boolean holeIncluded = round.holeSet().includes(currentHole);
 
-      featureListAdapter.features.clear();
-      featureListAdapter.features.addAll(currentHoleScore.hole.displayableFeatures());
-      featureListAdapter.notifyDataSetChanged();
+        currentHoleScoreView.setText(String.valueOf(currentHoleScore.score));
+        currentHolePuttsView.setText(String.valueOf(currentHoleScore.putts));
+        currentHolePenaltiesView.setText(String.valueOf(currentHoleScore.penaltyStrokes));
+        currentHoleFairwayHitBox.setChecked(currentHoleScore.fairwayHit);
+        currentHoleGirBox.setChecked(currentHoleScore.gir);
 
-      updateStats();
-      updateGpsDisplay(lastKnownLocation());
-      updateShotList();
+        currentHoleScoreIncrementBtn.setEnabled(holeIncluded);
+        currentHoleScoreDecrementBtn.setEnabled(holeIncluded);
+        currentHolePuttsIncrementBtn.setEnabled(holeIncluded);
+        currentHolePuttsDecrementBtn.setEnabled(holeIncluded);
+        currentHolePenaltiesIncrementBtn.setEnabled(holeIncluded);
+        currentHolePenaltiesDecrementBtn.setEnabled(holeIncluded);
+        currentHoleFairwayHitBox.setEnabled(holeIncluded && currentHoleRating.par > 3);
+        currentHoleGirBox.setEnabled(holeIncluded);
+
+        featureListAdapter.features.clear();
+        featureListAdapter.features.addAll(currentHoleScore.hole.displayableFeatures());
+        featureListAdapter.notifyDataSetChanged();
+
+        updateStats();
+        updateGpsDisplay(lastKnownLocation());
+        updateShotList();
+      }
     }
   }
 
@@ -258,20 +267,23 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
   private void updateStats() {
     if (isAdded()) {
 
-      RoundStats stats = round().stats();
+      Round round = round();
 
-      statsPuttsView.setText(String.valueOf(stats.putts));
-      statsPuttsAverageView.setText(String.format("%.2f", stats.puttAverage));
-      statsFairwayHitView.setText(String.format("%.2f%%", stats.fairwayHitPercentage * 100));
-      statsGirView.setText(String.format("%.2f%%", stats.girPercentage * 100));
-      statsPar3AverageView.setText(String.format("%.2f", stats.par3ScoringAverage));
-      statsPar4AverageView.setText(String.format("%.2f", stats.par4ScoringAverage));
-      statsPar5AverageView.setText(String.format("%.2f", stats.par5ScoringAverage));
+      if (round != null) {
+        RoundStats stats = round.stats();
+
+        statsPuttsView.setText(String.valueOf(stats.putts));
+        statsPuttsAverageView.setText(String.format("%.2f", stats.puttAverage));
+        statsFairwayHitView.setText(String.format("%.2f%%", stats.fairwayHitPercentage * 100));
+        statsGirView.setText(String.format("%.2f%%", stats.girPercentage * 100));
+        statsPar3AverageView.setText(String.format("%.2f", stats.par3ScoringAverage));
+        statsPar4AverageView.setText(String.format("%.2f", stats.par4ScoringAverage));
+        statsPar5AverageView.setText(String.format("%.2f", stats.par5ScoringAverage));
+      }
     }
   }
 
-  private void updateGpsDisplay(final Location location) {
-
+  private void updateGpsDisplay(@Nullable final Location location) {
     if (isAdded()) {
       if (location != null) {
 
@@ -309,25 +321,33 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
 
   private void updateShotList() {
     shotListAdapter.shots.clear();
-    shotListAdapter.shots.addAll(currentHoleScore().shots);
+
+    HoleScore currentHoleScore = currentHoleScore();
+    if (currentHoleScore != null) {
+      shotListAdapter.shots.addAll(currentHoleScore.shots);
+    }
+
     shotListAdapter.notifyDataSetChanged();
   }
 
-  private void addShot(final Club club) {
+  private void addShot(@NonNull final Club club) {
+
+    Location lastKnownLocation = lastKnownLocation();
+    HoleScore currentHoleScore = currentHoleScore();
 
     if (club == Club.FinishHole) {
 
-      if (lastKnownLocation() != null) {
-        if (!currentHoleScore().shots.isEmpty()) {
+      if (lastKnownLocation != null && currentHoleScore != null &&
+          !currentHoleScore.shots.isEmpty()) {
 
-          Shot lastShot = currentHoleScore().shots.get(currentHoleScore().shots.size() - 1);
-          Shot finishedShot = lastShot.locationEnd(LatLon.fromLocation(lastKnownLocation()));
+        Shot lastShot = currentHoleScore.shots.get(currentHoleScore.shots.size() - 1);
+        LatLon endLocation = LatLon.fromLocation(lastKnownLocation);
 
-          HoleScore finishedScore = currentHoleScore().removeShot(lastShot).withShot(finishedShot);
+        Shot finishedShot = lastShot.locationEnd(endLocation);
+        HoleScore finishedScore = currentHoleScore.removeShot(lastShot).withShot(finishedShot);
 
-          if (playRoundListener != null) {
-            playRoundListener.updateScore(finishedScore);
-          }
+        if (playRoundListener != null) {
+          playRoundListener.updateScore(finishedScore);
         }
       }
 
@@ -336,7 +356,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
         playRoundListener.nextHole();
       }
 
-    } else if (lastKnownLocation() != null) {
+    } else if (lastKnownLocation != null) {
 
       switch (club) {
         case Unknown: {
@@ -345,22 +365,25 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
         }
         default: {
 
-          Shot newShot = new Shot(-1, currentHoleScore().shots.size() + 1, club,
-              LatLon.fromLocation(lastKnownLocation()), LatLon.fromLocation
-              (lastKnownLocation()), currentHoleScore().id);
+          if (currentHoleScore != null) {
 
-          HoleScore newScore = currentHoleScore().withShot(newShot);
+            Shot newShot = new Shot(-1, currentHoleScore.shots.size() + 1, club,
+                LatLon.fromLocation(lastKnownLocation), LatLon.fromLocation
+                (lastKnownLocation), currentHoleScore.id);
 
-          if (autoManageStrokes) {
-            newScore = newScore.addStroke();
-            if (club == Club.Putter) {
-              newScore = newScore.addPutt();
+            HoleScore newScore = currentHoleScore.withShot(newShot);
+
+            if (autoManageStrokes) {
+              newScore = newScore.addStroke();
+              if (club == Club.Putter) {
+                newScore = newScore.addPutt();
+              }
             }
-          }
 
-          if (playRoundListener != null) {
-            Vibration.vibrate(2000);
-            playRoundListener.updateScore(newScore);
+            if (playRoundListener != null) {
+              Vibration.vibrate(2000);
+              playRoundListener.updateScore(newScore);
+            }
           }
 
           break;
@@ -406,13 +429,20 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     gpsStatusView = (TextView) playRoundHoleView.findViewById(R.id.gps_status);
 
     holeFeatureList = (ListView) playRoundHoleView.findViewById(R.id.current_hole_feature_list);
-    featureListAdapter = new FeatureListAdapter(
-        context, new ArrayList<>(currentHoleScore().hole.displayableFeatures()));
+
+    ArrayList<HoleFeature> initialFeatures = new ArrayList<>();
+
+    HoleScore currentHoleScore = currentHoleScore();
+    if (currentHoleScore != null) {
+      initialFeatures.addAll(currentHoleScore.hole.displayableFeatures());
+    }
+
+    featureListAdapter = new FeatureListAdapter(context, initialFeatures);
     holeFeatureList.setAdapter(featureListAdapter);
 
     shotSettingsButton = (ImageButton) playRoundHoleView.findViewById(R.id.shot_settings_button);
     shotAddButton = (ImageButton) playRoundHoleView.findViewById(R.id.shot_add_button);
-    shotList = (ListView) playRoundHoleView.findViewById(R.id.current_hole_shot_list);
+    ListView shotList = (ListView) playRoundHoleView.findViewById(R.id.current_hole_shot_list);
     shotListAdapter = new ShotListAdapter(context, new ArrayList<Shot>());
     shotList.setAdapter(shotListAdapter);
 
@@ -428,8 +458,15 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHoleScoreIncrementBtn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(final View v) {
-        if (playRoundListener != null && round().holeSet().includes(currentHoleNumber())) {
-          playRoundListener.updateScore(currentHoleScore().addStroke());
+        Round round = round();
+
+        if (playRoundListener != null && round != null &&
+            round.holeSet().includes(currentHoleNumber())) {
+
+          HoleScore currentHoleScore = currentHoleScore();
+          if (currentHoleScore != null) {
+            playRoundListener.updateScore(currentHoleScore.addStroke());
+          }
         }
       }
     });
@@ -437,7 +474,11 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHoleScoreView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(final View v) {
-        if (playRoundListener != null && round().holeSet().includes(currentHoleNumber())) {
+        Round round = round();
+
+        if (playRoundListener != null && round != null &&
+            round.holeSet().includes(currentHoleNumber())) {
+
           playRoundListener.showScoreSelectionDialog(currentHoleNumber());
         }
       }
@@ -446,8 +487,15 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHoleScoreDecrementBtn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(final View v) {
-        if (playRoundListener != null && round().holeSet().includes(currentHoleNumber())) {
-          playRoundListener.updateScore(currentHoleScore().subtractStroke());
+        Round round = round();
+
+        if (playRoundListener != null && round != null &&
+            round.holeSet().includes(currentHoleNumber())) {
+
+          HoleScore currentHoleScore = currentHoleScore();
+          if (currentHoleScore != null) {
+            playRoundListener.updateScore(currentHoleScore.subtractStroke());
+          }
         }
       }
     });
@@ -455,8 +503,15 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHolePuttsIncrementBtn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (playRoundListener != null && round().holeSet().includes(currentHoleNumber())) {
-          playRoundListener.updateScore(currentHoleScore().addPutt());
+        Round round = round();
+
+        if (playRoundListener != null && round != null &&
+            round.holeSet().includes(currentHoleNumber())) {
+
+          HoleScore currentHoleScore = currentHoleScore();
+          if (currentHoleScore != null) {
+            playRoundListener.updateScore(currentHoleScore.addPutt());
+          }
         }
       }
     });
@@ -464,7 +519,11 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHolePuttsView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(final View v) {
-        if (playRoundListener != null && round().holeSet().includes(currentHoleNumber())) {
+        Round round = round();
+
+        if (playRoundListener != null && round != null &&
+            round.holeSet().includes(currentHoleNumber())) {
+
           playRoundListener.showPuttsSelectionDialog(currentHoleNumber());
         }
       }
@@ -473,8 +532,15 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHolePuttsDecrementBtn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (playRoundListener != null && round().holeSet().includes(currentHoleNumber())) {
-          playRoundListener.updateScore(currentHoleScore().subtractPutt());
+        Round round = round();
+
+        if (playRoundListener != null && round != null &&
+            round.holeSet().includes(currentHoleNumber())) {
+
+          HoleScore currentHoleScore = currentHoleScore();
+          if (currentHoleScore != null) {
+            playRoundListener.updateScore(currentHoleScore.subtractPutt());
+          }
         }
       }
     });
@@ -482,8 +548,15 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHolePenaltiesIncrementBtn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (playRoundListener != null && round().holeSet().includes(currentHoleNumber())) {
-          playRoundListener.updateScore(currentHoleScore().addPenaltyStroke());
+        Round round = round();
+
+        if (playRoundListener != null && round != null &&
+            round.holeSet().includes(currentHoleNumber())) {
+
+          HoleScore currentHoleScore = currentHoleScore();
+          if (currentHoleScore != null) {
+            playRoundListener.updateScore(currentHoleScore.addPenaltyStroke());
+          }
         }
       }
     });
@@ -491,7 +564,11 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHolePenaltiesView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(final View v) {
-        if (playRoundListener != null && round().holeSet().includes(currentHoleNumber())) {
+        Round round = round();
+
+        if (playRoundListener != null && round != null &&
+            round.holeSet().includes(currentHoleNumber())) {
+
           playRoundListener.showPenaltiesSelectionDialog(currentHoleNumber());
         }
       }
@@ -500,8 +577,15 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     currentHolePenaltiesDecrementBtn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (playRoundListener != null && round().holeSet().includes(currentHoleNumber())) {
-          playRoundListener.updateScore(currentHoleScore().subtractPenaltyStroke());
+        Round round = round();
+
+        if (playRoundListener != null && round != null &&
+            round.holeSet().includes(currentHoleNumber())) {
+
+          HoleScore currentHoleScore = currentHoleScore();
+          if (currentHoleScore != null) {
+            playRoundListener.updateScore(currentHoleScore.subtractPenaltyStroke());
+          }
         }
       }
     });
@@ -510,7 +594,10 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
       @Override
       public void onClick(final View view) {
         if (playRoundListener != null) {
-          playRoundListener.updateScore(currentHoleScore().fairwayHit(((CheckBox) view).isChecked()));
+          HoleScore currentHoleScore = currentHoleScore();
+          if (currentHoleScore != null) {
+            playRoundListener.updateScore(currentHoleScore.fairwayHit(((CheckBox) view).isChecked()));
+          }
         }
       }
     });
@@ -519,7 +606,10 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
       @Override
       public void onClick(final View view) {
         if (playRoundListener != null) {
-          playRoundListener.updateScore(currentHoleScore().gir(((CheckBox) view).isChecked()));
+          HoleScore currentHoleScore = currentHoleScore();
+          if (currentHoleScore != null) {
+            playRoundListener.updateScore(currentHoleScore.gir(((CheckBox) view).isChecked()));
+          }
         }
       }
     });
@@ -544,32 +634,35 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
             .positiveText("Ok")
             .build();
 
-        final CheckBox autoStrokeBox = (CheckBox) dialog.getCustomView().findViewById(R.id
-            .auto_shot_box);
+        View customView = dialog.getCustomView();
 
-        final CheckBox keepScreenOnBox = (CheckBox) dialog.getCustomView().findViewById(R.id
-            .keep_screen_on_box);
+        if (customView != null) {
 
-        autoStrokeBox.setChecked(autoManageStrokes);
-        keepScreenOnBox.setChecked((activity.getWindow().getAttributes().flags & WindowManager
-            .LayoutParams.FLAG_KEEP_SCREEN_ON) != 0);
+          final CheckBox autoStrokeBox = (CheckBox) customView.findViewById(R.id.auto_shot_box);
+          final CheckBox keepScreenOnBox =
+              (CheckBox) customView.findViewById(R.id.keep_screen_on_box);
 
-        autoStrokeBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-            autoManageStrokes = isChecked;
-          }
-        });
-        keepScreenOnBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(final CompoundButton compoundButton, boolean isChecked) {
-            if (isChecked) {
-              activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            } else {
-              activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+          autoStrokeBox.setChecked(autoManageStrokes);
+          keepScreenOnBox.setChecked((activity.getWindow().getAttributes().flags & WindowManager
+              .LayoutParams.FLAG_KEEP_SCREEN_ON) != 0);
+
+          autoStrokeBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+              autoManageStrokes = isChecked;
             }
-          }
-        });
+          });
+          keepScreenOnBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(final CompoundButton compoundButton, boolean isChecked) {
+              if (isChecked) {
+                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+              } else {
+                activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+              }
+            }
+          });
+        }
 
         dialog.show();
       }
@@ -607,9 +700,11 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
     submitRoundButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(final View v) {
-        if (currentUser().isValid()) {
+        final Round round = round();
 
-          final List<Round.RoundIssue> roundIssues = round().issues();
+        if (round != null && currentUser().isValid()) {
+
+          final List<Round.RoundIssue> roundIssues = round.issues();
 
           if (roundIssues.isEmpty()) {
 
@@ -624,27 +719,27 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
                     final MaterialDialog progressDialog =
                         Dialogs.showBusyDialog(activity, "Submitting round...");
 
-                    final long localRoundId = round().id;
+                    final long localRoundId = round.id;
                     final Rounds rounds = new Rounds(context);
 
-                    rounds.postRound(round().asUser(currentUser())).
+                    rounds.postRound(round.asUser(currentUser())).
                         onSuccess(new BackendResponse.BackendSuccessListener<Round>() {
                           @Override
-                          public void onSuccess(final Round value) {
+                          public void onSuccess(@NonNull final Round value) {
                             rounds.clearBackupRoundData(localRoundId);
                             activity.finish();
                           }
                         }).
                         onError(new BackendResponse.BackendErrorListener() {
                           @Override
-                          public void onError(final BackendMessage message) {
+                          public void onError(@NonNull final BackendMessage message) {
                             Dialogs.showMessageDialog(
                                 activity, "Round submission failed: " + message.message);
                           }
                         }).
                         onException(new BackendResponse.BackendExceptionListener() {
                           @Override
-                          public void onException(final Exception exception) {
+                          public void onException(@NonNull final Exception exception) {
                             Dialogs.showMessageDialog(
                                 activity, "Round submission failed: " + exception.getMessage());
                           }
@@ -799,7 +894,7 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
         iconView.setImageResource(featureIcon(holeFeature));
       }
 
-      public void updateDistances(final Location location) {
+      public void updateDistances(@Nullable final Location location) {
 
         if (location != null) {
 
@@ -845,13 +940,15 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
         }
       }
 
-      private String distanceText(final Location fromLocation, final Location toLocation) {
+      private String distanceText(@NonNull final Location fromLocation,
+                                  @NonNull final Location toLocation) {
+
         double meters = fromLocation.distanceTo(toLocation);
         int yards = (int) Math.round(Units.metersToYards(meters));
         return String.valueOf(yards);
       }
 
-      private int featureIcon(final HoleFeature feature) {
+      private int featureIcon(@NonNull final HoleFeature feature) {
         if (feature.name.toLowerCase().contains("waste")) {
           return R.drawable.waste_area;
         } else if (feature.name.toLowerCase().contains("bunker") || feature.name.toLowerCase().contains("sand") || feature.name.toLowerCase().contains("trap")) {
@@ -873,10 +970,12 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
 
   class ShotListAdapter extends BaseAdapter {
 
+    @NonNull
     private final Context context;
+    @NonNull
     private final List<Shot> shots;
 
-    public ShotListAdapter(final Context context, final List<Shot> shots) {
+    public ShotListAdapter(@NonNull final Context context, @NonNull final List<Shot> shots) {
       this.context = context;
       this.shots = shots;
     }
@@ -947,9 +1046,12 @@ public class RoundPlayHoleViewFragment extends BaseFragment {
       holder.removeShotButton.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(final View view) {
-          if (playRoundListener != null) {
 
-            HoleScore newScore = currentHoleScore().removeShot(itemShot);
+          HoleScore currentHoleScore = currentHoleScore();
+
+          if (playRoundListener != null && currentHoleScore != null) {
+
+            HoleScore newScore = currentHoleScore.removeShot(itemShot);
 
             if (autoManageStrokes) {
               newScore = newScore.subtractStroke();

@@ -2,6 +2,7 @@ package org.cranst0n.dogleg.android.utils.nfc;
 
 import android.nfc.Tag;
 import android.nfc.tech.MifareUltralight;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.cranst0n.dogleg.android.model.Club;
@@ -14,7 +15,7 @@ public class MifareUltralightTagIO implements NfcTagIO<MifareUltralight> {
   private final String TAG = getClass().getSimpleName();
 
   @Override
-  public Club readClub(final Tag tag) {
+  public Club readClub(@NonNull final Tag tag) {
 
     MifareUltralight mifare = MifareUltralight.get(tag);
 
@@ -40,7 +41,7 @@ public class MifareUltralightTagIO implements NfcTagIO<MifareUltralight> {
   }
 
   @Override
-  public boolean writeClubTag(final Tag tag, final Club club) {
+  public boolean writeClubTag(@NonNull final Tag tag, @NonNull final Club club) {
 
     MifareUltralight ultralight = MifareUltralight.get(tag);
 

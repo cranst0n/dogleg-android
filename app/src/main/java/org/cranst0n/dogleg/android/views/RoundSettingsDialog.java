@@ -1,5 +1,7 @@
 package org.cranst0n.dogleg.android.views;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
 import android.view.View;
@@ -32,8 +34,10 @@ import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
 public class RoundSettingsDialog {
 
+  @NonNull
   private Round round;
   private final FragmentActivity activity;
+  @Nullable
   private final RoundSettingsCallback callback;
 
   private final Rounds rounds;
@@ -51,11 +55,11 @@ public class RoundSettingsDialog {
   private Spinner overrideHandicapSpinner;
 
   public interface RoundSettingsCallback {
-    void settingsUpdated(final Round round);
+    void settingsUpdated(@NonNull final Round round);
   }
 
-  public RoundSettingsDialog(final Round round, final FragmentActivity activity,
-                             final RoundSettingsCallback callback) {
+  public RoundSettingsDialog(@NonNull final Round round, final FragmentActivity activity,
+                             @Nullable final RoundSettingsCallback callback) {
 
     this.round = round;
     this.activity = activity;
@@ -87,113 +91,117 @@ public class RoundSettingsDialog {
                 overrideHandicapSpinner.getSelectedItemPosition(), round.holeScores(),
                 selectedHoleSet);
 
-            if (unhandicappedRound.isHandicapOverridden) {
-              callback.settingsUpdated(unhandicappedRound);
-            } else {
-              rounds.handicapRound(round.roundSlope(), round.numHoles(), round.time)
-                  .onSuccess(new BackendResponse.BackendSuccessListener<RoundHandicapResponse>() {
-                    @Override
-                    public void onSuccess(final RoundHandicapResponse value) {
-                      callback.settingsUpdated(unhandicappedRound.withAutoHandicap(value.handicap));
-                    }
-                  });
+            if (callback != null) {
+              if (unhandicappedRound.isHandicapOverridden) {
+                callback.settingsUpdated(unhandicappedRound);
+              } else {
+                rounds.handicapRound(round.roundSlope(), round.numHoles(), round.time)
+                    .onSuccess(new BackendResponse.BackendSuccessListener<RoundHandicapResponse>() {
+                      @Override
+                      public void onSuccess(@NonNull final RoundHandicapResponse value) {
+                        callback.settingsUpdated(unhandicappedRound.withAutoHandicap(value.handicap));
+                      }
+                    });
+              }
             }
 
           }
         }).build();
 
-    ratingSpinner = (Spinner) dialog.getCustomView().findViewById(R.id.play_round_tee_spinner);
-    holeSetSpinner = (Spinner) dialog.getCustomView().findViewById(R.id.play_round_holes_spinner);
-    pickDateButton = (Button) dialog.getCustomView().findViewById(R.id.pick_date_button);
-    officialCheckBox =
-        (CheckBox) dialog.getCustomView().findViewById(R.id.play_round_official_checkbox);
-    handicapLayout = (GridLayout) dialog.getCustomView().findViewById(R.id.handicap_layout);
-    autoHandicapButton = (RadioButton) dialog.getCustomView().findViewById(R.id.auto_handicap_button);
-    fetchingAutoHandicapIndicator =
-        (CircularProgressBar) dialog.getCustomView().findViewById(R.id.fetching_auto_handicap_indicator);
-    autoHandicapText = (TextView) dialog.getCustomView().findViewById(R.id.auto_handicap_text);
-    overrideHandicapButton =
-        (RadioButton) dialog.getCustomView().findViewById(R.id.override_handicap_button);
-    overrideHandicapSpinner =
-        (Spinner) dialog.getCustomView().findViewById(R.id.override_handicap_spinner);
+    View customView = dialog.getCustomView();
 
-    int ratingIx = -1;
-    for (int ix = 0; ix < round.course.ratings.length; ix++) {
-      if (round.course.ratings[ix].id == round.rating.id) {
-        ratingIx = ix;
+    if (customView != null) {
+
+      ratingSpinner = (Spinner) customView.findViewById(R.id.play_round_tee_spinner);
+      holeSetSpinner = (Spinner) customView.findViewById(R.id.play_round_holes_spinner);
+      pickDateButton = (Button) customView.findViewById(R.id.pick_date_button);
+      officialCheckBox = (CheckBox) customView.findViewById(R.id.play_round_official_checkbox);
+      handicapLayout = (GridLayout) customView.findViewById(R.id.handicap_layout);
+      autoHandicapButton = (RadioButton) customView.findViewById(R.id.auto_handicap_button);
+      fetchingAutoHandicapIndicator =
+          (CircularProgressBar) customView.findViewById(R.id.fetching_auto_handicap_indicator);
+      autoHandicapText = (TextView) customView.findViewById(R.id.auto_handicap_text);
+      overrideHandicapButton = (RadioButton) customView.findViewById(R.id.override_handicap_button);
+      overrideHandicapSpinner = (Spinner) customView.findViewById(R.id.override_handicap_spinner);
+
+      int ratingIx = -1;
+      for (int ix = 0; ix < round.course.ratings.length; ix++) {
+        if (round.course.ratings[ix].id == round.rating.id) {
+          ratingIx = ix;
+        }
       }
+
+      ratingSpinner.setAdapter(teeAdapter());
+      ratingSpinner.setSelection(ratingIx);
+      holeSetSpinner.setAdapter(holeSetAdapter());
+      holeSetSpinner.setSelection(Arrays.asList(HoleSet.available(round.course)).indexOf(round.holeSet()));
+      officialCheckBox.setChecked(round.official);
+
+      overrideHandicapSpinner.setAdapter(handicapAdapter());
+      overrideHandicapSpinner.setSelection(round.handicapOverride);
+      overrideHandicapSpinner.setVisibility(
+          overrideHandicapButton.isChecked() ? View.VISIBLE : View.INVISIBLE);
+
+      ratingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+          updateAutoHandicapValue();
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+      });
+
+      holeSetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+          updateAutoHandicapValue();
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+      });
+
+      pickDateButton.setText(new DateTime(round.time).toString("MMM dd yyyy @ hh:mma"));
+      pickDateButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(final View view) {
+          showDateSelection(new DateTime(round.time));
+        }
+      });
+
+      officialCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+          handicapLayout.setVisibility(b ? View.VISIBLE : View.GONE);
+        }
+      });
+
+      autoHandicapButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+          overrideHandicapButton.setChecked(!isChecked);
+          autoHandicapText.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
+        }
+      });
+
+      overrideHandicapButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+          autoHandicapButton.setChecked(!isChecked);
+          overrideHandicapSpinner.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
+        }
+      });
+
+      autoHandicapButton.setChecked(!round.isHandicapOverridden);
+      overrideHandicapButton.setChecked(round.isHandicapOverridden);
+
+      dialog.show();
     }
-
-    ratingSpinner.setAdapter(teeAdapter());
-    ratingSpinner.setSelection(ratingIx);
-    holeSetSpinner.setAdapter(holeSetAdapter());
-    holeSetSpinner.setSelection(Arrays.asList(HoleSet.available(round.course)).indexOf(round.holeSet()));
-    officialCheckBox.setChecked(round.official);
-
-    overrideHandicapSpinner.setAdapter(handicapAdapter());
-    overrideHandicapSpinner.setSelection(round.handicapOverride);
-    overrideHandicapSpinner.setVisibility(
-        overrideHandicapButton.isChecked() ? View.VISIBLE : View.INVISIBLE);
-
-    ratingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-      @Override
-      public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        updateAutoHandicapValue();
-      }
-
-      @Override
-      public void onNothingSelected(AdapterView<?> adapterView) {
-
-      }
-    });
-
-    holeSetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-      @Override
-      public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        updateAutoHandicapValue();
-      }
-
-      @Override
-      public void onNothingSelected(AdapterView<?> adapterView) {
-
-      }
-    });
-
-    pickDateButton.setText(new DateTime(round.time).toString("MMM dd yyyy @ hh:mma"));
-    pickDateButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(final View view) {
-        showDateSelection(new DateTime(round.time));
-      }
-    });
-
-    officialCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-      @Override
-      public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        handicapLayout.setVisibility(b ? View.VISIBLE : View.GONE);
-      }
-    });
-
-    autoHandicapButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-      @Override
-      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        overrideHandicapButton.setChecked(!isChecked);
-        autoHandicapText.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
-      }
-    });
-
-    overrideHandicapButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-      @Override
-      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        autoHandicapButton.setChecked(!isChecked);
-        overrideHandicapSpinner.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
-      }
-    });
-
-    autoHandicapButton.setChecked(!round.isHandicapOverridden);
-    overrideHandicapButton.setChecked(round.isHandicapOverridden);
-
-    dialog.show();
   }
 
   private void updateAutoHandicapValue() {
@@ -208,7 +216,8 @@ public class RoundSettingsDialog {
         selectedHoleSet.numHoles, round.time);
   }
 
-  private void updateAutoHandicapValue(final double slope, final int numHoles, final DateTime time) {
+  private void updateAutoHandicapValue(final double slope, final int numHoles,
+                                       @NonNull final DateTime time) {
 
     if (autoHandicapButton.isChecked()) {
       autoHandicapText.setVisibility(View.GONE);
@@ -218,7 +227,7 @@ public class RoundSettingsDialog {
     rounds.handicapRound(slope, numHoles, time).
         onSuccess(new BackendResponse.BackendSuccessListener<RoundHandicapResponse>() {
           @Override
-          public void onSuccess(final RoundHandicapResponse value) {
+          public void onSuccess(@NonNull final RoundHandicapResponse value) {
             autoHandicapText.setText(String.valueOf(value.handicap));
           }
         }).
@@ -261,7 +270,8 @@ public class RoundSettingsDialog {
     return new ArrayAdapter<>(activity, android.R.layout.simple_spinner_dropdown_item, handicaps);
   }
 
-  private void showDateSelection(final DateTime initial) {
+  private void showDateSelection(@NonNull final DateTime initial) {
+
     CalendarDatePickerDialog calendarDatePickerDialog = CalendarDatePickerDialog
         .newInstance(new CalendarDatePickerDialog.OnDateSetListener() {
                        @Override
@@ -275,7 +285,7 @@ public class RoundSettingsDialog {
     calendarDatePickerDialog.show(activity.getSupportFragmentManager(), getClass().getSimpleName() + ".DatePicker");
   }
 
-  private void showTimeSelection(final DateTime initial) {
+  private void showTimeSelection(@NonNull final DateTime initial) {
     RadialTimePickerDialog timePickerDialog = RadialTimePickerDialog
         .newInstance(new RadialTimePickerDialog.OnTimeSetListener() {
                        @Override

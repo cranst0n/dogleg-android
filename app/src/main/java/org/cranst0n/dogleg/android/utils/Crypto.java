@@ -1,14 +1,18 @@
 package org.cranst0n.dogleg.android.utils;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.bouncycastle.jcajce.provider.digest.SHA3;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
 public class Crypto {
 
-  public static final String hashPassword(final String password) {
+  @Nullable
+  public static String hashPassword(@NonNull final String password) {
 
     String hashed = null;
 
@@ -22,7 +26,7 @@ public class Crypto {
 
       hashed = String.format("%0" + (bytes.length << 1) + "X", bi).toLowerCase();
 
-    } catch (Exception ex) {
+    } catch (final UnsupportedEncodingException ex) {
       Log.e(Crypto.class.getSimpleName(), "Failed to hash password.", ex);
     }
 

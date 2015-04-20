@@ -5,6 +5,7 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.cranst0n.dogleg.android.model.Club;
@@ -18,7 +19,7 @@ public class NdefTagIO implements NfcTagIO<Ndef> {
   private final String TAG = getClass().getSimpleName();
 
   @Override
-  public Club readClub(final Tag tag) {
+  public Club readClub(@NonNull final Tag tag) {
 
     Ndef ndefTag = Ndef.get(tag);
 
@@ -41,15 +42,13 @@ public class NdefTagIO implements NfcTagIO<Ndef> {
         return Club.Unknown;
       }
 
-    } catch (final IOException e) {
-      e.printStackTrace();
-    } catch (final FormatException e) {
-      e.printStackTrace();
+    } catch (final IOException | FormatException e) {
+      Log.e(TAG, "Exception while reading Ndef tag.", e);
     } finally {
       if (ndefTag != null) {
         try {
           ndefTag.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
           Log.e(TAG, "IOException while closing Ndef tag.", e);
         }
       }
@@ -59,7 +58,7 @@ public class NdefTagIO implements NfcTagIO<Ndef> {
   }
 
   @Override
-  public boolean writeClubTag(final Tag tag, final Club club) {
+  public boolean writeClubTag(@NonNull final Tag tag, @NonNull final Club club) {
 
     Ndef ndefTag = Ndef.get(tag);
 
@@ -79,16 +78,13 @@ public class NdefTagIO implements NfcTagIO<Ndef> {
 
       return true;
 
-    } catch (final IOException e) {
-      e.printStackTrace();
-      Log.e(TAG, "IOException while writing to Ndef tag.", e);
-    } catch (final FormatException e) {
-      Log.e(TAG, "FormatException while writing to Ndef tag.", e);
+    } catch (final IOException | FormatException e) {
+      Log.e(TAG, "Exception while writing to Ndef tag.", e);
     } finally {
       if (ndefTag != null) {
         try {
           ndefTag.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
           Log.e(TAG, "IOException while closing Ndef tag.", e);
         }
       }

@@ -1,6 +1,8 @@
 package org.cranst0n.dogleg.android.backend;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -35,10 +37,11 @@ public class Rounds extends BackendComponent {
 
   private static final String HANDICAP_URL = "/handicap?slope=%.2f&numHoles=%d&time=%d";
 
-  public Rounds(final Context context) {
+  public Rounds(@NonNull final Context context) {
     super(context);
   }
 
+  @NonNull
   public BackendResponse<JsonArray, List<Round>> list(final int num, final int offset) {
 
     String url = String.format(LIST_URL, num, offset);
@@ -49,7 +52,8 @@ public class Rounds extends BackendComponent {
     }.getType());
   }
 
-  public BackendResponse<JsonObject, Round> postRound(final Round round) {
+  @NonNull
+  public BackendResponse<JsonObject, Round> postRound(@NonNull final Round round) {
 
     Gson gson = new GsonBuilder()
         .registerTypeAdapter(DateTime.class, new Json.DateTimeTypeAdapter())
@@ -67,7 +71,8 @@ public class Rounds extends BackendComponent {
         .withResponse(), Round.class);
   }
 
-  public BackendResponse<JsonObject, Round> updateRound(final Round round) {
+  @NonNull
+  public BackendResponse<JsonObject, Round> updateRound(@NonNull final Round round) {
 
     Gson gson = new GsonBuilder()
         .registerTypeAdapter(DateTime.class, new Json.DateTimeTypeAdapter())
@@ -85,6 +90,7 @@ public class Rounds extends BackendComponent {
         .withResponse(), Round.class);
   }
 
+  @NonNull
   public BackendResponse<JsonObject, BackendMessage> deleteRound(final long roundId) {
 
     String url = String.format(DELETE_URL, roundId);
@@ -96,9 +102,10 @@ public class Rounds extends BackendComponent {
         .withResponse(), BackendMessage.class);
   }
 
+  @NonNull
   public BackendResponse<JsonObject, RoundHandicapResponse> handicapRound(final double slope,
                                                                           final int numHoles,
-                                                                          final DateTime time) {
+                                                                          @NonNull final DateTime time) {
 
     String url = String.format(HANDICAP_URL, slope, numHoles, time.getMillis());
 
@@ -109,7 +116,7 @@ public class Rounds extends BackendComponent {
         .withResponse(), RoundHandicapResponse.class);
   }
 
-  public boolean backupRoundData(final Round round) {
+  public boolean backupRoundData(@NonNull final Round round) {
 
     File backupFile = new File(context.getFilesDir(), String.format("rounds/%d.json", round.id));
     backupFile.getParentFile().mkdirs();
@@ -128,7 +135,7 @@ public class Rounds extends BackendComponent {
       if (outputStream != null) {
         try {
           outputStream.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
           Log.d(Tag, "Failed to close output stream", e);
         }
       }
@@ -140,16 +147,19 @@ public class Rounds extends BackendComponent {
     return backupFile.delete();
   }
 
+  @Nullable
   public Round backedUpRound() {
 
     File backupDir = new File(context.getFilesDir(), "rounds/");
     backupDir.mkdirs();
 
     try {
+
       for (File f : backupDir.listFiles()) {
         String jsonString = Files.getStringFromFile(f);
         return Json.pimpedGson().fromJson(jsonString, Round.class);
       }
+
     } catch (final IOException e) {
       Log.e(Tag, "Failed to parse round file.", e);
     }
@@ -158,6 +168,7 @@ public class Rounds extends BackendComponent {
   }
 
   private class RoundRequestSerializer implements JsonSerializer<Round> {
+
     public JsonElement serialize(final Round round, final Type type,
                                  final JsonSerializationContext context) {
 

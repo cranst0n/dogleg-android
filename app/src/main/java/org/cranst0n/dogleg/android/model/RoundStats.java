@@ -1,5 +1,7 @@
 package org.cranst0n.dogleg.android.model;
 
+import android.support.annotation.NonNull;
+
 public class RoundStats {
 
   public final int score;
@@ -27,7 +29,7 @@ public class RoundStats {
   public final double par4ScoringAverage;
   public final double par5ScoringAverage;
 
-  public RoundStats(final Round round) {
+  public RoundStats(@NonNull final Round round) {
 
     int holesPlayed = 0;
     int frontHolesPlayed = 0;
@@ -170,15 +172,18 @@ public class RoundStats {
 
   }
 
+  @NonNull
   public String grossScoreToParString() {
-    return scorToParString(scoreToPar);
+    return scoreToParString(scoreToPar);
   }
 
+  @NonNull
   public String netScoreToParString() {
-    return scorToParString(netScoreToPar);
+    return scoreToParString(netScoreToPar);
   }
 
-  public static String scorToParString(final int scoreToPar) {
+  @NonNull
+  public static String scoreToParString(final int scoreToPar) {
     if (scoreToPar == 0) {
       return "E";
     } else if (scoreToPar > 0) {

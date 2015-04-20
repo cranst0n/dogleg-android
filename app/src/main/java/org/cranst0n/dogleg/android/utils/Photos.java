@@ -1,8 +1,8 @@
 package org.cranst0n.dogleg.android.utils;
 
-import org.cranst0n.dogleg.android.R;
+import android.support.annotation.DrawableRes;
 
-import java.util.Random;
+import org.cranst0n.dogleg.android.R;
 
 public class Photos {
 
@@ -39,11 +39,9 @@ public class Photos {
       R.drawable.stock_photo_29
   };
 
-  public static final int random() {
-    return stock[new Random().nextInt(stock.length)];
-  }
-
-  public static final int photoFor(final long value) {
+  @DrawableRes
+  public static int photoFor(final long value) {
     return stock[(int) value % stock.length];
   }
+
 }

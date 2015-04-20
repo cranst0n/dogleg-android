@@ -2,7 +2,6 @@ package org.cranst0n.dogleg.android.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 
@@ -55,13 +54,7 @@ public class RoundShowActivity extends BaseActivity {
   }
 
   @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    Log.d(getClass().getSimpleName(), "oar(activity): " + resultCode);
-    super.onActivityResult(requestCode, resultCode, data);
-  }
-
-  @Override
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
+  public boolean onKeyDown(final int keyCode, final KeyEvent event) {
     //Handle the back button
     if (keyCode == KeyEvent.KEYCODE_BACK) {
       backPressed();
@@ -77,7 +70,7 @@ public class RoundShowActivity extends BaseActivity {
   }
 
   @Override
-  protected int getTitleToolBar() {
+  protected int getToolbarTitle() {
     return R.string.app_name;
   }
 

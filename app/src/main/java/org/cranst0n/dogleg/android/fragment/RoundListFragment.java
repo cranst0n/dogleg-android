@@ -3,6 +3,8 @@ package org.cranst0n.dogleg.android.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -41,7 +43,6 @@ import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
 public class RoundListFragment extends BaseFragment {
 
-  private View roundListView;
   private SwipeRefreshLayout swipeRefreshLayout;
   private RecyclerView recyclerView;
   private SmoothProgressBar appendInProgressBar;
@@ -60,11 +61,12 @@ public class RoundListFragment extends BaseFragment {
   private int firstVisibleItem, visibleItemCount, totalItemCount;
 
   @Override
-  public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+  public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                           final Bundle savedInstanceState) {
 
     rounds = new Rounds(context);
 
-    roundListView = inflater.inflate(R.layout.fragment_round_list, container, false);
+    View roundListView = inflater.inflate(R.layout.fragment_round_list, container, false);
 
     swipeRefreshLayout = (SwipeRefreshLayout) roundListView.findViewById(R.id.swipe_refresh_container);
     recyclerView = (RecyclerView) roundListView.findViewById(R.id.round_list_recycler);
@@ -97,11 +99,12 @@ public class RoundListFragment extends BaseFragment {
   }
 
   @Override
+  @NonNull
   public String getTitle() {
     return "Rounds";
   }
 
-  public void roundUpdated(final Round updatedRound) {
+  public void roundUpdated(@NonNull final Round updatedRound) {
     for (int ix = 0; ix < displayedRoundList.size(); ix++) {
       if (displayedRoundList.get(ix).id == updatedRound.id) {
         displayedRoundList.set(ix, updatedRound);
@@ -111,7 +114,7 @@ public class RoundListFragment extends BaseFragment {
     }
   }
 
-  public void roundDeleted(final Round deletedRound) {
+  public void roundDeleted(@NonNull final Round deletedRound) {
     for (Round r : displayedRoundList) {
       if (r.id == deletedRound.id) {
         displayedRoundList.remove(r);
@@ -186,7 +189,7 @@ public class RoundListFragment extends BaseFragment {
     queryCall.
         onSuccess(new BackendResponse.BackendSuccessListener<List<Round>>() {
           @Override
-          public void onSuccess(final List<Round> value) {
+          public void onSuccess(@NonNull final List<Round> value) {
             endOfListReached = value.isEmpty();
             displayedRoundList.addAll(value);
           }
@@ -209,6 +212,7 @@ public class RoundListFragment extends BaseFragment {
 
   private class RoundListRecyclerAdapter extends RecyclerView.Adapter<RoundListRecyclerAdapter.ViewHolder> {
 
+    @Nullable
     private Round expandedRound = null;
 
     @Override
@@ -241,6 +245,7 @@ public class RoundListFragment extends BaseFragment {
       private final TextView roundTimeView;
 
       private final ViewPager scorecardViewPager;
+      @NonNull
       private final List<Fragment> viewPagerFragments = new ArrayList<>();
 
       private final ImageButton expandDetailsButton;
@@ -323,7 +328,7 @@ public class RoundListFragment extends BaseFragment {
         }
       }
 
-      private void setRound(final Round round) {
+      private void setRound(@NonNull final Round round) {
 
         this.round = round;
 
@@ -374,7 +379,7 @@ public class RoundListFragment extends BaseFragment {
 
         @Override
         public int getCount() {
-          return viewPagerFragments != null ? viewPagerFragments.size() : 0;
+          return viewPagerFragments.size();
         }
 
         @Override

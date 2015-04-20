@@ -1,6 +1,7 @@
 package org.cranst0n.dogleg.android.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,16 +34,12 @@ public class AdminFragment extends BaseFragment {
 
   private Bus bus;
   private Users users;
-  private User currentUser;
-
-  private View adminView;
 
   private TextView usernameField;
   private TextView passwordField;
   private TextView passwordConfirmField;
   private TextView emailField;
   private CheckBox administratorBox;
-  private Button createAccountButton;
 
   private User resetUser = User.NO_USER;
   private AutoCompleteTextView usernameSearchField;
@@ -68,16 +65,17 @@ public class AdminFragment extends BaseFragment {
   }
 
   @Override
-  public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+  public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                           final Bundle savedInstanceState) {
 
-    adminView = inflater.inflate(R.layout.fragment_admin, container, false);
+    View adminView = inflater.inflate(R.layout.fragment_admin, container, false);
 
     usernameField = (TextView) adminView.findViewById(R.id.username_field);
     passwordField = (TextView) adminView.findViewById(R.id.password_field);
     passwordConfirmField = (TextView) adminView.findViewById(R.id.password_confirm_field);
     emailField = (TextView) adminView.findViewById(R.id.email_field);
     administratorBox = (CheckBox) adminView.findViewById(R.id.administrator_box);
-    createAccountButton = (Button) adminView.findViewById(R.id.create_account_button);
+    Button createAccountButton = (Button) adminView.findViewById(R.id.create_account_button);
 
     createAccountButton.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -139,32 +137,39 @@ public class AdminFragment extends BaseFragment {
       return;
     }
 
-    User newUser = new User(-1, username, Crypto.hashPassword(password), email, isAdmin, true,
-        DateTime.now(), UserProfile.EMPTY);
+    String hashedPassword = Crypto.hashPassword(password);
 
-    final MaterialDialog busyDialog = Dialogs.showBusyDialog(activity, "Creating Account...");
+    if (hashedPassword != null) {
 
-    users.create(newUser)
-        .onSuccess(new BackendResponse.BackendSuccessListener<User>() {
-          @Override
-          public void onSuccess(final User value) {
-            SnackBars.showSimple(activity, String.format("User '%s' created.", username));
+      User newUser = new User(-1, username, hashedPassword, email, isAdmin, true,
+          DateTime.now(), UserProfile.EMPTY);
 
-            usernameField.setText("");
-            passwordField.setText("");
-            passwordConfirmField.setText("");
-            emailField.setText("");
-            administratorBox.setChecked(false);
-          }
-        })
-        .onError(SnackBars.showBackendError(activity))
-        .onException(SnackBars.showBackendException(activity))
-        .onFinally(new BackendResponse.BackendFinallyListener() {
-          @Override
-          public void onFinally() {
-            busyDialog.dismiss();
-          }
-        });
+      final MaterialDialog busyDialog = Dialogs.showBusyDialog(activity, "Creating Account...");
+
+      users.create(newUser)
+          .onSuccess(new BackendResponse.BackendSuccessListener<User>() {
+            @Override
+            public void onSuccess(@NonNull final User value) {
+              SnackBars.showSimple(activity, String.format("User '%s' created.", username));
+
+              usernameField.setText("");
+              passwordField.setText("");
+              passwordConfirmField.setText("");
+              emailField.setText("");
+              administratorBox.setChecked(false);
+            }
+          })
+          .onError(SnackBars.showBackendError(activity))
+          .onException(SnackBars.showBackendException(activity))
+          .onFinally(new BackendResponse.BackendFinallyListener() {
+            @Override
+            public void onFinally() {
+              busyDialog.dismiss();
+            }
+          });
+    } else {
+      SnackBars.showSimple(activity, "Failed to hash password.");
+    }
   }
 
   private void resetPassword() {
@@ -189,7 +194,7 @@ public class AdminFragment extends BaseFragment {
       users.resetPassword(resetUser, password, passwordConfirm)
           .onSuccess(new BackendResponse.BackendSuccessListener<User>() {
             @Override
-            public void onSuccess(final User value) {
+            public void onSuccess(@NonNull final User value) {
               SnackBars.showSimple(activity, "Password reset.");
               usernameSearchField.clearListSelection();
               resetPasswordField.setText("");
@@ -213,9 +218,7 @@ public class AdminFragment extends BaseFragment {
 
   @Subscribe
   public void newUser(final User user) {
-    if (user.isValid() && user.admin) {
-      currentUser = user;
-    } else {
+    if (!user.isValid() || !user.admin) {
       activity.finish();
     }
   }

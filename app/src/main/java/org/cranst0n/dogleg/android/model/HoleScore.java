@@ -1,5 +1,7 @@
 package org.cranst0n.dogleg.android.model;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,12 +15,14 @@ public class HoleScore implements Comparable<HoleScore> {
   public final int penaltyStrokes;
   public final boolean fairwayHit;
   public final boolean gir;
+  @NonNull
   public final List<Shot> shots;
+  @NonNull
   public final Hole hole;
 
   public HoleScore(final long id, final long roundId, final int score, final int netScore,
                    final int putts, final int penaltyStrokes, final boolean fairwayHit,
-                   final boolean gir, final List<Shot> shots, final Hole hole) {
+                   final boolean gir, @NonNull final List<Shot> shots, @NonNull final Hole hole) {
 
     this.id = id;
     this.roundId = roundId;
@@ -32,82 +36,78 @@ public class HoleScore implements Comparable<HoleScore> {
     this.hole = hole;
   }
 
+  @NonNull
   public static HoleScore empty() {
     return new HoleScore(-1, -1, 0, 0, 0, 0, false, false, new ArrayList<Shot>(), Hole.empty());
   }
 
+  @NonNull
   public final HoleScore score(final int score) {
-    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gir,
-        shots, hole);
+    return new HoleScore(id, roundId, Math.max(score, 0), netScore, putts, penaltyStrokes,
+        fairwayHit, gir, shots, hole);
   }
 
+  @NonNull
   public final HoleScore netScore(final int netScore) {
     return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gir,
         shots, hole);
   }
 
+  @NonNull
   public final HoleScore addStroke() {
-    return new HoleScore(id, roundId, score + 1, netScore, putts, penaltyStrokes, fairwayHit,
-        gir, shots, hole);
+    return score(score + 1);
   }
 
+  @NonNull
   public final HoleScore subtractStroke() {
-    if (score > 0) {
-      return new HoleScore(id, roundId, score - 1, netScore, putts, penaltyStrokes, fairwayHit,
-          gir, shots, hole);
-    } else {
-      return this;
-    }
+    return score(score - 1);
   }
 
+  @NonNull
   public final HoleScore putts(final int putts) {
-    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gir,
-        shots, hole);
+    return new HoleScore(id, roundId, score, netScore, Math.max(putts, 0), penaltyStrokes,
+        fairwayHit, gir, shots, hole);
   }
 
+  @NonNull
   public final HoleScore addPutt() {
-    return new HoleScore(id, roundId, score, netScore, putts + 1, penaltyStrokes, fairwayHit,
-        gir, shots, hole);
+    return putts(putts + 1);
   }
 
+  @NonNull
   public final HoleScore subtractPutt() {
-    if (putts > 0) {
-      return new HoleScore(id, roundId, score, netScore, putts - 1, penaltyStrokes, fairwayHit,
-          gir, shots, hole);
-    } else {
-      return this;
-    }
+    return putts(putts - 1);
   }
 
+  @NonNull
   public final HoleScore penaltyStrokes(final int penaltyStrokes) {
-    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gir,
-        shots, hole);
+    return new HoleScore(id, roundId, score, netScore, putts, Math.max(penaltyStrokes, 0),
+        fairwayHit, gir, shots, hole);
   }
 
+  @NonNull
   public final HoleScore addPenaltyStroke() {
-    return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes + 1, fairwayHit,
-        gir, shots, hole);
+    return penaltyStrokes(penaltyStrokes + 1);
   }
 
+  @NonNull
   public final HoleScore subtractPenaltyStroke() {
-    if (penaltyStrokes > 0) {
-      return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes - 1, fairwayHit,
-          gir, shots, hole);
-    } else {
-      return this;
-    }
+    return penaltyStrokes(penaltyStrokes - 1);
   }
 
+  @NonNull
   public final HoleScore fairwayHit(final boolean fh) {
     return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fh, gir, shots, hole);
   }
 
+  @NonNull
   public final HoleScore gir(final boolean gr) {
     return new HoleScore(id, roundId, score, netScore, putts, penaltyStrokes, fairwayHit, gr,
         shots, hole);
   }
 
-  public final HoleScore withShot(final Shot shot) {
+  @NonNull
+  public final HoleScore withShot(@NonNull final Shot shot) {
     List<Shot> newShots = new ArrayList<>(shots);
     newShots.add(shot);
 
@@ -115,7 +115,8 @@ public class HoleScore implements Comparable<HoleScore> {
         validatedShots(newShots, false), hole);
   }
 
-  public final HoleScore removeShot(final Shot shot) {
+  @NonNull
+  public final HoleScore removeShot(@NonNull final Shot shot) {
     List<Shot> newShots = new ArrayList<>(shots);
     newShots.remove(shot);
 
@@ -123,7 +124,9 @@ public class HoleScore implements Comparable<HoleScore> {
         validatedShots(newShots, true), hole);
   }
 
-  private List<Shot> validatedShots(final List<Shot> shots, final boolean shotRemoved) {
+  @NonNull
+  private List<Shot> validatedShots(@NonNull final List<Shot> shots, final boolean shotRemoved) {
+
     List<Shot> validated = new ArrayList<>();
 
     for (int ix = 0; ix < shots.size(); ix++) {
@@ -143,19 +146,18 @@ public class HoleScore implements Comparable<HoleScore> {
   }
 
   @Override
-  public int compareTo(final HoleScore another) {
+  public int compareTo(@NonNull final HoleScore another) {
     return hole.number - another.hole.number;
   }
 
+  @NonNull
   public static String scoreToParString(final int score, final int par) {
 
     if (score == 1) {
       return "Ace";
     }
 
-    int diff = score - par;
-
-    switch (diff) {
+    switch (score - par) {
       case -4: {
         return "You're a liar";
       }
@@ -183,8 +185,9 @@ public class HoleScore implements Comparable<HoleScore> {
       case 4: {
         return "Quadruple Bogey";
       }
+      default: {
+        return "Other";
+      }
     }
-
-    return "Other";
   }
 }

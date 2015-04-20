@@ -3,6 +3,7 @@ package org.cranst0n.dogleg.android.views;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.internal.widget.TintImageView;
 import android.support.v7.widget.SearchView;
 import android.text.Spannable;
@@ -37,7 +38,9 @@ public class Views {
     }
   }
 
-  public static void colorizeSearchView(final SearchView searchView, final int colorRes, final Context context) {
+  public static void colorizeSearchView(@NonNull final SearchView searchView,
+                                        final int colorRes,
+                                        @NonNull final Context context) {
 
     SearchView.SearchAutoComplete searchAutoComplete =
         (SearchView.SearchAutoComplete) searchView.findViewById(R.id.search_src_text);

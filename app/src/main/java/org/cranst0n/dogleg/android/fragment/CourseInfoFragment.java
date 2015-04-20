@@ -2,6 +2,7 @@ package org.cranst0n.dogleg.android.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -29,7 +30,6 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.ion.Ion;
 import com.nineoldandroids.view.ViewHelper;
 
-import org.cranst0n.dogleg.android.DoglegApplication;
 import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.activity.RoundPlayActivity;
 import org.cranst0n.dogleg.android.backend.BackendResponse;
@@ -51,8 +51,6 @@ import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
 public class CourseInfoFragment extends BaseFragment implements ObservableScrollViewCallbacks {
 
-  private View courseInfoView;
-
   private Courses courses;
 
   private BackendResponse<JsonObject, Course> courseInfoQuery;
@@ -62,7 +60,6 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
   private PinSwitch pinCourseSwitch;
 
   private ImageView courseImageView;
-  private ObservableScrollView scrollView;
 
   private CircularProgressBar loadingIndicator;
 
@@ -79,16 +76,19 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
   private ViewPager ratingsViewPager;
 
   @Override
-  public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+  public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                           final Bundle savedInstanceState) {
 
     setHasOptionsMenu(true);
     setToolbarOverlaid(true);
 
-    setToolbarBackground(ScrollUtils.getColorWithAlpha(0, getResources().getColor(R.color.primary)));
+    setToolbarBackground(
+        ScrollUtils.getColorWithAlpha(0, getResources().getColor(R.color.primary)));
 
-    courseInfoView = inflater.inflate(R.layout.fragment_course_info, container, false);
+    View courseInfoView = inflater.inflate(R.layout.fragment_course_info, container, false);
 
-    scrollView = (ObservableScrollView) courseInfoView.findViewById(R.id.scroll);
+    ObservableScrollView scrollView =
+        (ObservableScrollView) courseInfoView.findViewById(R.id.scroll);
     scrollView.setScrollViewCallbacks(this);
 
     loadingIndicator = (CircularProgressBar) courseInfoView.findViewById(R.id.loading_indicator);
@@ -128,7 +128,7 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
       public void onClick(View v) {
         Intent intent = new Intent(activity, RoundPlayActivity.class);
         intent.putExtra(Round.class.getCanonicalName(), Json.pimpedGson().toJson(Round.create
-            (DoglegApplication.appUser(), course, HoleSet.available(course)[0])));
+            (app.user(), course, HoleSet.available(course)[0])));
         activity.startActivity(intent);
       }
     });
@@ -144,7 +144,7 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
     courseInfoQuery = courses.info(courseId).
         onSuccess(new BackendResponse.BackendSuccessListener<Course>() {
           @Override
-          public void onSuccess(final Course value) {
+          public void onSuccess(@NonNull final Course value) {
             setCourse(value);
           }
         });
@@ -185,7 +185,7 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
     initPinnedState();
 
     if (course != null) {
-      pinCourseSwitch.setChecked(Courses.isPinned(course));
+      pinCourseSwitch.setChecked(courses.isPinned(course));
     }
   }
 
@@ -196,40 +196,37 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
     outState.putString(Course.class.getCanonicalName(), Json.pimpedGson().toJson(course));
   }
 
-  private void setCourse(final Course course) {
+  private void setCourse(@NonNull final Course course) {
     this.course = course;
 
-    if (course != null) {
+    setActionBarTitle(course.name);
 
-      setActionBarTitle(course.name);
+    initPinnedState();
 
-      initPinnedState();
+    cityTextView.setText(course.city);
+    stateTextView.setText(course.state);
+    statsTextView.setText(String.format("%d Holes - Par %d", course.numHoles, course.par()));
 
-      cityTextView.setText(course.city);
-      stateTextView.setText(course.state);
-      statsTextView.setText(String.format("%d Holes - Par %d", course.numHoles, course.par()));
+    ratingsViewPager.setAdapter(
+        new RatingsPagerAdapter(Arrays.asList(course.ratings), getChildFragmentManager()));
 
-      ratingsViewPager.setAdapter(
-          new RatingsPagerAdapter(Arrays.asList(course.ratings), getChildFragmentManager()));
+    ratingsTabStrip.setViewPager(ratingsViewPager);
+    ratingsTabStrip.setTextColor(getResources().getColor(R.color.primary));
 
-      ratingsTabStrip.setViewPager(ratingsViewPager);
-      ratingsTabStrip.setTextColor(getResources().getColor(R.color.primary));
-
-      loadingIndicator.setVisibility(View.INVISIBLE);
-      cityTextView.setVisibility(View.VISIBLE);
-      stateTextView.setVisibility(View.VISIBLE);
-      statsTextView.setVisibility(View.VISIBLE);
-      navigationButton.setVisibility(View.VISIBLE);
-      callButton.setVisibility(View.VISIBLE);
-      startRoundButton.setVisibility(View.VISIBLE);
-      courseRatingsCard.setVisibility(View.VISIBLE);
-    }
+    loadingIndicator.setVisibility(View.INVISIBLE);
+    cityTextView.setVisibility(View.VISIBLE);
+    stateTextView.setVisibility(View.VISIBLE);
+    statsTextView.setVisibility(View.VISIBLE);
+    navigationButton.setVisibility(View.VISIBLE);
+    callButton.setVisibility(View.VISIBLE);
+    startRoundButton.setVisibility(View.VISIBLE);
+    courseRatingsCard.setVisibility(View.VISIBLE);
   }
 
   private void initPinnedState() {
     if (pinCourseSwitch != null && course != null) {
 
-      pinCourseSwitch.setChecked(Courses.isPinned(course));
+      pinCourseSwitch.setChecked(courses.isPinned(course));
       pinMenuItem.setVisible(true);
 
       if (activity != null) {
@@ -240,13 +237,13 @@ public class CourseInfoFragment extends BaseFragment implements ObservableScroll
         @Override
         public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
           if (isChecked) {
-            if (Courses.pin(course)) {
+            if (courses.pin(course)) {
               SnackBars.showSimple(activity, "Pinned course for offline use.");
             } else {
               SnackBars.showSimple(activity, "Failed to pin course.");
             }
           } else {
-            if (Courses.unpin(course)) {
+            if (courses.unpin(course)) {
               SnackBars.showSimple(activity, "Unpinned course.");
             } else {
               SnackBars.showSimple(activity, "Failed to unpin course.");

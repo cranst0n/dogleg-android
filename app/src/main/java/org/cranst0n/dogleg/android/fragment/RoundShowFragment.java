@@ -2,6 +2,7 @@ package org.cranst0n.dogleg.android.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,10 +41,7 @@ public class RoundShowFragment extends ScorecardFragment implements ObservableSc
 
   private Round originalRound;
 
-  private View roundShowView;
-
   private ImageView courseImageView;
-  private ObservableScrollView scrollView;
 
   private TextView courseNameView;
   private TextView timeView;
@@ -59,16 +57,18 @@ public class RoundShowFragment extends ScorecardFragment implements ObservableSc
   private ImageButton deleteRoundBtn;
 
   @Override
-  public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+  public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                           final Bundle savedInstanceState) {
 
     setToolbarOverlaid(true);
     setEnabled(false);
 
     rounds = new Rounds(context);
 
-    roundShowView = inflater.inflate(R.layout.fragment_round_show, container, false);
+    View roundShowView = inflater.inflate(R.layout.fragment_round_show, container, false);
 
-    scrollView = (ObservableScrollView) roundShowView.findViewById(R.id.scroll);
+    ObservableScrollView scrollView =
+        (ObservableScrollView) roundShowView.findViewById(R.id.scroll);
     scrollView.setScrollViewCallbacks(this);
 
     courseImageView = (ImageView) roundShowView.findViewById(R.id.course_image);
@@ -107,24 +107,26 @@ public class RoundShowFragment extends ScorecardFragment implements ObservableSc
       @Override
       public void onClick(final View view) {
 
-        final MaterialDialog busyDialog = Dialogs.showBusyDialog(activity, "Saving Round...");
+        if (round != null) {
+          final MaterialDialog busyDialog = Dialogs.showBusyDialog(activity, "Saving Round...");
 
-        rounds.updateRound(round)
-            .onSuccess(new BackendResponse.BackendSuccessListener<Round>() {
-              @Override
-              public void onSuccess(final Round value) {
-                originalRound = Objects.deepCopy(round);
-                setEnabled(false);
-              }
-            })
-            .onError(SnackBars.showBackendError(activity))
-            .onException(SnackBars.showBackendException(activity))
-            .onFinally(new BackendResponse.BackendFinallyListener() {
-              @Override
-              public void onFinally() {
-                busyDialog.dismiss();
-              }
-            });
+          rounds.updateRound(round)
+              .onSuccess(new BackendResponse.BackendSuccessListener<Round>() {
+                @Override
+                public void onSuccess(@NonNull final Round value) {
+                  originalRound = Objects.deepCopy(round);
+                  setEnabled(false);
+                }
+              })
+              .onError(SnackBars.showBackendError(activity))
+              .onException(SnackBars.showBackendException(activity))
+              .onFinally(new BackendResponse.BackendFinallyListener() {
+                @Override
+                public void onFinally() {
+                  busyDialog.dismiss();
+                }
+              });
+        }
       }
     });
 
@@ -132,41 +134,43 @@ public class RoundShowFragment extends ScorecardFragment implements ObservableSc
       @Override
       public void onClick(final View view) {
 
-        new MaterialDialog.Builder(activity)
-            .content("Are you sure you want to delete this round? This can not be undone.")
-            .positiveText("Yes")
-            .negativeText("No")
-            .callback(new MaterialDialog.ButtonCallback() {
-              @Override
-              public void onPositive(final MaterialDialog dialog) {
+        if (round != null) {
+          new MaterialDialog.Builder(activity)
+              .content("Are you sure you want to delete this round? This can not be undone.")
+              .positiveText("Yes")
+              .negativeText("No")
+              .callback(new MaterialDialog.ButtonCallback() {
+                @Override
+                public void onPositive(final MaterialDialog dialog) {
 
-                final MaterialDialog busyDialog =
-                    Dialogs.showBusyDialog(activity, "Deleting Round...");
+                  final MaterialDialog busyDialog =
+                      Dialogs.showBusyDialog(activity, "Deleting Round...");
 
-                rounds.deleteRound(round.id)
-                    .onSuccess(new BackendResponse.BackendSuccessListener<BackendMessage>() {
-                      @Override
-                      public void onSuccess(final BackendMessage value) {
-                        Intent data = new Intent();
-                        data.putExtra(Round.class.getCanonicalName(),
-                            Json.pimpedGson().toJson(round));
+                  rounds.deleteRound(round.id)
+                      .onSuccess(new BackendResponse.BackendSuccessListener<BackendMessage>() {
+                        @Override
+                        public void onSuccess(@NonNull final BackendMessage value) {
+                          Intent data = new Intent();
+                          data.putExtra(Round.class.getCanonicalName(),
+                              Json.pimpedGson().toJson(round));
 
-                        activity.setResult(R.integer.round_delete_result, data);
+                          activity.setResult(R.integer.round_delete_result, data);
 
-                        activity.finish();
-                      }
-                    })
-                    .onError(SnackBars.showBackendError(activity))
-                    .onException(SnackBars.showBackendException(activity))
-                    .onFinally(new BackendResponse.BackendFinallyListener() {
-                      @Override
-                      public void onFinally() {
-                        busyDialog.dismiss();
-                      }
-                    });
-              }
-            })
-            .show();
+                          activity.finish();
+                        }
+                      })
+                      .onError(SnackBars.showBackendError(activity))
+                      .onException(SnackBars.showBackendException(activity))
+                      .onFinally(new BackendResponse.BackendFinallyListener() {
+                        @Override
+                        public void onFinally() {
+                          busyDialog.dismiss();
+                        }
+                      });
+                }
+              })
+              .show();
+        }
       }
     });
 
@@ -174,31 +178,33 @@ public class RoundShowFragment extends ScorecardFragment implements ObservableSc
       @Override
       public void onClick(final View view) {
         if (activity instanceof FragmentActivity) {
-          new RoundSettingsDialog(round, (FragmentActivity) activity, new RoundSettingsDialog.RoundSettingsCallback() {
-            @Override
-            public void settingsUpdated(final Round round) {
-              if (round.official && !round.isHandicapOverridden) {
+          if (round != null) {
+            new RoundSettingsDialog(round, (FragmentActivity) activity, new RoundSettingsDialog.RoundSettingsCallback() {
+              @Override
+              public void settingsUpdated(@NonNull final Round round) {
+                if (round.official && !round.isHandicapOverridden) {
 
-                final MaterialDialog busyDialog = Dialogs.showBusyDialog(activity, "Updating round...");
+                  final MaterialDialog busyDialog = Dialogs.showBusyDialog(activity, "Updating round...");
 
-                rounds.handicapRound(round.roundSlope(), round.holeSet().numHoles, round.time)
-                    .onSuccess(new BackendResponse.BackendSuccessListener<RoundHandicapResponse>() {
-                      @Override
-                      public void onSuccess(RoundHandicapResponse value) {
-                        setRound(round.withAutoHandicap(value.handicap));
-                      }
-                    })
-                    .onFinally(new BackendResponse.BackendFinallyListener() {
-                      @Override
-                      public void onFinally() {
-                        busyDialog.dismiss();
-                      }
-                    });
-              } else {
-                setRound(round);
+                  rounds.handicapRound(round.roundSlope(), round.holeSet().numHoles, round.time)
+                      .onSuccess(new BackendResponse.BackendSuccessListener<RoundHandicapResponse>() {
+                        @Override
+                        public void onSuccess(@NonNull RoundHandicapResponse value) {
+                          setRound(round.withAutoHandicap(value.handicap));
+                        }
+                      })
+                      .onFinally(new BackendResponse.BackendFinallyListener() {
+                        @Override
+                        public void onFinally() {
+                          busyDialog.dismiss();
+                        }
+                      });
+                } else {
+                  setRound(round);
+                }
               }
-            }
-          }).show();
+            }).show();
+          }
         } else {
           SnackBars.showSimple(activity, "Unable to show settings dialog");
         }
@@ -214,7 +220,7 @@ public class RoundShowFragment extends ScorecardFragment implements ObservableSc
       holeFieldViews[holeNumber - holeStart()].score.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(final View v) {
-          if (enabled) {
+          if (round != null && enabled) {
             HoleScoreDialogs.showScoreSelectionDialog(activity, round, holeNumber, new HoleScoreDialogs.HoleScoreDialogCallback() {
               @Override
               public void holeScoreUpdated(final HoleScore holeScore) {
@@ -229,7 +235,7 @@ public class RoundShowFragment extends ScorecardFragment implements ObservableSc
       holeFieldViews[holeNumber - holeStart()].putts.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(final View v) {
-          if (enabled) {
+          if (round != null && enabled) {
             HoleScoreDialogs.showPuttsSelectionDialog(activity, round, holeNumber, new HoleScoreDialogs.HoleScoreDialogCallback() {
               @Override
               public void holeScoreUpdated(final HoleScore holeScore) {
@@ -244,7 +250,7 @@ public class RoundShowFragment extends ScorecardFragment implements ObservableSc
       holeFieldViews[holeNumber - holeStart()].penalties.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(final View v) {
-          if (enabled) {
+          if (round != null && enabled) {
             HoleScoreDialogs.showPenaltiesSelectionDialog(activity, round, holeNumber, new HoleScoreDialogs.HoleScoreDialogCallback() {
               @Override
               public void holeScoreUpdated(final HoleScore holeScore) {
@@ -258,17 +264,27 @@ public class RoundShowFragment extends ScorecardFragment implements ObservableSc
 
       holeFieldViews[holeNumber - holeStart()].fairwayHit.setOnCheckedChangeListener(new TextlessCheckbox.OnCheckedChangeListener() {
         @Override
-        public void onCheckedChanged(final TextlessCheckbox buttonView, final boolean isChecked) {
-          round.updateScore(round.holeScore(holeNumber).fairwayHit(isChecked));
-          updateScorecard();
+        public void onCheckedChanged(@NonNull final TextlessCheckbox buttonView, final boolean isChecked) {
+          if (round != null) {
+            HoleScore holeScore = round.holeScore(holeNumber);
+            if (holeScore != null) {
+              round.updateScore(holeScore.fairwayHit(isChecked));
+              updateScorecard();
+            }
+          }
         }
       });
 
       holeFieldViews[holeNumber - holeStart()].gir.setOnCheckedChangeListener(new TextlessCheckbox.OnCheckedChangeListener() {
         @Override
-        public void onCheckedChanged(final TextlessCheckbox buttonView, final boolean isChecked) {
-          round.updateScore(round.holeScore(holeNumber).gir(isChecked));
-          updateScorecard();
+        public void onCheckedChanged(@NonNull final TextlessCheckbox buttonView, final boolean isChecked) {
+          if (round != null) {
+            HoleScore holeScore = round.holeScore(holeNumber);
+            if (holeScore != null) {
+              round.updateScore(holeScore.gir(isChecked));
+              updateScorecard();
+            }
+          }
         }
       });
     }
@@ -279,10 +295,10 @@ public class RoundShowFragment extends ScorecardFragment implements ObservableSc
     setRound(Json.pimpedGson().fromJson(
         activity.getIntent().getStringExtra(Round.class.getCanonicalName()), Round.class));
 
-    originalRound = Objects.deepCopy(round);
-
-    setActionBarTitle(round.course.name);
-
+    if (round != null) {
+      originalRound = Objects.deepCopy(round);
+      setActionBarTitle(round.course.name);
+    }
     Ion.with(courseImageView)
         .centerCrop()
         .load("android.resource://" + activity.getPackageName() + "/" + Photos.photoFor(round.course.id));

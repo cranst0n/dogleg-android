@@ -9,8 +9,6 @@ import org.cranst0n.dogleg.android.fragment.ShotCaddySetupFragment;
 
 public class ShotCaddySetupActivity extends BaseActivity {
 
-  private final String TAG = getClass().getSimpleName();
-
   private ShotCaddySetupFragment setupFragment;
 
   @Override
@@ -45,7 +43,7 @@ public class ShotCaddySetupActivity extends BaseActivity {
   }
 
   @Override
-  protected int getTitleToolBar() {
+  protected int getToolbarTitle() {
     return R.string.shot_caddy_setup_activity_title;
   }
 

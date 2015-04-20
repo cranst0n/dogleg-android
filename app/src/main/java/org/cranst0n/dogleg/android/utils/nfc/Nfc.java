@@ -9,6 +9,7 @@ import android.nfc.Tag;
 import android.nfc.tech.MifareUltralight;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.TagTechnology;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.cranst0n.dogleg.android.model.Club;
@@ -33,43 +34,42 @@ public class Nfc {
 
   }
 
-  public static void enableForegroundDispatch(final NfcAdapter nfcAdapter, final Activity activity) {
+  public static void enableForegroundDispatch(@NonNull final NfcAdapter nfcAdapter,
+                                              @NonNull final Activity activity) {
 
-    if (nfcAdapter != null) {
+    PendingIntent pendingIntent = PendingIntent.getActivity(
+        activity, 0, new Intent(activity, activity.getClass()).addFlags(Intent
+            .FLAG_ACTIVITY_SINGLE_TOP),
+        0);
 
-      PendingIntent pendingIntent = PendingIntent.getActivity(
-          activity, 0, new Intent(activity, activity.getClass()).addFlags(Intent
-              .FLAG_ACTIVITY_SINGLE_TOP),
-          0);
+    // Setup an intent filter for all MIME based dispatches
+    IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
 
-      // Setup an intent filter for all MIME based dispatches
-      IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
-
-      try {
-        ndef.addDataType("*/*");
-      } catch (IntentFilter.MalformedMimeTypeException e) {
-        throw new RuntimeException("fail", e);
-      }
-
-      IntentFilter td = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
-
-      IntentFilter[] mFilters = new IntentFilter[]{
-          ndef, td
-      };
-
-      String[][] mTechLists = new String[1][tagIO.size()];
-      List<Class> techs = Arrays.asList(tagIO.keySet().toArray(new
-          Class[tagIO.size()]));
-
-      for (int ix = 0; ix < tagIO.size(); ix++) {
-        mTechLists[0][ix] = techs.get(ix).getName();
-      }
-
-      nfcAdapter.enableForegroundDispatch(activity, pendingIntent, mFilters, mTechLists);
+    try {
+      ndef.addDataType("*/*");
+    } catch (IntentFilter.MalformedMimeTypeException e) {
+      throw new RuntimeException("fail", e);
     }
+
+    IntentFilter td = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+
+    IntentFilter[] mFilters = new IntentFilter[]{
+        ndef, td
+    };
+
+    String[][] mTechLists = new String[1][tagIO.size()];
+    List<Class> techs = Arrays.asList(tagIO.keySet().toArray(new
+        Class[tagIO.size()]));
+
+    for (int ix = 0; ix < tagIO.size(); ix++) {
+      mTechLists[0][ix] = techs.get(ix).getName();
+    }
+
+    nfcAdapter.enableForegroundDispatch(activity, pendingIntent, mFilters, mTechLists);
   }
 
-  public static Club readClubTag(final Tag tag) {
+  @NonNull
+  public static Club readClubTag(@NonNull final Tag tag) {
 
     Log.d(TAG, String.format("Reading club from tag: [%s]", tag));
 
@@ -86,7 +86,7 @@ public class Nfc {
     return Club.Unknown;
   }
 
-  public static boolean writeClubTag(final Tag tag, final Club club) {
+  public static boolean writeClubTag(@NonNull final Tag tag, @NonNull final Club club) {
 
     Log.d(TAG, String.format("Writing club to tag: [%s]", tag));
 
@@ -103,9 +103,7 @@ public class Nfc {
     return false;
   }
 
-  public static Class<? extends TagTechnology> getTagTech(final Tag tag) {
-
-    String[] techList = tag.getTechList();
+  public static Class<? extends TagTechnology> getTagTech(@NonNull final Tag tag) {
 
     for (Class<? extends TagTechnology> tech : tagIO.keySet()) {
       for (String tagTech : tag.getTechList()) {

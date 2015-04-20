@@ -1,6 +1,7 @@
 package org.cranst0n.dogleg.android.utils;
 
 import android.os.Looper;
+import android.support.annotation.NonNull;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -16,11 +17,11 @@ public class Threads {
     return Looper.getMainLooper().getThread() == Thread.currentThread();
   }
 
-  public static Future<?> background(final FutureTask<?> task) {
+  public static Future<?> background(@NonNull final FutureTask<?> task) {
     return executor.submit(task);
   }
 
-  public static <T> Future<T> background(final Callable<T> callable) {
+  public static <T> Future<T> background(@NonNull final Callable<T> callable) {
     return executor.submit(callable);
   }
 

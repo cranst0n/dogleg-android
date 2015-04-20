@@ -2,6 +2,8 @@ package org.cranst0n.dogleg.android.backend;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -32,8 +34,11 @@ public class BackendResponse<T extends JsonElement, U> {
 
   protected final String Tag = getClass().getSimpleName();
 
+  @Nullable
   protected Exception exception;
+  @Nullable
   protected U value;
+  @Nullable
   protected BackendMessage errorMessage;
 
   protected final List<BackendSuccessListener<U>> successListeners = new ArrayList<>();
@@ -49,7 +54,7 @@ public class BackendResponse<T extends JsonElement, U> {
     before();
   }
 
-  public BackendResponse(final Future<Response<T>> ionCall, final Type type) {
+  public BackendResponse(@NonNull final Future<Response<T>> ionCall, @NonNull final Type type) {
 
     this.ionCall = ionCall;
     this.type = type;
@@ -60,7 +65,8 @@ public class BackendResponse<T extends JsonElement, U> {
     before();
   }
 
-  public BackendResponse(final Future<Response<T>> ionCall, final Class<U> clazz) {
+  public BackendResponse(@NonNull final Future<Response<T>> ionCall,
+                         @NonNull final Class<U> clazz) {
 
     this.ionCall = ionCall;
     this.type = null;
@@ -91,39 +97,43 @@ public class BackendResponse<T extends JsonElement, U> {
     }
   }
 
-  public BackendResponse<T, U> onSuccess(final BackendSuccessListener<U> listener) {
+  @NonNull
+  public BackendResponse<T, U> onSuccess(@NonNull final BackendSuccessListener<U> listener) {
     successListeners.add(listener);
     return this;
   }
 
-  public BackendResponse<T, U> onError(final BackendErrorListener listener) {
+  @NonNull
+  public BackendResponse<T, U> onError(@NonNull final BackendErrorListener listener) {
     errorListeners.add(listener);
     return this;
   }
 
-  public BackendResponse<T, U> onException(final BackendExceptionListener listener) {
+  @NonNull
+  public BackendResponse<T, U> onException(@NonNull final BackendExceptionListener listener) {
     exceptionListeners.add(listener);
     return this;
   }
 
-  public BackendResponse<T, U> onFinally(final BackendFinallyListener listener) {
+  @NonNull
+  public BackendResponse<T, U> onFinally(@NonNull final BackendFinallyListener listener) {
     finallyListeners.add(listener);
     return this;
   }
 
-  protected void notifySuccess(final U value) {
+  protected void notifySuccess(@NonNull final U value) {
     for (BackendSuccessListener l : successListeners) {
       l.onSuccess(value);
     }
   }
 
-  protected void notifyError(final BackendMessage message) {
+  protected void notifyError(@NonNull final BackendMessage message) {
     for (BackendErrorListener l : errorListeners) {
       l.onError(message);
     }
   }
 
-  protected void notifyException(final Exception ex) {
+  protected void notifyException(@NonNull final Exception ex) {
     for (BackendExceptionListener l : exceptionListeners) {
       l.onException(ex);
     }
@@ -136,15 +146,15 @@ public class BackendResponse<T extends JsonElement, U> {
   }
 
   public interface BackendSuccessListener<T> {
-    void onSuccess(final T value);
+    void onSuccess(@NonNull final T value);
   }
 
   public interface BackendErrorListener {
-    void onError(final BackendMessage message);
+    void onError(@NonNull final BackendMessage message);
   }
 
   public interface BackendExceptionListener {
-    void onException(final Exception exception);
+    void onException(@NonNull final Exception exception);
   }
 
   public interface BackendFinallyListener {
@@ -154,7 +164,7 @@ public class BackendResponse<T extends JsonElement, U> {
   private class ResultCallback implements FutureCallback<Response<T>> {
 
     @Override
-    public void onCompleted(final Exception exception, final Response<T> result) {
+    public void onCompleted(@Nullable final Exception exception, final Response<T> result) {
 
       try {
 
@@ -199,9 +209,11 @@ public class BackendResponse<T extends JsonElement, U> {
     }
   }
 
-  public static <T extends JsonElement, U> BackendResponse<T, U> fromCallable(final Callable<U> callable) {
+  @NonNull
+  public static <T extends JsonElement, U> BackendResponse<T, U> fromCallable(
+      @NonNull final Callable<U> callable) {
 
-    BackendResponse response = new BackendResponse<T, U>() {
+    return new BackendResponse<T, U>() {
 
       FutureTask<U> wrappedFuture;
 
@@ -250,11 +262,10 @@ public class BackendResponse<T extends JsonElement, U> {
         Threads.background(wrappedFuture);
       }
     };
-
-    return response;
   }
 
-  public static <T extends JsonElement, U> BackendResponse<T, U> pure(final U pureValue) {
+  @NonNull
+  public static <T extends JsonElement, U> BackendResponse<T, U> pure(@NonNull final U pureValue) {
     return new BackendResponse<T, U>() {
 
       @Override
@@ -262,7 +273,8 @@ public class BackendResponse<T extends JsonElement, U> {
 
       }
 
-      public BackendResponse<T, U> onSuccess(final BackendSuccessListener<U> listener) {
+      @NonNull
+      public BackendResponse<T, U> onSuccess(@NonNull final BackendSuccessListener<U> listener) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
           @Override
           public void run() {
@@ -272,15 +284,18 @@ public class BackendResponse<T extends JsonElement, U> {
         return this;
       }
 
-      public BackendResponse<T, U> onError(final BackendErrorListener listener) {
+      @NonNull
+      public BackendResponse<T, U> onError(@NonNull final BackendErrorListener listener) {
         return this;
       }
 
-      public BackendResponse<T, U> onException(final BackendExceptionListener listener) {
+      @NonNull
+      public BackendResponse<T, U> onException(@NonNull final BackendExceptionListener listener) {
         return this;
       }
 
-      public BackendResponse<T, U> onFinally(final BackendFinallyListener listener) {
+      @NonNull
+      public BackendResponse<T, U> onFinally(@NonNull final BackendFinallyListener listener) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
           @Override
           public void run() {

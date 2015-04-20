@@ -1,6 +1,8 @@
 package org.cranst0n.dogleg.android.utils;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
@@ -15,7 +17,9 @@ public class SnackBars {
 
   }
 
-  public static final void showSimple(final Activity activity, final String message) {
+  public static void showSimple(@Nullable final Activity activity,
+                                @NonNull final String message) {
+
     if (activity != null) {
       SnackbarManager.show(
           Snackbar.with(activity)
@@ -25,7 +29,9 @@ public class SnackBars {
     }
   }
 
-  public static final void showSimpleMultiline(final Activity activity, final String message) {
+  public static void showSimpleMultiline(@Nullable final Activity activity,
+                                         @NonNull final String message) {
+
     if (activity != null) {
       SnackbarManager.show(
           Snackbar.with(activity)
@@ -36,37 +42,47 @@ public class SnackBars {
     }
   }
 
-  public static final BackendResponse.BackendErrorListener showBackendError(final Activity
-                                                                                activity) {
+  public static BackendResponse.BackendErrorListener showBackendError(@Nullable final Activity
+                                                                          activity) {
+
     return showBackendError(activity, "");
   }
 
-  public static final BackendResponse.BackendErrorListener showBackendError(final Activity activity,
-                                                                            final String prefix) {
+  public static BackendResponse.BackendErrorListener showBackendError(@Nullable final
+                                                                      Activity activity,
+                                                                      @NonNull final String
+                                                                          prefix) {
 
     return new BackendResponse.BackendErrorListener() {
       @Override
-      public void onError(final BackendMessage message) {
+      public void onError(@NonNull final BackendMessage message) {
 
-        String text = prefix.isEmpty() ? message.message : String.format("%s %s", prefix, message
-            .message);
+        String text;
+
+        if (!prefix.isEmpty() && message.message != null) {
+          text = String.format("%s %s", prefix, message.message);
+        } else if (message.message != null) {
+          text = message.message;
+        } else {
+          text = prefix;
+        }
 
         showSimple(activity, text);
       }
     };
   }
 
-  public static final BackendResponse.BackendExceptionListener showBackendException(
-      final Activity activity) {
+  public static BackendResponse.BackendExceptionListener showBackendException(
+      @Nullable final Activity activity) {
     return showBackendException(activity, "");
   }
 
-  public static final BackendResponse.BackendExceptionListener showBackendException(
-      final Activity activity, final String prefix) {
+  public static BackendResponse.BackendExceptionListener showBackendException(
+      @Nullable final Activity activity, @NonNull final String prefix) {
 
     return new BackendResponse.BackendExceptionListener() {
       @Override
-      public void onException(final Exception exception) {
+      public void onException(@NonNull final Exception exception) {
 
         String text = prefix.isEmpty() ? exception.getMessage() : String.format("%s %s", prefix,
             exception.getMessage());

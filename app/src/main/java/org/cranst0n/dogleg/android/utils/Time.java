@@ -1,5 +1,7 @@
 package org.cranst0n.dogleg.android.utils;
 
+import android.support.annotation.NonNull;
+
 import org.joda.time.DateTime;
 
 import java.util.Arrays;
@@ -23,13 +25,10 @@ public class Time {
 
   }
 
-  public static String ago(final long time) {
-    return ago(new DateTime(time));
-  }
+  @NonNull
+  public static String ago(@NonNull final DateTime dateTime) {
 
-  public static String ago(final DateTime dateTime) {
-
-    StringBuffer res = new StringBuffer();
+    StringBuilder res = new StringBuilder();
 
     for (int i = 0; i < times.size(); i++) {
 
@@ -46,9 +45,10 @@ public class Time {
       }
     }
 
-    if ("".equals(res.toString()))
+    if ("".equals(res.toString())) {
       return "Just now";
-    else
+    } else {
       return res.toString();
+    }
   }
 }

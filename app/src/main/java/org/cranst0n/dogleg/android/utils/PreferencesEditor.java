@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 
 import org.cranst0n.dogleg.android.DoglegApplication;
 
@@ -15,7 +16,8 @@ public class PreferencesEditor {
     if (mSingletonPreferences == null) {
       synchronized (PreferencesEditor.class) {
         if (mSingletonPreferences == null) {
-          mSingletonPreferences = PreferenceManager.getDefaultSharedPreferences(DoglegApplication.context());
+          mSingletonPreferences = PreferenceManager.getDefaultSharedPreferences
+              (DoglegApplication.application().context());
         }
       }
     }
@@ -50,10 +52,12 @@ public class PreferencesEditor {
     return getSharedPreferences().getInt(prefKey, defaultValue);
   }
 
+  @Nullable
   public static String getStringPreference(final Context context, final int resId, final String defaultValue) {
     return getSharedPreferences().getString(context.getString(resId), defaultValue);
   }
 
+  @Nullable
   public static String getStringPreference(final String prefKey, final String defaultValue) {
     return getSharedPreferences().getString(prefKey, defaultValue);
   }

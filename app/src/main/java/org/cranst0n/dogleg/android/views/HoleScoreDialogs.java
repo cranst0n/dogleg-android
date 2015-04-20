@@ -1,6 +1,8 @@
 package org.cranst0n.dogleg.android.views;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -11,46 +13,52 @@ import org.cranst0n.dogleg.android.model.Round;
 
 public class HoleScoreDialogs {
 
-  public static interface HoleScoreDialogCallback {
-    void holeScoreUpdated(final HoleScore holeScore);
+  public interface HoleScoreDialogCallback {
+    void holeScoreUpdated(@Nullable final HoleScore holeScore);
   }
 
-  public static void showScoreSelectionDialog(final Activity activity, final Round round,
+  public static void showScoreSelectionDialog(@NonNull final Activity activity,
+                                              @NonNull final Round round,
                                               final int holeNumber,
-                                              final HoleScoreDialogCallback callback) {
+                                              @Nullable final HoleScoreDialogCallback callback) {
 
     HoleRating holeRating = round.rating.holeRating(holeNumber);
+    final HoleScore holeScore = round.holeScore(holeNumber);
 
-    final int scoreStart = Math.max(holeRating.par - 3, 1);
-    final int scoreEnd = scoreStart + 10;
-    String[] scoreSelections = new String[scoreEnd - scoreStart + 1];
-    for (int score = scoreStart; score <= scoreEnd; score++) {
-      scoreSelections[score - scoreStart] =
-          String.format("%d - (%s)", score, HoleScore.scoreToParString(score, holeRating.par));
-    }
+    if (holeRating != null && holeScore != null) {
 
-    new MaterialDialog.Builder(activity)
-        .title("Score")
-        .cancelable(true)
-        .items(scoreSelections)
-        .itemsCallback(new MaterialDialog.ListCallback() {
-          @Override
-          public void onSelection(final MaterialDialog dialog, final View view,
-                                  final int which, final CharSequence text) {
+      final int scoreStart = Math.max(holeRating.par - 3, 1);
+      final int scoreEnd = scoreStart + 10;
+      String[] scoreSelections = new String[scoreEnd - scoreStart + 1];
+      for (int score = scoreStart; score <= scoreEnd; score++) {
+        scoreSelections[score - scoreStart] =
+            String.format("%d - (%s)", score, HoleScore.scoreToParString(score, holeRating.par));
+      }
 
-            int score = which + scoreStart;
+      new MaterialDialog.Builder(activity)
+          .title("Score")
+          .cancelable(true)
+          .items(scoreSelections)
+          .itemsCallback(new MaterialDialog.ListCallback() {
+            @Override
+            public void onSelection(final MaterialDialog dialog, final View view,
+                                    final int which, final CharSequence text) {
 
-            if (round.holeSet().includes(holeNumber)) {
-              callback.holeScoreUpdated(round.holeScore(holeNumber).score(score));
+              int score = which + scoreStart;
+
+              if (callback != null && round.holeSet().includes(holeNumber)) {
+                callback.holeScoreUpdated(holeScore.score(score));
+              }
+
             }
-
-          }
-        }).show();
+          }).show();
+    }
   }
 
-  public static void showPuttsSelectionDialog(final Activity activity, final Round round,
+  public static void showPuttsSelectionDialog(@NonNull final Activity activity,
+                                              @NonNull final Round round,
                                               final int holeNumber,
-                                              final HoleScoreDialogCallback callback) {
+                                              @Nullable final HoleScoreDialogCallback callback) {
 
     String[] puttSelections = new String[6];
     for (int putts = 0; putts < puttSelections.length; putts++) {
@@ -65,16 +73,21 @@ public class HoleScoreDialogs {
           @Override
           public void onSelection(final MaterialDialog dialog, final View view,
                                   final int which, final CharSequence text) {
-            if (round.holeSet().includes(holeNumber)) {
-              callback.holeScoreUpdated(round.holeScore(holeNumber).putts(which));
+
+            HoleScore holeScore = round.holeScore(holeNumber);
+
+            if (callback != null && holeScore != null && round.holeSet().includes
+                (holeNumber)) {
+              callback.holeScoreUpdated(holeScore.putts(which));
             }
           }
         }).show();
   }
 
-  public static void showPenaltiesSelectionDialog(final Activity activity, final Round round,
+  public static void showPenaltiesSelectionDialog(@NonNull final Activity activity,
+                                                  @NonNull final Round round,
                                                   final int holeNumber,
-                                                  final HoleScoreDialogCallback callback) {
+                                                  @Nullable final HoleScoreDialogCallback callback) {
 
     String[] penaltySelections = new String[10];
     for (int penalties = 0; penalties < penaltySelections.length; penalties++) {
@@ -89,8 +102,11 @@ public class HoleScoreDialogs {
           @Override
           public void onSelection(final MaterialDialog dialog, final View view,
                                   final int which, final CharSequence text) {
-            if (round.holeSet().includes(holeNumber)) {
-              callback.holeScoreUpdated(round.holeScore(holeNumber).penaltyStrokes(which));
+
+            HoleScore holeScore = round.holeScore(holeNumber);
+
+            if (callback != null && holeScore != null && round.holeSet().includes(holeNumber)) {
+              callback.holeScoreUpdated(holeScore.penaltyStrokes(which));
             }
           }
         }).show();

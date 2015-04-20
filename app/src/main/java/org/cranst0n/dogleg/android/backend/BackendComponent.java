@@ -1,6 +1,7 @@
 package org.cranst0n.dogleg.android.backend;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.squareup.otto.Bus;
 
@@ -12,29 +13,36 @@ public abstract class BackendComponent {
 
   public static final String AuthTokenHeader = "X-XSRF-TOKEN";
 
+  @NonNull
   protected final Context context;
   protected final String Tag = getClass().getSimpleName();
 
   protected final Bus bus;
 
-  protected BackendComponent(final Context context) {
+  protected BackendComponent(@NonNull final Context context) {
     this.context = context;
     this.bus = BusProvider.Instance.bus;
   }
 
-  protected final String serverUrl(final String relativeUrl) {
+  @NonNull
+  protected final String serverUrl(@NonNull final String relativeUrl) {
     return serverUrl() + relativeUrl;
   }
 
+  @NonNull
   public final String serverUrl() {
-    return PreferencesEditor.getStringPreference(context, R.string.dogleg_server_url_key, "");
+    String url = PreferencesEditor.getStringPreference(context, R.string.dogleg_server_url_key, "");
+    return url == null ? "" : url;
   }
 
+  @NonNull
   protected final String authToken() {
-    return PreferencesEditor.getStringPreference(AuthTokenHeader, "");
+    String token = PreferencesEditor.getStringPreference(AuthTokenHeader, "");
+    return token == null ? "" : token;
   }
 
-  protected final String saveAuthToken(final String token) {
+  @NonNull
+  protected final String saveAuthToken(@NonNull final String token) {
     PreferencesEditor.savePreference(AuthTokenHeader, token);
     return token;
   }

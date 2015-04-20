@@ -1,6 +1,7 @@
 package org.cranst0n.dogleg.android.views;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Checkable;
@@ -14,8 +15,8 @@ public class TextlessCheckbox extends ImageButton implements Checkable {
 
   private OnCheckedChangeListener listener;
 
-  public static interface OnCheckedChangeListener {
-    void onCheckedChanged(TextlessCheckbox checkbox, boolean isChecked);
+  public interface OnCheckedChangeListener {
+    void onCheckedChanged(@NonNull TextlessCheckbox checkbox, boolean isChecked);
   }
 
   public TextlessCheckbox(Context context) {
@@ -85,7 +86,7 @@ public class TextlessCheckbox extends ImageButton implements Checkable {
     updateState();
   }
 
-  public void setOnCheckedChangeListener(final OnCheckedChangeListener listener) {
+  public void setOnCheckedChangeListener(@NonNull final OnCheckedChangeListener listener) {
     this.listener = listener;
   }
 

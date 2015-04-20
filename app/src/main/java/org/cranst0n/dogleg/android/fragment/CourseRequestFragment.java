@@ -1,6 +1,7 @@
 package org.cranst0n.dogleg.android.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,15 +27,12 @@ public class CourseRequestFragment extends BaseFragment {
 
   private Courses courses;
 
-  private View requestView;
-
   private TextView requestNameView;
   private TextView requestCityView;
   private TextView requestStateView;
   private TextView requestCountryView;
   private TextView requestWebsiteView;
   private TextView requestCommentView;
-  private Button requestCourseButton;
 
   @Override
   public void onCreate(final Bundle savedInstanceState) {
@@ -54,9 +52,10 @@ public class CourseRequestFragment extends BaseFragment {
   }
 
   @Override
-  public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+  public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                           final Bundle savedInstanceState) {
 
-    requestView = inflater.inflate(R.layout.fragment_course_request, container, false);
+    View requestView = inflater.inflate(R.layout.fragment_course_request, container, false);
 
     requestNameView = (TextView) requestView.findViewById(R.id.course_request_name);
     requestCityView = (TextView) requestView.findViewById(R.id.course_request_city);
@@ -64,7 +63,7 @@ public class CourseRequestFragment extends BaseFragment {
     requestCountryView = (TextView) requestView.findViewById(R.id.course_request_country);
     requestWebsiteView = (TextView) requestView.findViewById(R.id.course_request_website);
     requestCommentView = (TextView) requestView.findViewById(R.id.course_request_comment);
-    requestCourseButton = (Button) requestView.findViewById(R.id.request_course_button);
+    Button requestCourseButton = (Button) requestView.findViewById(R.id.request_course_button);
 
     requestCourseButton.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -98,7 +97,7 @@ public class CourseRequestFragment extends BaseFragment {
           courseWebsite, courseComment))
           .onSuccess(new BackendResponse.BackendSuccessListener<CourseRequest>() {
             @Override
-            public void onSuccess(final CourseRequest value) {
+            public void onSuccess(@NonNull final CourseRequest value) {
               SnackBars.showSimple(activity, "Request submitted");
               activity.finish();
             }

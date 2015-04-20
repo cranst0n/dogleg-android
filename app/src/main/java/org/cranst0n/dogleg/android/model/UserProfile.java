@@ -1,16 +1,22 @@
 package org.cranst0n.dogleg.android.model;
 
+import android.support.annotation.Nullable;
+
 public class UserProfile {
 
+  @Nullable
   public final String home;
+  @Nullable
   public final LatLon location;
+  @Nullable
   public final Image avatar;
+  @Nullable
   public final Course favoriteCourse;
 
-  public static UserProfile EMPTY = new UserProfile("", new LatLon(0, 0), Image.EMPTY, null);
+  public static final UserProfile EMPTY = new UserProfile("", new LatLon(0, 0), Image.EMPTY, null);
 
-  public UserProfile(final String home, final LatLon location, final Image avatar,
-                     final Course favoriteCourse) {
+  public UserProfile(@Nullable final String home, @Nullable final LatLon location,
+                     @Nullable final Image avatar, @Nullable final Course favoriteCourse) {
 
     this.home = home;
     this.location = location;

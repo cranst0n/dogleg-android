@@ -1,16 +1,25 @@
 package org.cranst0n.dogleg.android.model;
 
+import android.support.annotation.NonNull;
+
 public class CourseRequest {
 
+  @NonNull
   public final String name;
+  @NonNull
   public final String city;
+  @NonNull
   public final String state;
+  @NonNull
   public final String country;
+  @NonNull
   public final String website;
+  @NonNull
   public final String comment;
 
-  public CourseRequest(final String name, final String city, final String state,
-                       final String country, final String website, final String comment) {
+  public CourseRequest(@NonNull final String name, @NonNull final String city,
+                       @NonNull final String state, @NonNull final String country,
+                       @NonNull final String website, @NonNull final String comment) {
 
     this.name = name;
     this.city = city;
