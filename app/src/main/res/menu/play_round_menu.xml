@@ -3,6 +3,12 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_lock_orientation"
+        android:icon="@drawable/ic_device_screen_rotation"
+        android:title="@string/action_lock_orientation"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_action_settings_white"
         android:title="@string/action_settings"

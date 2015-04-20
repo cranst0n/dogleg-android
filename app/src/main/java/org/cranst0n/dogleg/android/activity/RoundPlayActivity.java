@@ -38,6 +38,8 @@ import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.utils.BusProvider;
 import org.cranst0n.dogleg.android.utils.Json;
 import org.cranst0n.dogleg.android.utils.Locations;
+import org.cranst0n.dogleg.android.utils.Orientations;
+import org.cranst0n.dogleg.android.utils.SnackBars;
 import org.cranst0n.dogleg.android.utils.Threads;
 import org.cranst0n.dogleg.android.views.HoleScoreDialogs;
 import org.cranst0n.dogleg.android.views.RoundSettingsDialog;
@@ -219,6 +221,20 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
   }
 
   @Override
+  public boolean onPrepareOptionsMenu(final Menu menu) {
+
+    MenuItem lockOrientationItem = menu.findItem(R.id.action_lock_orientation);
+
+    if(Orientations.isLocked(this)) {
+      lockOrientationItem.setIcon(R.drawable.ic_device_screen_lock_rotation);
+    } else {
+      lockOrientationItem.setIcon(R.drawable.ic_device_screen_rotation);
+    }
+
+    return super.onPrepareOptionsMenu(menu);
+  }
+
+  @Override
   public boolean onOptionsItemSelected(final MenuItem item) {
     switch (item.getItemId()) {
       // Respond to the action bar's Up/Home button
@@ -228,6 +244,19 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
       }
       case R.id.action_settings: {
         showRoundSettings();
+        return true;
+      }
+      case R.id.action_lock_orientation: {
+
+        if(Orientations.isLocked(this)) {
+          Orientations.unlockOrientation(this);
+          item.setIcon(R.drawable.ic_device_screen_rotation);
+          SnackBars.showSimple(this, "Screen orientation unlocked.");
+        } else {
+          Orientations.lockOrientation(this);
+          SnackBars.showSimple(this, "Screen orientation locked.");
+          item.setIcon(R.drawable.ic_device_screen_lock_rotation);
+        }
         return true;
       }
       default: {
