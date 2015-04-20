@@ -179,7 +179,7 @@ public class Rounds extends BackendComponent {
       result.addProperty("time", round.time.getMillis());
       result.addProperty("official", round.official);
 
-      if (round.isHandicapOverridden) {
+      if (round.isHandicapOverridden()) {
         result.addProperty("handicapOverride", round.handicapOverride);
       }
 
@@ -203,7 +203,7 @@ public class Rounds extends BackendComponent {
       result.addProperty("official", round.official);
       result.addProperty("handicap", round.handicap);
 
-      if (round.isHandicapOverridden) {
+      if (round.isHandicapOverridden()) {
         result.addProperty("handicapOverride", round.handicapOverride);
       }
 

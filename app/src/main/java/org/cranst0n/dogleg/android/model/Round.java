@@ -23,7 +23,6 @@ public class Round {
   public final DateTime time;
   public final boolean official;
   public final int handicap;
-  public final boolean isHandicapOverridden;
   public final int handicapOverride;
 
   @NonNull
@@ -33,8 +32,8 @@ public class Round {
 
   private Round(final long id, @NonNull final User user, @NonNull final Course course,
                 @NonNull final CourseRating rating, @NonNull final DateTime time,
-                final boolean official, final int handicap, final boolean isHandicapOverridden,
-                final int handicapOverride, @NonNull final HoleScore[] holeScores) {
+                final boolean official, final int handicap, final int handicapOverride,
+                @NonNull final HoleScore[] holeScores) {
 
     this.id = id;
     this.user = user;
@@ -43,7 +42,6 @@ public class Round {
     this.time = time;
     this.official = official;
     this.handicap = handicap;
-    this.isHandicapOverridden = isHandicapOverridden;
     this.handicapOverride = handicapOverride;
 
     this.holeScores = holeScores;
@@ -123,19 +121,19 @@ public class Round {
   @NonNull
   public Round asUser(@NonNull final User user) {
     return new Round(id, user, course, rating, time, official,
-        handicap, isHandicapOverridden, handicapOverride, holeScores);
+        handicap, handicapOverride, holeScores);
   }
 
   @NonNull
   public Round withTime(@NonNull final DateTime time) {
     return new Round(id, user, course, rating, time, official,
-        handicap, isHandicapOverridden, handicapOverride, holeScores);
+        handicap, handicapOverride, holeScores);
   }
 
   @NonNull
   public Round withAutoHandicap(final int handicap) {
     return new Round(id, user, course, rating, time, official,
-        handicap, false, handicapOverride, holeScores).handicapped();
+        handicap, 0, holeScores).handicapped();
   }
 
   @NonNull
@@ -153,12 +151,12 @@ public class Round {
     return holeSet;
   }
 
-  public boolean hasHandicap() {
-    return isHandicapOverridden || handicap > 0;
+  public boolean isHandicapOverridden() {
+    return handicapOverride > 0;
   }
 
   public int handicap() {
-    return hasHandicap() ? (isHandicapOverridden ? handicapOverride : handicap) : 0;
+    return handicapOverride > 0 ? handicapOverride : handicap;
   }
 
   @NonNull
@@ -227,8 +225,8 @@ public class Round {
       }
     }
 
-    return new Round(id, user, course, rating, time, official, handicap, isHandicapOverridden,
-        handicapOverride, newHoleScores).handicapped();
+    return new Round(id, user, course, rating, time, official, handicap, handicapOverride,
+        newHoleScores).handicapped();
   }
 
   public static class RoundIssue {

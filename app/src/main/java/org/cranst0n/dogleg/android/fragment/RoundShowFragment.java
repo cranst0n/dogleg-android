@@ -182,7 +182,7 @@ public class RoundShowFragment extends ScorecardFragment implements ObservableSc
             new RoundSettingsDialog(round, (FragmentActivity) activity, new RoundSettingsDialog.RoundSettingsCallback() {
               @Override
               public void settingsUpdated(@NonNull final Round round) {
-                if (round.official && !round.isHandicapOverridden) {
+                if (round.official && !round.isHandicapOverridden()) {
 
                   final MaterialDialog busyDialog = Dialogs.showBusyDialog(activity, "Updating round...");
 
@@ -299,6 +299,7 @@ public class RoundShowFragment extends ScorecardFragment implements ObservableSc
       originalRound = Objects.deepCopy(round);
       setActionBarTitle(round.course.name);
     }
+
     Ion.with(courseImageView)
         .centerCrop()
         .load("android.resource://" + activity.getPackageName() + "/" + Photos.photoFor(round.course.id));

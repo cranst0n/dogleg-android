@@ -92,7 +92,7 @@ public class RoundSettingsDialog {
                 selectedHoleSet);
 
             if (callback != null) {
-              if (unhandicappedRound.isHandicapOverridden) {
+              if (unhandicappedRound.isHandicapOverridden()) {
                 callback.settingsUpdated(unhandicappedRound);
               } else {
                 rounds.handicapRound(round.roundSlope(), round.numHoles(), round.time)
@@ -197,8 +197,8 @@ public class RoundSettingsDialog {
         }
       });
 
-      autoHandicapButton.setChecked(!round.isHandicapOverridden);
-      overrideHandicapButton.setChecked(round.isHandicapOverridden);
+      autoHandicapButton.setChecked(!round.isHandicapOverridden());
+      overrideHandicapButton.setChecked(round.isHandicapOverridden());
 
       dialog.show();
     }
