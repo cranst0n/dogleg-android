@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -108,7 +108,7 @@ public class RoundListFragment extends BaseFragment {
     for (int ix = 0; ix < displayedRoundList.size(); ix++) {
       if (displayedRoundList.get(ix).id == updatedRound.id) {
         displayedRoundList.set(ix, updatedRound);
-        recyclerView.getAdapter().notifyDataSetChanged();
+        recyclerView.getAdapter().notifyItemChanged(ix);
         break;
       }
     }
@@ -222,7 +222,9 @@ public class RoundListFragment extends BaseFragment {
     }
 
     @Override
-    public void onBindViewHolder(final RoundListRecyclerAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RoundListRecyclerAdapter.ViewHolder holder,
+                                 final int position) {
+
       holder.setRound(displayedRoundList.get(position));
       holder.setExpanded(expandedRound != null && holder.round.id == expandedRound.id);
     }
@@ -245,6 +247,8 @@ public class RoundListFragment extends BaseFragment {
       private final TextView roundTimeView;
 
       private final ViewPager scorecardViewPager;
+      private final ScorecardPagerAdapter scorecardPagerAdapter;
+
       @NonNull
       private final List<Fragment> viewPagerFragments = new ArrayList<>();
 
@@ -279,7 +283,8 @@ public class RoundListFragment extends BaseFragment {
         scorecardViewPager =
             (ViewPager) itemView.findViewById(R.id.item_round_scorecard_view_pager);
         scorecardViewPager.setId(Views.generateViewId());
-        scorecardViewPager.setAdapter(new ScorecardPagerAdapter(getChildFragmentManager()));
+        scorecardPagerAdapter = new ScorecardPagerAdapter(getChildFragmentManager());
+        scorecardViewPager.setAdapter(scorecardPagerAdapter);
         scorecardViewPager.setOffscreenPageLimit(2);
         scorecardViewPager.setVisibility(View.GONE);
 
@@ -363,10 +368,12 @@ public class RoundListFragment extends BaseFragment {
 
         viewPagerFragments.clear();
         viewPagerFragments.addAll(newFragments);
-        scorecardViewPager.getAdapter().notifyDataSetChanged();
+
+        scorecardViewPager.setAdapter(scorecardPagerAdapter);
+        scorecardPagerAdapter.notifyDataSetChanged();
       }
 
-      private class ScorecardPagerAdapter extends FragmentPagerAdapter {
+      private class ScorecardPagerAdapter extends FragmentStatePagerAdapter {
 
         public ScorecardPagerAdapter(final FragmentManager childFragmentManager) {
           super(childFragmentManager);
