@@ -19,7 +19,7 @@ public class Orientations {
   }
 
   public static void lockOrientation(@NonNull final Activity activity) {
-    switch(activity.getResources().getConfiguration().orientation) {
+    switch (activity.getResources().getConfiguration().orientation) {
       case Configuration.ORIENTATION_LANDSCAPE: {
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         break;

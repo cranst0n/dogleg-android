@@ -31,7 +31,7 @@ public class Locations {
 
     if (currentLocation == null) {
       return true;
-    } else if(newLocation == null) {
+    } else if (newLocation == null) {
       return false;
     }
 

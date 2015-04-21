@@ -285,7 +285,7 @@ public class RoundPlayMapFragment extends BaseFragment implements GoogleMap.OnMa
       HoleFeature teeFeature = hole.teeFeature();
       HoleFeature greenFeature = hole.greenFeature();
 
-      if(teeFeature != null && greenFeature != null) {
+      if (teeFeature != null && greenFeature != null) {
 
         if (initial) {
           map.clear();

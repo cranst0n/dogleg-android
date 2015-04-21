@@ -225,7 +225,7 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
 
     MenuItem lockOrientationItem = menu.findItem(R.id.action_lock_orientation);
 
-    if(Orientations.isLocked(this)) {
+    if (Orientations.isLocked(this)) {
       lockOrientationItem.setIcon(R.drawable.ic_device_screen_lock_rotation);
     } else {
       lockOrientationItem.setIcon(R.drawable.ic_device_screen_rotation);
@@ -248,7 +248,7 @@ public class RoundPlayActivity extends BaseActivity implements LocationListener,
       }
       case R.id.action_lock_orientation: {
 
-        if(Orientations.isLocked(this)) {
+        if (Orientations.isLocked(this)) {
           Orientations.unlockOrientation(this);
           item.setIcon(R.drawable.ic_device_screen_rotation);
           SnackBars.showSimple(this, "Screen orientation unlocked.");

@@ -102,7 +102,7 @@ public class Round {
 
     HoleRating holeRating = rating.holeRating(holeScore.hole.number);
 
-    if(holeRating != null) {
+    if (holeRating != null) {
       int handicapToUse = handicap();
 
       // If you're playing 9 holes of an 18 hole course, you need to divide each holes
