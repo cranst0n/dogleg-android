@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.melnykov.fab.FloatingActionButton;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -40,6 +40,7 @@ import org.cranst0n.dogleg.android.views.Views;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
@@ -56,7 +57,7 @@ public class CourseListFragment extends BaseFragment implements
   private SmoothProgressBar appendInProgressBar;
   private TextView noCoursesIndicator;
 
-  private BackendResponse<JsonArray, List<CourseSummary>> queryCall;
+  private BackendResponse<? extends JsonElement, List<CourseSummary>> queryCall;
 
   private boolean pinMode = false;
   private MenuItem courseSearchMenuItem;
@@ -65,6 +66,7 @@ public class CourseListFragment extends BaseFragment implements
 
   private Courses courses;
 
+  private final List<CourseSummary> summaryListCache = new ArrayList<>();
   private final List<CourseSummary> displayedCourseList = new ArrayList<>();
 
   private int previousTotal = 0;
@@ -299,8 +301,8 @@ public class CourseListFragment extends BaseFragment implements
     }
 
     if (pinMode && searchMode()) {
-      queryCall =
-          courses.searchPinned(courseSearchView.getQuery().toString(), 20, displayedCourseList.size());
+      queryCall = courses.searchPinned(
+          courseSearchView.getQuery().toString(), 20, displayedCourseList.size());
     } else if (pinMode) {
       queryCall =
           courses.listPinned(
@@ -310,9 +312,25 @@ public class CourseListFragment extends BaseFragment implements
       queryCall =
           courses.search(courseSearchView.getQuery().toString(), 20, displayedCourseList.size());
     } else {
-      queryCall = courses.list(
-          LatLon.fromLocation(DoglegApplication.application().lastKnownLocation()), 20,
-          displayedCourseList.size());
+
+      if (append || summaryListCache.isEmpty()) {
+        queryCall = courses.list(
+            LatLon.fromLocation(DoglegApplication.application().lastKnownLocation()), 20,
+            displayedCourseList.size()).onSuccess(new BackendResponse.BackendSuccessListener<List<CourseSummary>>() {
+          @Override
+          public void onSuccess(@NonNull List<CourseSummary> value) {
+            summaryListCache.addAll(value);
+          }
+        });
+
+      } else {
+        queryCall = BackendResponse.fromCallable(new Callable<List<CourseSummary>>() {
+          @Override
+          public List<CourseSummary> call() throws Exception {
+            return summaryListCache;
+          }
+        });
+      }
     }
 
     queryCall.
