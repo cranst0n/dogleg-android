@@ -40,9 +40,18 @@ public class SettingsFragment extends PreferenceFragment {
 
       if (BuildConfig.DEBUG) {
         try {
-          double doubleVersion = Double.parseDouble(appVersion + "-M1");
-          appVersion = String.valueOf(doubleVersion + 0.1) + "-SNAPSHOT";
-        } catch (NumberFormatException e) {
+
+          String[] versionComponents = appVersion.split("\\.");
+
+          if (versionComponents.length >= 2) {
+            int major = Integer.valueOf(versionComponents[0]);
+            int minor = Integer.valueOf(versionComponents[1]);
+            appVersion = String.format("%d.%d-SNAPSHOT", major, (minor + 1));
+          } else {
+            double doubleVersion = Double.parseDouble(appVersion);
+            appVersion = String.valueOf(doubleVersion + 0.1) + "-SNAPSHOT";
+          }
+        } catch (final NumberFormatException e) {
           appVersion += "+-SNAPSHOT";
         }
       }
