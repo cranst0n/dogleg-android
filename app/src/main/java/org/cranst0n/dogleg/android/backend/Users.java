@@ -11,6 +11,7 @@ import com.koushikdutta.ion.Ion;
 
 import org.cranst0n.dogleg.android.model.FileUpload;
 import org.cranst0n.dogleg.android.model.User;
+import org.cranst0n.dogleg.android.model.UserStats;
 import org.cranst0n.dogleg.android.utils.Crypto;
 import org.cranst0n.dogleg.android.utils.Json;
 
@@ -24,6 +25,7 @@ public class Users extends BackendComponent {
   private static final String CHANGE_PASSWORD_URL = "/users/%d/password";
   private static final String RESET_PASSWORD_URL = "/users/%d/passwordReset";
   private static final String SEARCH_BY_NAME_URL = "/users/named/%s";
+  private static final String STATS_URL = "/users/stats/%d";
 
   public Users(@NonNull final Context context) {
     super(context);
@@ -102,6 +104,15 @@ public class Users extends BackendComponent {
         .asJsonArray()
         .withResponse(), new TypeToken<List<User>>() {
     }.getType());
+  }
+
+  @NonNull
+  public BackendResponse<JsonObject, UserStats> stats(final long userId) {
+    return new BackendResponse<>(Ion.with(context)
+        .load(serverUrl(String.format(STATS_URL, userId)))
+        .setHeader(AuthTokenHeader, authToken())
+        .asJsonObject()
+        .withResponse(), UserStats.class);
   }
 
 }
