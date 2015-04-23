@@ -9,8 +9,8 @@ android {
         applicationId "org.cranst0n.dogleg.android"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 3
-        versionName "0.1"
+        versionCode 4
+        versionName "0.2"
     }
 
     buildTypes {
