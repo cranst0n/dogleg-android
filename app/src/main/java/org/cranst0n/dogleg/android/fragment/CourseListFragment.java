@@ -115,7 +115,7 @@ public class CourseListFragment extends BaseFragment implements
     swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
       public void onRefresh() {
-        addToCourseList(false);
+        addToCourseList(false, true);  // Always fetch from backend (ignore cache)
       }
     });
 
@@ -276,6 +276,10 @@ public class CourseListFragment extends BaseFragment implements
   }
 
   private void addToCourseList(final boolean append) {
+    addToCourseList(append, false);
+  }
+
+  private void addToCourseList(final boolean append, final boolean ignoreCache) {
 
     loading = true;
     noCoursesIndicator.setVisibility(View.GONE);
@@ -313,7 +317,7 @@ public class CourseListFragment extends BaseFragment implements
           courses.search(courseSearchView.getQuery().toString(), 20, displayedCourseList.size());
     } else {
 
-      if (append || summaryListCache.isEmpty()) {
+      if (append || summaryListCache.isEmpty() || ignoreCache) {
         queryCall = courses.list(
             LatLon.fromLocation(DoglegApplication.application().lastKnownLocation()), 20,
             displayedCourseList.size()).onSuccess(new BackendResponse.BackendSuccessListener<List<CourseSummary>>() {
