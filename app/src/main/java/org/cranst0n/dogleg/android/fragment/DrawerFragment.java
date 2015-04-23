@@ -29,6 +29,7 @@ import org.cranst0n.dogleg.android.R;
 import org.cranst0n.dogleg.android.activity.AccountActivity;
 import org.cranst0n.dogleg.android.activity.AdminActivity;
 import org.cranst0n.dogleg.android.activity.HomeActivity;
+import org.cranst0n.dogleg.android.activity.ProfileActivity;
 import org.cranst0n.dogleg.android.activity.SettingsActivity;
 import org.cranst0n.dogleg.android.activity.ShotCaddySetupActivity;
 import org.cranst0n.dogleg.android.adapter.DrawerMenuAdapter;
@@ -72,9 +73,8 @@ public class DrawerFragment extends BaseFragment implements AdapterView.OnItemCl
   private final DrawerMenuItem homeItem =
       new DrawerMenuItem(R.drawable.ic_action_home, "Home", 0, HomeActivity.class);
 
-  private final DrawerMenuItem shotCaddyItem =
-      new DrawerMenuItem(R.drawable.ic_tee, "Shot Caddy", 475, ShotCaddySetupActivity
-          .class, true);
+  private final DrawerMenuItem profileItem =
+      new DrawerMenuItem(R.drawable.ic_profile, "Profile", 450, ProfileActivity.class);
 
   private final DrawerMenuItem accountItem =
       new DrawerMenuItem(R.drawable.ic_action_account_box, "Account", 500, AccountActivity.class);
@@ -82,17 +82,21 @@ public class DrawerFragment extends BaseFragment implements AdapterView.OnItemCl
   private final DrawerMenuItem adminItem =
       new DrawerMenuItem(R.drawable.ic_action_verified_user, "Admin", 550, AdminActivity.class);
 
+  private final DrawerMenuItem shotCaddyItem =
+      new DrawerMenuItem(R.drawable.ic_tee, "Shot Caddy Setup", 950, ShotCaddySetupActivity
+          .class);
+
   private final DrawerMenuItem settingsItem =
       new DrawerMenuItem(R.drawable.ic_action_settings, "Settings", 1000, SettingsActivity.class);
 
   public final List<DrawerMenuItem> defaultMenuItems =
-      new ArrayList<>(Arrays.asList(homeItem, shotCaddyItem));
+      new ArrayList<>(Arrays.asList(homeItem));
 
   public final List<DrawerMenuItem> settingsMenuItems =
-      new ArrayList<>(Arrays.asList(settingsItem));
+      new ArrayList<>(Arrays.asList(shotCaddyItem, settingsItem));
 
   public final List<DrawerMenuItem> userMenuItems =
-      new ArrayList<>(Arrays.asList(accountItem));
+      new ArrayList<>(Arrays.asList(profileItem, accountItem));
 
   public final List<DrawerMenuItem> adminMenuItems =
       new ArrayList<>(Arrays.asList(adminItem));
