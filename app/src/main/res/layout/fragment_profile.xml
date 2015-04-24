@@ -1,632 +1,687 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:fillViewport="true">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:fillViewport="true">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                                            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:elevation="@dimen/elevation_ten"
-                                            card_view:cardCornerRadius="0px">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:elevation="@dimen/elevation_ten"
+                                                card_view:cardCornerRadius="0px">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/user_avatar"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/margin_eight"
-                        android:src="@drawable/default_avatar"/>
-
-                    <TextView
-                        android:id="@+id/username"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:textColor="@color/text_grey"
-                        android:textSize="@dimen/text_size_eighteen"
-                        android:text="dogleg"/>
+                        android:orientation="vertical">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/user_avatar"
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/margin_eight"
+                            android:src="@color/text_lighter_grey"/>
+
+                        <TextView
+                            android:id="@+id/username"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textColor="@color/text_grey"
+                            android:textSize="@dimen/text_size_eighteen"
+                            android:text="dogleg"/>
+
+                    </LinearLayout>
+
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_eight"
+                        android:stretchColumns="0,1">
+
+                        <TableRow>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:layout_span="2"
+                                android:textColor="@color/text_light_grey"
+                                android:textSize="@dimen/text_size_twelve"
+                                android:text="General"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_span="2"
+                                android:background="@color/text_light_grey"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Dogleg Handicap"/>
+
+                            <TextView
+                                android:id="@+id/auto_handicap"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Total Rounds"/>
+
+                            <TextView
+                                android:id="@+id/total_rounds"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Member Since"/>
+
+                            <TextView
+                                android:id="@+id/member_since"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_marginTop="@dimen/margin_sixteen">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:textColor="@color/text_light_grey"
+                                android:textSize="@dimen/text_size_twelve"
+                                android:text="Scoring"/>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:orientation="horizontal">
+
+                                <Button
+                                    android:id="@+id/scoring_gross_button"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingTop="@dimen/padding_two"
+                                    android:paddingBottom="@dimen/padding_two"
+                                    android:paddingLeft="@dimen/padding_twelve"
+                                    android:paddingRight="@dimen/padding_twelve"
+                                    android:background="@color/accent"
+                                    android:textSize="@dimen/text_size_ten"
+                                    android:text="Gross"/>
+
+                                <Button
+                                    android:id="@+id/scoring_net_button"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="@dimen/margin_eight"
+                                    android:paddingTop="@dimen/padding_two"
+                                    android:paddingBottom="@dimen/padding_two"
+                                    android:paddingLeft="@dimen/padding_twelve"
+                                    android:paddingRight="@dimen/padding_twelve"
+                                    android:background="@drawable/border"
+                                    android:textColor="@color/text_grey"
+                                    android:textSize="@dimen/text_size_ten"
+                                    android:text="Net"/>
+
+                            </LinearLayout>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_span="2"
+                                android:background="@color/text_light_grey"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Average Score (18 Holes)"/>
+
+                            <TextView
+                                android:id="@+id/average_score_18_holes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Average Putts / Hole"/>
+
+                            <TextView
+                                android:id="@+id/average_putts_per_hole"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Fairway Hit %"/>
+
+                            <TextView
+                                android:id="@+id/fairway_hit_percentage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="GIR %"/>
+
+                            <TextView
+                                android:id="@+id/gir_percentage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Par 3 Average"/>
+
+                            <TextView
+                                android:id="@+id/par_3_average"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Par 4 Average"/>
+
+                            <TextView
+                                android:id="@+id/par_4_average"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Par 5 Average"/>
+
+                            <TextView
+                                android:id="@+id/par_5_average"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Eagles / Round"/>
+
+                            <TextView
+                                android:id="@+id/average_eagles_per_round"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Birdies / Round"/>
+
+                            <TextView
+                                android:id="@+id/average_birdies_per_round"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Pars / Round"/>
+
+                            <TextView
+                                android:id="@+id/average_pars_per_round"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_marginTop="@dimen/margin_sixteen">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:textColor="@color/text_light_grey"
+                                android:textSize="@dimen/text_size_twelve"
+                                android:text="Round Records"/>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:orientation="horizontal">
+
+                                <Button
+                                    android:id="@+id/round_records_gross_button"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingTop="@dimen/padding_two"
+                                    android:paddingBottom="@dimen/padding_two"
+                                    android:paddingLeft="@dimen/padding_twelve"
+                                    android:paddingRight="@dimen/padding_twelve"
+                                    android:background="@color/accent"
+                                    android:textSize="@dimen/text_size_ten"
+                                    android:text="Gross"/>
+
+                                <Button
+                                    android:id="@+id/round_records_net_button"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="@dimen/margin_eight"
+                                    android:paddingTop="@dimen/padding_two"
+                                    android:paddingBottom="@dimen/padding_two"
+                                    android:paddingLeft="@dimen/padding_twelve"
+                                    android:paddingRight="@dimen/padding_twelve"
+                                    android:background="@drawable/border"
+                                    android:textColor="@color/text_grey"
+                                    android:textSize="@dimen/text_size_ten"
+                                    android:text="Net"/>
+
+                            </LinearLayout>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_span="2"
+                                android:background="@color/text_light_grey"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Low Score (18 Holes)"/>
+
+                            <TextView
+                                android:id="@+id/low_score_18_holes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Low Score (9 Holes)"/>
+
+                            <TextView
+                                android:id="@+id/low_score_9_holes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Fewest Putts (18 Holes)"/>
+
+                            <TextView
+                                android:id="@+id/fewestPutts18Holes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Most Birdies (18 Holes)"/>
+
+                            <TextView
+                                android:id="@+id/mostBirdies18Holes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Most Pars (18 Holes)"/>
+
+                            <TextView
+                                android:id="@+id/mostPars18Holes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_marginTop="@dimen/margin_sixteen">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:textColor="@color/text_light_grey"
+                                android:textSize="@dimen/text_size_twelve"
+                                android:text="Scoring Records"/>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:orientation="horizontal">
+
+                                <Button
+                                    android:id="@+id/scoring_records_gross_button"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingTop="@dimen/padding_two"
+                                    android:paddingBottom="@dimen/padding_two"
+                                    android:paddingLeft="@dimen/padding_twelve"
+                                    android:paddingRight="@dimen/padding_twelve"
+                                    android:background="@color/accent"
+                                    android:textSize="@dimen/text_size_ten"
+                                    android:text="Gross"/>
+
+                                <Button
+                                    android:id="@+id/scoring_records_net_button"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="@dimen/margin_eight"
+                                    android:paddingTop="@dimen/padding_two"
+                                    android:paddingBottom="@dimen/padding_two"
+                                    android:paddingLeft="@dimen/padding_twelve"
+                                    android:paddingRight="@dimen/padding_twelve"
+                                    android:background="@drawable/border"
+                                    android:textColor="@color/text_grey"
+                                    android:textSize="@dimen/text_size_ten"
+                                    android:text="Net"/>
+
+                            </LinearLayout>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_span="2"
+                                android:background="@color/text_light_grey"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Hole In Ones"/>
+
+                            <TextView
+                                android:id="@+id/aces"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Birdie Streak"/>
+
+                            <TextView
+                                android:id="@+id/birdie_streak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Par Streak"/>
+
+                            <TextView
+                                android:id="@+id/par_streak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                    </TableLayout>
 
                 </LinearLayout>
 
-                <TableLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_eight"
-                    android:stretchColumns="0,1">
+            </android.support.v7.widget.CardView>
 
-                    <TableRow>
+        </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:layout_span="2"
-                            android:textColor="@color/text_light_grey"
-                            android:textSize="@dimen/text_size_twelve"
-                            android:text="General"/>
+    </ScrollView>
 
-                    </TableRow>
+    <ImageButton
+        android:id="@+id/custom_back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|left"
+        android:padding="@dimen/padding_twelve"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_arrow_left"/>
 
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_span="2"
-                            android:background="@color/text_light_grey"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_sixteen"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="Dogleg Handicap"/>
-
-                        <TextView
-                            android:id="@+id/auto_handicap"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="-"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_sixteen"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="Total Rounds"/>
-
-                        <TextView
-                            android:id="@+id/total_rounds"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="-"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_sixteen"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="Member Since"/>
-
-                        <TextView
-                            android:id="@+id/member_since"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="-"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_marginTop="@dimen/margin_sixteen">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:textColor="@color/text_light_grey"
-                            android:textSize="@dimen/text_size_twelve"
-                            android:text="Scoring"/>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:orientation="horizontal">
-
-                            <Button
-                                android:id="@+id/scoring_gross_button"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingTop="@dimen/padding_two"
-                                android:paddingBottom="@dimen/padding_two"
-                                android:paddingLeft="@dimen/padding_twelve"
-                                android:paddingRight="@dimen/padding_twelve"
-                                android:background="@color/accent"
-                                android:textSize="@dimen/text_size_ten"
-                                android:text="Gross"/>
-
-                            <Button
-                                android:id="@+id/scoring_net_button"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="@dimen/margin_eight"
-                                android:paddingTop="@dimen/padding_two"
-                                android:paddingBottom="@dimen/padding_two"
-                                android:paddingLeft="@dimen/padding_twelve"
-                                android:paddingRight="@dimen/padding_twelve"
-                                android:background="@drawable/border"
-                                android:textColor="@color/text_grey"
-                                android:textSize="@dimen/text_size_ten"
-                                android:text="Net"/>
-
-                        </LinearLayout>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_span="2"
-                            android:background="@color/text_light_grey"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_sixteen"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="Average Score (18 Holes)"/>
-
-                        <TextView
-                            android:id="@+id/average_score_18_holes"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="-"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_sixteen"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="Average Putts / Hole"/>
-
-                        <TextView
-                            android:id="@+id/average_putts_per_hole"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="-"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_sixteen"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="Par 3 Average"/>
-
-                        <TextView
-                            android:id="@+id/par_3_average"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="-"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_sixteen"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="Par 4 Average"/>
-
-                        <TextView
-                            android:id="@+id/par_4_average"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="-"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_sixteen"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="Par 5 Average"/>
-
-                        <TextView
-                            android:id="@+id/par_5_average"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="-"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_sixteen"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="Eagles / Round"/>
-
-                        <TextView
-                            android:id="@+id/average_eagles_per_round"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="-"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_sixteen"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="Birdies / Round"/>
-
-                        <TextView
-                            android:id="@+id/average_birdies_per_round"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="-"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_sixteen"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="Pars / Round"/>
-
-                        <TextView
-                            android:id="@+id/average_pars_per_round"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="-"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_marginTop="@dimen/margin_sixteen">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:textColor="@color/text_light_grey"
-                            android:textSize="@dimen/text_size_twelve"
-                            android:text="Round Records"/>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:orientation="horizontal">
-
-                            <Button
-                                android:id="@+id/round_records_gross_button"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingTop="@dimen/padding_two"
-                                android:paddingBottom="@dimen/padding_two"
-                                android:paddingLeft="@dimen/padding_twelve"
-                                android:paddingRight="@dimen/padding_twelve"
-                                android:background="@color/accent"
-                                android:textSize="@dimen/text_size_ten"
-                                android:text="Gross"/>
-
-                            <Button
-                                android:id="@+id/round_records_net_button"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="@dimen/margin_eight"
-                                android:paddingTop="@dimen/padding_two"
-                                android:paddingBottom="@dimen/padding_two"
-                                android:paddingLeft="@dimen/padding_twelve"
-                                android:paddingRight="@dimen/padding_twelve"
-                                android:background="@drawable/border"
-                                android:textColor="@color/text_grey"
-                                android:textSize="@dimen/text_size_ten"
-                                android:text="Net"/>
-
-                        </LinearLayout>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_span="2"
-                            android:background="@color/text_light_grey"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_sixteen"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="Low Score (18 Holes)"/>
-
-                        <TextView
-                            android:id="@+id/low_score_18_holes"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="-"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_sixteen"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="Low Score (9 Holes)"/>
-
-                        <TextView
-                            android:id="@+id/low_score_9_holes"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="-"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_sixteen"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="Fewest Putts (18 Holes)"/>
-
-                        <TextView
-                            android:id="@+id/fewestPutts18Holes"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="-"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_sixteen"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="Most Birdies (18 Holes)"/>
-
-                        <TextView
-                            android:id="@+id/mostBirdies18Holes"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="-"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_sixteen"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="Most Pars (18 Holes)"/>
-
-                        <TextView
-                            android:id="@+id/mostPars18Holes"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="-"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_marginTop="@dimen/margin_sixteen">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:textColor="@color/text_light_grey"
-                            android:textSize="@dimen/text_size_twelve"
-                            android:text="Scoring Records"/>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:orientation="horizontal">
-
-                            <Button
-                                android:id="@+id/scoring_records_gross_button"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingTop="@dimen/padding_two"
-                                android:paddingBottom="@dimen/padding_two"
-                                android:paddingLeft="@dimen/padding_twelve"
-                                android:paddingRight="@dimen/padding_twelve"
-                                android:background="@color/accent"
-                                android:textSize="@dimen/text_size_ten"
-                                android:text="Gross"/>
-
-                            <Button
-                                android:id="@+id/scoring_records_net_button"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="@dimen/margin_eight"
-                                android:paddingTop="@dimen/padding_two"
-                                android:paddingBottom="@dimen/padding_two"
-                                android:paddingLeft="@dimen/padding_twelve"
-                                android:paddingRight="@dimen/padding_twelve"
-                                android:background="@drawable/border"
-                                android:textColor="@color/text_grey"
-                                android:textSize="@dimen/text_size_ten"
-                                android:text="Net"/>
-
-                        </LinearLayout>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_span="2"
-                            android:background="@color/text_light_grey"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_sixteen"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="Hole In Ones"/>
-
-                        <TextView
-                            android:id="@+id/aces"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="-"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_sixteen"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="Birdie Streak"/>
-
-                        <TextView
-                            android:id="@+id/birdie_streak"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="-"/>
-
-                    </TableRow>
-
-                    <TableRow android:layout_margin="@dimen/margin_four">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_sixteen"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="Par Streak"/>
-
-                        <TextView
-                            android:id="@+id/par_streak"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_grey"
-                            android:textSize="@dimen/profile_stat_text_size"
-                            android:text="-"/>
-
-                    </TableRow>
-
-                </TableLayout>
-
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
-
-    </LinearLayout>
-
-</ScrollView>
+</FrameLayout>

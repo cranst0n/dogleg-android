@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.koushikdutta.async.future.FutureCallback;
@@ -22,6 +23,7 @@ import org.cranst0n.dogleg.android.backend.Users;
 import org.cranst0n.dogleg.android.model.User;
 import org.cranst0n.dogleg.android.model.UserStats;
 import org.cranst0n.dogleg.android.utils.BusProvider;
+import org.cranst0n.dogleg.android.utils.Colors;
 import org.cranst0n.dogleg.android.utils.SnackBars;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -40,6 +42,7 @@ public class ProfileFragment extends BaseFragment {
   private boolean grossRoundRecordsDisplayed = true;
   private boolean grossScoringRecordsDisplayed = true;
 
+  private ImageButton customBackButton;
   private CircleImageView avatarView;
   private TextView usernameView;
 
@@ -59,6 +62,8 @@ public class ProfileFragment extends BaseFragment {
   private TextView lowScore18Holes;
   private TextView lowScore9Holes;
 
+  private TextView fairwayHitPercentage;
+  private TextView girPercentage;
   private TextView par3Average;
   private TextView par4Average;
   private TextView par5Average;
@@ -193,11 +198,21 @@ public class ProfileFragment extends BaseFragment {
         parStreak.setText(String.valueOf(userStats.netParStreak));
       }
 
+      fairwayHitPercentage.setText(String.format("%.2f%%", userStats.fairwayHitPercentage * 100));
+      girPercentage.setText(String.format("%.2f%%", userStats.girPercentage * 100));
       fewestPutts18Holes.setText(String.valueOf(userStats.fewestPutts18Hole));
     }
   }
 
   private void attachListeners() {
+
+    customBackButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(final View view) {
+        activity.onBackPressed();
+      }
+    });
+
     scoringGrossButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(final View view) {
@@ -265,6 +280,10 @@ public class ProfileFragment extends BaseFragment {
 
   private void findViews(@NonNull final View profileView) {
 
+    customBackButton = (ImageButton) profileView.findViewById(R.id.custom_back_button);
+    customBackButton.setImageDrawable(
+        Colors.colorize(customBackButton.getDrawable(), R.color.text_grey, context));
+
     avatarView = (CircleImageView) profileView.findViewById(R.id.user_avatar);
     usernameView = (TextView) profileView.findViewById(R.id.username);
 
@@ -284,6 +303,8 @@ public class ProfileFragment extends BaseFragment {
 
     lowScore18Holes = (TextView) profileView.findViewById(R.id.low_score_18_holes);
     lowScore9Holes = (TextView) profileView.findViewById(R.id.low_score_9_holes);
+    fairwayHitPercentage = (TextView) profileView.findViewById(R.id.fairway_hit_percentage);
+    girPercentage = (TextView) profileView.findViewById(R.id.gir_percentage);
 
     par3Average = (TextView) profileView.findViewById(R.id.par_3_average);
     par4Average = (TextView) profileView.findViewById(R.id.par_4_average);
