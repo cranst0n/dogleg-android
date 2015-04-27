@@ -64,6 +64,7 @@ public class ProfileFragment extends BaseFragment {
 
   private TextView fairwayHitPercentage;
   private TextView girPercentage;
+  private TextView scrambling;
   private TextView par3Average;
   private TextView par4Average;
   private TextView par5Average;
@@ -158,6 +159,7 @@ public class ProfileFragment extends BaseFragment {
 
       if (grossScoringDisplayed) {
         averageScore18Holes.setText(String.format("%.2f", userStats.averageGross18Hole));
+        scrambling.setText(String.format("%.2f%%", userStats.grossScrambling * 100));
         par3Average.setText(String.format("%.2f", userStats.grossPar3Average));
         par4Average.setText(String.format("%.2f", userStats.grossPar4Average));
         par5Average.setText(String.format("%.2f", userStats.grossPar5Average));
@@ -166,6 +168,7 @@ public class ProfileFragment extends BaseFragment {
         averageParsPerRound.setText(String.format("%.2f", userStats.grossAverageParsPerRound));
       } else {
         averageScore18Holes.setText(String.format("%.2f", userStats.averageNet18Hole));
+        scrambling.setText(String.format("%.2f%%", userStats.netScrambling * 100));
         par3Average.setText(String.format("%.2f", userStats.netPar3Average));
         par4Average.setText(String.format("%.2f", userStats.netPar4Average));
         par5Average.setText(String.format("%.2f", userStats.netPar5Average));
@@ -305,6 +308,7 @@ public class ProfileFragment extends BaseFragment {
     lowScore9Holes = (TextView) profileView.findViewById(R.id.low_score_9_holes);
     fairwayHitPercentage = (TextView) profileView.findViewById(R.id.fairway_hit_percentage);
     girPercentage = (TextView) profileView.findViewById(R.id.gir_percentage);
+    scrambling = (TextView) profileView.findViewById(R.id.scrambling);
 
     par3Average = (TextView) profileView.findViewById(R.id.par_3_average);
     par4Average = (TextView) profileView.findViewById(R.id.par_4_average);

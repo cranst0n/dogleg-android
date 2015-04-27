@@ -281,6 +281,26 @@
                                 android:layout_marginRight="@dimen/margin_sixteen"
                                 android:textColor="@color/text_grey"
                                 android:textSize="@dimen/profile_stat_text_size"
+                                android:text="Scrambling"/>
+
+                            <TextView
+                                android:id="@+id/scrambling"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
+                                android:text="-"/>
+
+                        </TableRow>
+
+                        <TableRow android:layout_margin="@dimen/margin_four">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_sixteen"
+                                android:textColor="@color/text_grey"
+                                android:textSize="@dimen/profile_stat_text_size"
                                 android:text="Par 3 Average"/>
 
                             <TextView

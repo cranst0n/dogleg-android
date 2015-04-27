@@ -16,6 +16,8 @@ public class UserStats {
   public final double averageNet18Hole;
   public final double fairwayHitPercentage;
   public final double girPercentage;
+  public final double grossScrambling;
+  public final double netScrambling;
   public final int grossAces;
   public final int grossBirdieStreak;
   public final int grossParStreak;
@@ -60,6 +62,8 @@ public class UserStats {
                    final double averageNet18Hole,
                    final double fairwayHitPercentage,
                    final double girPercentage,
+                   final double grossScrambling,
+                   final double netScrambling,
                    final int grossAces,
                    final int grossBirdieStreak,
                    final int grossParStreak,
@@ -104,6 +108,8 @@ public class UserStats {
     this.averageNet18Hole = averageNet18Hole;
     this.fairwayHitPercentage = fairwayHitPercentage;
     this.girPercentage = girPercentage;
+    this.grossScrambling = grossScrambling;
+    this.netScrambling = netScrambling;
     this.grossAces = grossAces;
     this.grossBirdieStreak = grossBirdieStreak;
     this.grossParStreak = grossParStreak;
