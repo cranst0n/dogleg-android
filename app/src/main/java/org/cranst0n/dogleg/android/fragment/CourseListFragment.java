@@ -73,7 +73,7 @@ public class CourseListFragment extends BaseFragment implements
   private int lastKnownFirstPosition;
   private boolean loading = true;
   private boolean endOfListReached = false;
-  private final int visibleThreshold = 5;
+  private final int visibleThreshold = 8;
   private int firstVisibleItem, visibleItemCount, totalItemCount;
 
   @Override
@@ -221,8 +221,8 @@ public class CourseListFragment extends BaseFragment implements
 
   private void initRecyclerView() {
 
-    final LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+    final LinearLayoutManager layoutManager = new LinearLayoutManager(context,
+        LinearLayoutManager.VERTICAL, false);
     recyclerView.setLayoutManager(layoutManager);
     recyclerView.setAdapter(new CourseListRecyclerAdapter(activity, displayedCourseList));
 

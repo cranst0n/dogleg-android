@@ -2,6 +2,8 @@ package org.cranst0n.dogleg.android.activity;
 
 import android.app.Activity;
 import android.content.res.TypedArray;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.LayoutRes;
@@ -53,6 +55,9 @@ public abstract class BaseActivity extends ActionBarActivity {
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setElevation(0);
 
+    final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+    upArrow.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
+    getSupportActionBar().setHomeAsUpIndicator(upArrow);
   }
 
   protected void onResume() {

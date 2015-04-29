@@ -3,6 +3,8 @@ package org.cranst0n.dogleg.android.fragment;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.DrawableRes;
@@ -338,6 +340,10 @@ public class DrawerFragment extends BaseFragment implements AdapterView.OnItemCl
         getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
       }
     };
+
+    final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+    upArrow.setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_ATOP);
+    drawerToggle.setHomeAsUpIndicator(upArrow);
 
     // Defer code dependent on restoration of previous instance state.
     this.drawerLayout.post(new Runnable() {

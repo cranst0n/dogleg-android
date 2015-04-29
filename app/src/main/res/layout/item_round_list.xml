@@ -3,6 +3,8 @@
                                     android:id="@+id/round_list_item_card"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
+                                    android:layout_marginTop="@dimen/margin_four"
+                                    android:layout_marginBottom="@dimen/margin_four"
                                     android:elevation="@dimen/elevation_ten"
                                     card_view:cardCornerRadius="0px">
 
